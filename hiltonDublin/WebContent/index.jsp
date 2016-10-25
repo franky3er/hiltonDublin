@@ -8,6 +8,10 @@
 </head>
 <body>
 This is a test file!
+<<<<<<< HEAD
 This is an other test!
+=======
+This is a change to the test file!
+>>>>>>> branch 'master' of https://github.com/franky3er/hiltonDublin.git
 </body>
 </html>
