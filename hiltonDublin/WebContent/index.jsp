@@ -8,5 +8,6 @@
 </head>
 <body>
 This is a test file!
+This is an other test!
 </body>
 </html>
