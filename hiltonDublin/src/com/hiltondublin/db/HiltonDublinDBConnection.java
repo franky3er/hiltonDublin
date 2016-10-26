@@ -141,26 +141,56 @@ public class HiltonDublinDBConnection {
 		return true;
 	}
 	
+	/**
+	 * Returns all rooms from the database that are specified by the parameters
+	 * @param roomNumber
+	 * @param typeID
+	 * @param smoking
+	 * @param occupied
+	 * @param additionalSQL
+	 * @return List<Room>
+	 */
 	public List<Room> getRooms(int roomNumber, int typeID, boolean smoking, boolean occupied, String additionalSQL){
 		List<Room> rooms = new ArrayList<Room>();
 		
 		String []values = {Integer.toString(roomNumber), Integer.toString(typeID), Boolean.toString(smoking), Boolean.toString(occupied)};
+		String []tables = {ROOM};
 		
-		String sqlStatement = createSelectStatement(ROOM, ROOM_COLUMNS, values, additionalSQL);
+		String sqlStatement = createSelectStatement(tables, ROOM_COLUMNS, values, additionalSQL);
 		
 		//TODO Execute Query
 		
 		return rooms;
 	}
 
-	public String createSelectStatement(String table, String[] columns, String[] values, String additionalSQL) {
-		String sqlStatement = "SELEC * FROM " + table + " WHERE ";
+	
+	/**
+	 * Creates a Select SQL Statement specified by the table name(s) and the given columns with values as a condition
+	 * @param tables
+	 * @param columns
+	 * @param values
+	 * @param additionalSQL
+	 * @return
+	 */
+	public String createSelectStatement(String [] tables, String[] columns, String[] values, String additionalSQL) {
+		String sqlStatement = "SELEC * FROM ";
+		boolean firstTable = true;
+		for(String table : tables){
+			if(firstTable){
+				firstTable = false;
+			}
+			else{
+				sqlStatement += ", ";
+			}
+			sqlStatement += table;
+		}
+		sqlStatement += " WHERE ";
 		int numberOfColumns = columns.length;
-		boolean firstAnd = true;
+		boolean firstCondition = true;
 		for(int i = 0; i < numberOfColumns; i++){
 			if( !(values[i]!=null || values[i].trim().equals(""))){
-				if(firstAnd){
-					firstAnd = false;
+				if(firstCondition){
+					firstCondition = false;
 				}
 				else{
 					sqlStatement += "AND ";
