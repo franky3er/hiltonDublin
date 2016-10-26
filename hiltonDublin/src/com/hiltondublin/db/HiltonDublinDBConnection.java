@@ -170,7 +170,7 @@ public class HiltonDublinDBConnection {
 	 * @param columns
 	 * @param values
 	 * @param additionalSQL
-	 * @return
+	 * @return String
 	 */
 	public String createSelectStatement(String [] tables, String[] columns, String[] values, String additionalSQL) {
 		String sqlStatement = "SELEC * FROM ";
