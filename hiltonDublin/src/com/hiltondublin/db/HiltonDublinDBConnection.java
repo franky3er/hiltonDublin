@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class HiltonDublinDBConnection {
+	//Database Properties constants
 	public final static String DB_PROPERTIES_FILENAME = "db.properties";
 	public final static String HILTONDUBLIN_DB_DRIVER = "hiltondublin.db.driver";
 	public final static String HILTONDUBLIN_DB_URL = "hiltondublin.db.url";
@@ -15,6 +16,7 @@ public class HiltonDublinDBConnection {
 	public final static String HILTONDUBLIN_DB_PASSWORD = "hiltondublin.db.password";
 	public final static String HILTONDUBLIN_DB_NAME = "hiltondublin.db.name";
 	
+	//Attributes
 	private static HiltonDublinDBConnection instance;
 	private Connection dbConnection = null;
 	private Properties dbProperties = null;
