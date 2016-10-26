@@ -16,14 +16,14 @@ public class HiltonDublinDBConnection {
 	public final static String HILTONDUBLIN_DB_NAME = "hiltondublin.db.name";
 	
 	private static HiltonDublinDBConnection instance;
-	private Connection dbConnection;
-	private Properties dbProperties;
+	private Connection dbConnection = null;
+	private Properties dbProperties = null;
 	
 	/**
 	 * Returns the instance of the HiltonDublinDBConnection (Singleton)
 	 * @return HiltonDublinDBConnection
 	 */
-	public static HiltonDublinDBConnection getHiltonDublinDBConnectionInstance(){
+	public static HiltonDublinDBConnection getInstance(){
 		if(HiltonDublinDBConnection.instance == null){
 			instance = new HiltonDublinDBConnection();
 		}
@@ -58,6 +58,7 @@ public class HiltonDublinDBConnection {
 	 */
 	public boolean loadDBProperties() {
 		System.out.println("Load \"" + DB_PROPERTIES_FILENAME + "\"");
+		dbProperties = new Properties();
 		InputStream input = null;
 		input = getClass().getClassLoader().getResourceAsStream(DB_PROPERTIES_FILENAME);
 		try {
