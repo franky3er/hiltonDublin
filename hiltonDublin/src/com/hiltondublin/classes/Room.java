@@ -4,6 +4,7 @@ public class Room {
 	private int roomNumber;
 	private boolean smoking;
 	private boolean occupied;
+	private int typeID;
 	private RoomType type;
 	
 	public int getRoomNumber() {
@@ -32,6 +33,13 @@ public class Room {
 	}
 	public void setType(RoomType type) {
 		this.type = type;
+	}
+	
+	public int getTypeID() {
+		return typeID;
+	}
+	public void setTypeID(int typeID) {
+		this.typeID = typeID;
 	}
 	
 	

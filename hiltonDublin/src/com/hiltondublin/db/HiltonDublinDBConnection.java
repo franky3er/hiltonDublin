@@ -5,7 +5,11 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+
+import com.hiltondublin.classes.Room;
 
 public class HiltonDublinDBConnection {
 	//Database Properties constants
@@ -15,6 +19,14 @@ public class HiltonDublinDBConnection {
 	public final static String HILTONDUBLIN_DB_USERNAME = "hiltondublin.db.username";
 	public final static String HILTONDUBLIN_DB_PASSWORD = "hiltondublin.db.password";
 	public final static String HILTONDUBLIN_DB_NAME = "hiltondublin.db.name";
+	
+	//Room table constants
+	public final static String ROOM = "ROOM";
+	public final static String ROOM_NUMBER = "ROOMNUMBER";
+	public final static String ROOM_TYPEID = "ROOMTYPEID";
+	public final static String ROOM_SMOKING = "SMOKING";
+	public final static String ROOM_OCCUPIED = "OCCUPIED";
+	public final static String []ROOM_COLUMNS = {ROOM_NUMBER, ROOM_TYPEID, ROOM_SMOKING, ROOM_OCCUPIED}; 
 	
 	//Attributes
 	private static HiltonDublinDBConnection instance;
@@ -127,6 +139,41 @@ public class HiltonDublinDBConnection {
 			return false;
 		}
 		return true;
+	}
+	
+	public List<Room> getRooms(int roomNumber, int typeID, boolean smoking, boolean occupied, String additionalSQL){
+		List<Room> rooms = new ArrayList<Room>();
+		
+		String []values = {Integer.toString(roomNumber), Integer.toString(typeID), Boolean.toString(smoking), Boolean.toString(occupied)};
+		
+		String sqlStatement = createSelectStatement(ROOM, ROOM_COLUMNS, values, additionalSQL);
+		
+		//TODO Execute Query
+		
+		return rooms;
+	}
+
+	public String createSelectStatement(String table, String[] columns, String[] values, String additionalSQL) {
+		String sqlStatement = "SELEC * FROM " + table + " WHERE ";
+		int numberOfColumns = columns.length;
+		boolean firstAnd = true;
+		for(int i = 0; i < numberOfColumns; i++){
+			if( !(values[i]!=null || values[i].trim().equals(""))){
+				if(firstAnd){
+					firstAnd = false;
+				}
+				else{
+					sqlStatement += "AND ";
+				}
+				sqlStatement += columns[i] + "='" + values[i] + "' ";
+			}
+		}
+		if( !(additionalSQL==null || additionalSQL.trim().equals(""))){
+			sqlStatement += "AND " + additionalSQL + " ";
+		}
+		sqlStatement += ";";
+		
+		return sqlStatement;
 	}
 
 	
