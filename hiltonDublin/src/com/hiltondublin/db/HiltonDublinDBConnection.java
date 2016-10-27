@@ -40,6 +40,8 @@ public class HiltonDublinDBConnection {
 	public final static String ROOMTYPE_DESCRIPTION = ROOMTYPE + "." + "DESCRIPTION";
 	public final static String []ROOMTYPE_COLUMNS = {ROOMTYPE_TYPEID, ROOMTYPE_NAME, ROOMTYPE_PICTURE, ROOMTYPE_STANDARDPRICE, ROOMTYPE_DESCRIPTION};
 	
+	//
+	
 	//Attributes
 	private static HiltonDublinDBConnection instance;
 	private Connection dbConnection = null;
@@ -248,6 +250,47 @@ public class HiltonDublinDBConnection {
 	
 	
 	/**
+	 * Creates an Inser SQL Statement specified by the given parameters
+	 * @param table
+	 * @param columns
+	 * @param values
+	 * @return String
+	 */
+	public String createInsertStatement(String table, List<Cell> cells){
+		
+		String sqlStatement = null;
+		sqlStatement += "INSERT INTO " + table + "( ";
+		boolean firstColumn = true;
+		for(Cell cell : cells){
+			if(firstColumn){
+				firstColumn = false;
+			}
+			else{
+				sqlStatement += ", ";
+			}
+			sqlStatement += cell.getColumn();
+		}
+		
+		sqlStatement += " ) VALUES (";
+		boolean firstValue = true;
+		for(Cell cell : cells){
+			if(firstValue){
+				firstValue = false;
+			}
+			else {
+				sqlStatement += ", ";
+			}
+			
+			sqlStatement += "'" + cell.getValue() + "'";
+		}
+		sqlStatement += " ) ;";
+		
+		
+		return sqlStatement;
+	}
+	
+	
+	/**
 	 * Executes the from the parameter given SQL Statement on the database and returns the result set
 	 * @param sqlStatement
 	 * @return ResultSet
@@ -267,6 +310,27 @@ public class HiltonDublinDBConnection {
 			return null;
 		}
 		
+	}
+	
+	
+	private boolean executeUpdate(String sqlStatement) {
+		try {
+			Statement statement;
+			System.out.println("Execute Update: \"" + sqlStatement + "\"");
+			statement = dbConnection.createStatement();
+			int numberOfRows = statement.executeUpdate(sqlStatement);
+			statement.close();
+			if(numberOfRows == 0){
+				return false;
+			}
+			else {
+				return true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Execute Update failed: \"" + sqlStatement + "\"");
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	
@@ -299,6 +363,31 @@ public class HiltonDublinDBConnection {
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Return a List of cells which contain column-value pairs. Returns only pairs where the value is not null or empty.
+	 * @param columns
+	 * @param values
+	 * @return List<Cell>
+	 */
+	private List<Cell> getCellList(String[] columns, String[] values) {
+		if(values.length != columns.length){
+			return null;
+		}
+		
+		List<Cell> cells = new ArrayList<Cell>();
+		int i = 0;
+		for(String value : values){
+			if(!isNullOrEmpty(value)){
+				Cell cell = new Cell();
+				cell.setColumn(columns[i]);
+				cell.setValue(value);
+			}
+			i++;
+		}
+		
+		return cells;
 	}
 	
 	
@@ -352,6 +441,59 @@ public class HiltonDublinDBConnection {
 		return rooms;
 	}
 	
+	
+	/**
+	 * Inserts a room into the database specified from the given parameter.
+	 * If a parameter is null or empty it won't be recorded in the SQL Statement.
+	 * @param roomNumber
+	 * @param typeID
+	 * @param smoking
+	 * @param occupied
+	 * @return boolean
+	 */
+	public boolean insertRoom(String roomNumber, String typeID, String smoking, String occupied){
+		//Create cell List
+		String []values = {roomNumber, typeID, smoking, occupied};
+		
+		//Return cell List with contained values
+		List<Cell> cells = getCellList(ROOM_COLUMNS, values);
+		
+		//Create insert SQL Statement
+		String sqlStatement = createInsertStatement(ROOM, cells);
+		
+		//Execute update
+		return executeUpdate(sqlStatement);
+	}
+	
+	
+	
+	/**
+	 * Inserts a room type into the database specified from the given parameter.
+	 * If a parameter is null or empty it won't be recorded in the SQL Statement.
+	 * @param typeID
+	 * @param name
+	 * @param picture
+	 * @param standardPrice
+	 * @param description
+	 * @return boolean
+	 */
+	public boolean insertRoomType(String typeID, String name, String picture, String standardPrice, String description){
+		//Create cell List
+		String []values = {typeID, name, picture, standardPrice, description};
+				
+		//Return cell List with contained values
+		List<Cell> cells = getCellList(ROOMTYPE_COLUMNS, values);
+		
+		//Create insert SQL Statement
+		String sqlStatement = createInsertStatement(ROOMTYPE, cells);
+		
+		//Execute update
+		return executeUpdate(sqlStatement);		
+	}
+	
+
+	
+
 	/**
 	 * Returns all room types from the database that are specified by the parameters.
 	 * If parameter is null it won't be included in the conditions from the sql statement.
@@ -361,7 +503,7 @@ public class HiltonDublinDBConnection {
 	 * @param standardprice
 	 * @param description
 	 * @param additionalSQLCondition
-	 * @return
+	 * @return List<RoomType>
 	 */
 	public List<RoomType> getRoomTypes(String typeID, String name, String picture, String standardprice, String description, String additionalSQLCondition){
 		List <RoomType> roomTypes = new ArrayList<RoomType>();
