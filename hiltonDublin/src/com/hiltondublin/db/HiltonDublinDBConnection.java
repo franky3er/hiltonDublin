@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Properties;
 
 import com.hiltondublin.classes.Room;
+import com.hiltondublin.classes.RoomType;
 
 public class HiltonDublinDBConnection {
 	//Database Properties constants
@@ -24,16 +25,29 @@ public class HiltonDublinDBConnection {
 	
 	//Room table constants
 	public final static String ROOM = "ROOM";
-	public final static String ROOM_NUMBER = "ROOMNUMBER";
-	public final static String ROOM_TYPEID = "TYPEID";
-	public final static String ROOM_SMOKING = "SMOKING";
-	public final static String ROOM_OCCUPIED = "OCCUPIED";
-	public final static String []ROOM_COLUMNS = {ROOM_NUMBER, ROOM_TYPEID, ROOM_SMOKING, ROOM_OCCUPIED}; 
+	public final static String ROOM_NUMBER = ROOM + "." + "ROOMNUMBER";
+	public final static String ROOM_TYPEID = ROOM + "." + "TYPEID";
+	public final static String ROOM_SMOKING = ROOM + "." + "SMOKING";
+	public final static String ROOM_OCCUPIED = ROOM + "." + "OCCUPIED";
+	public final static String []ROOM_COLUMNS = {ROOM_NUMBER, ROOM_TYPEID, ROOM_SMOKING, ROOM_OCCUPIED};
+	
+	//RoomType table constants
+	public final static String ROOMTYPE = "ROOMTYPE";
+	public final static String ROOMTYPE_TYPEID = ROOMTYPE + "." + "TYPEID";
+	public final static String ROOMTYPE_NAME = ROOMTYPE + "." + "NAME";
+	public final static String ROOMTYPE_PICTURE = ROOMTYPE + "." + "PICTURE";
+	public final static String ROOMTYPE_STANDARDPRICE = ROOMTYPE + "." + "STANDARDPRICE";
+	public final static String ROOMTYPE_DESCRIPTION = ROOMTYPE + "." + "DESCRIPTION";
+	public final static String []ROOMTYPE_COLUMNS = {ROOMTYPE_TYPEID, ROOMTYPE_NAME, ROOMTYPE_PICTURE, ROOMTYPE_STANDARDPRICE, ROOMTYPE_DESCRIPTION};
 	
 	//Attributes
 	private static HiltonDublinDBConnection instance;
 	private Connection dbConnection = null;
 	private Properties dbProperties = null;
+	
+	
+	
+	
 	
 	/**
 	 * Returns the instance of the HiltonDublinDBConnection (Singleton)
@@ -241,8 +255,8 @@ public class HiltonDublinDBConnection {
 	public ResultSet executeQueryAndReturnResultSet(String sqlStatement) {
 		
 		try {
-			System.out.println("Execute Query: \"" + sqlStatement + "\"");
 			Statement statement;
+			System.out.println("Execute Query: \"" + sqlStatement + "\"");
 			statement = dbConnection.createStatement();
 			ResultSet resultSet = statement.executeQuery(sqlStatement);
 			return resultSet;
@@ -295,26 +309,27 @@ public class HiltonDublinDBConnection {
 	 * @param typeID
 	 * @param smoking
 	 * @param occupied
-	 * @param additionalSQL
+	 * @param additionalSQLCondition
 	 * @return List<Room>
 	 */
-	public List<Room> getRooms(String roomNumber, String typeID, String smoking, String occupied, String additionalSQL){
+	public List<Room> getRooms(String roomNumber, String typeID, String smoking, String occupied, String additionalSQLCondition){
 		List<Room> rooms = new ArrayList<Room>();
 		
 		//Converting
 		smoking = convertBooleanToTinyInt(smoking);
 		occupied = convertBooleanToTinyInt(occupied);
 		
-		//Values and table
+		//Write values and tables in arrays
 		String []values = {roomNumber, typeID, smoking, occupied};
 		String []tables = {ROOM};
 		
 		//Get sql Statement
-		String sqlStatement = createSelectStatement(tables, ROOM_COLUMNS, ROOM_COLUMNS, values, additionalSQL);
+		String sqlStatement = createSelectStatement(tables, ROOM_COLUMNS, ROOM_COLUMNS, values, additionalSQLCondition);
 		
 		//Execute Query
-		
 		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
+		
+		//Process Result Set
 		try{
 			while(rs.next()){
 				Room room = new Room();
@@ -325,13 +340,63 @@ public class HiltonDublinDBConnection {
 				
 				rooms.add(room);
 			}
+			rs.close();
 		} catch (SQLException e) {
 			System.out.println("Read ResultSet Failed.");
 			e.printStackTrace();
 			return null;
 		}
 		
+		
+		
 		return rooms;
+	}
+	
+	/**
+	 * Returns all room types from the database that are specified by the parameters.
+	 * If parameter is null it won't be included in the conditions from the sql statement.
+	 * @param typeID
+	 * @param name
+	 * @param picture
+	 * @param standardprice
+	 * @param description
+	 * @param additionalSQLCondition
+	 * @return
+	 */
+	public List<RoomType> getRoomTypes(String typeID, String name, String picture, String standardprice, String description, String additionalSQLCondition){
+		List <RoomType> roomTypes = new ArrayList<RoomType>();
+		
+		//Write Values and Tables in Arrays
+		String []values = {typeID, name, picture, standardprice, description};
+		String []tables = {ROOMTYPE};
+		
+		//Get SQL Statement
+		String sqlStatement = createSelectStatement(tables, ROOMTYPE_COLUMNS, ROOMTYPE_COLUMNS, values, additionalSQLCondition);
+		
+		//Execute Query
+		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
+		
+		//Process Result Set
+		try{
+			while(rs.next()){
+				RoomType roomType = new RoomType();
+				
+				roomType.setRoomTypeID(rs.getInt(ROOMTYPE_TYPEID));
+				roomType.setName(rs.getString(ROOMTYPE_NAME));
+				roomType.setPictureRessource(rs.getString(ROOMTYPE_PICTURE));
+				roomType.setStandardPrice(rs.getDouble(ROOMTYPE_STANDARDPRICE));
+				roomType.setDescription(rs.getString(ROOMTYPE_DESCRIPTION));
+				
+				roomTypes.add(roomType);
+			}
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("Read ResultSet Failed.");
+			e.printStackTrace();
+			return null;
+		}
+		
+		return roomTypes;
 	}
 
 }

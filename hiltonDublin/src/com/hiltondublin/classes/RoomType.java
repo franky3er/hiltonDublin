@@ -5,9 +5,11 @@ import java.util.List;
 public class RoomType {
 	private String name;
 	private int roomTypeID;
+	private double standardPrice;
 	private List<SpecialPrice> specialPrices = null;
 	private List<WeekdayPrice> weekdayPrices = null;
 	private String description;
+	private String pictureRessource;
 	
 	public String getName() {
 		return name;
@@ -41,5 +43,17 @@ public class RoomType {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public double getStandardPrice() {
+		return standardPrice;
+	}
+	public void setStandardPrice(double standardPrice) {
+		this.standardPrice = standardPrice;
+	}
+	public String getPictureRessource() {
+		return pictureRessource;
+	}
+	public void setPictureRessource(String pictureRessource) {
+		this.pictureRessource = pictureRessource;
 	}
 }
