@@ -25,7 +25,7 @@ public class HiltonDublinDBConnection {
 	//Room table constants
 	public final static String ROOM = "ROOM";
 	public final static String ROOM_NUMBER = "ROOMNUMBER";
-	public final static String ROOM_TYPEID = "ROOMTYPEID";
+	public final static String ROOM_TYPEID = "TYPEID";
 	public final static String ROOM_SMOKING = "SMOKING";
 	public final static String ROOM_OCCUPIED = "OCCUPIED";
 	public final static String []ROOM_COLUMNS = {ROOM_NUMBER, ROOM_TYPEID, ROOM_SMOKING, ROOM_OCCUPIED}; 
@@ -163,7 +163,7 @@ public class HiltonDublinDBConnection {
 			return null;
 		}
 		
-		String sqlStatement = "SELEC ";
+		String sqlStatement = "SELECT ";
 		boolean firstSelectedColumn = true;
 		for(String selectedColumn : selectedColumns){
 			if(firstSelectedColumn){
@@ -185,26 +185,106 @@ public class HiltonDublinDBConnection {
 			}
 			sqlStatement += table;
 		}
-		sqlStatement += " WHERE ";
-		int numberOfColumns = conditionColumns.length;
-		boolean firstCondition = true;
-		for(int i = 0; i < numberOfColumns; i++){
-			if( !(conditionValues[i]!=null || conditionValues[i].trim().equals(""))){
-				if(firstCondition){
-					firstCondition = false;
-				}
-				else{
-					sqlStatement += "AND ";
-				}
-				sqlStatement += conditionColumns[i] + "='" + conditionValues[i] + "' ";
+		
+		//Checking if Conditions are available
+		boolean conditionsAvailable = false;
+		boolean primaryConditionsAvailable = false;
+		for(String conditionValue : conditionValues){
+			if(!isNullOrEmpty(conditionValue)){
+				conditionsAvailable = true;
+				primaryConditionsAvailable = true;
+				break;
 			}
 		}
-		if( !(additionalSQL==null || additionalSQL.trim().equals(""))){
-			sqlStatement += "AND " + additionalSQL + " ";
+		if(!isNullOrEmpty(additionalSQL)){
+			conditionsAvailable = true;
+		}
+		
+		if(conditionsAvailable){
+			sqlStatement += " WHERE ";
+			int numberOfColumns = conditionColumns.length;
+			boolean firstCondition = true;
+			for(int i = 0; i < numberOfColumns; i++){
+				if( conditionValues[i]!=null ){
+					if( !conditionValues[i].isEmpty()){
+						if(firstCondition){
+							firstCondition = false;
+						}
+						else{
+							sqlStatement += "AND ";
+						}
+						sqlStatement += conditionColumns[i] + "='" + conditionValues[i] + "' ";
+					}
+				}
+			}
+			if( additionalSQL!=null){
+				if( !additionalSQL.isEmpty()){
+					if(primaryConditionsAvailable){
+						sqlStatement += "AND ";
+					}
+					sqlStatement += additionalSQL + " ";
+				}
+			}
 		}
 		sqlStatement += ";";
 		
+		
 		return sqlStatement;
+	}
+	
+	
+	/**
+	 * Executes the from the parameter given SQL Statement on the database and returns the result set
+	 * @param sqlStatement
+	 * @return ResultSet
+	 */
+	public ResultSet executeQueryAndReturnResultSet(String sqlStatement) {
+		
+		try {
+			System.out.println("Execute Query: \"" + sqlStatement + "\"");
+			Statement statement;
+			statement = dbConnection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sqlStatement);
+			return resultSet;
+			
+		} catch (SQLException e) {
+			System.out.println("Execute Query failed: \"" + sqlStatement + "\"");
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	
+	
+	/**
+	 * converts the boolean (true/false) to a tiny int (1/0)
+	 * @param bool
+	 * @return String
+	 */
+	private String convertBooleanToTinyInt(String bool) {
+		if(bool!=null){
+			if(!bool.isEmpty()){
+				if(bool == "true"){
+					bool = "1";
+				} else if (bool == "false"){
+					bool = "0";
+				}
+			}
+		}
+		
+		return bool;
+	}
+	
+	
+	private boolean isNullOrEmpty(String obj){
+		if(obj == null){
+			return true;
+		}
+		if(obj.isEmpty()){
+			return true;
+		}
+		return false;
 	}
 	
 	
@@ -218,31 +298,35 @@ public class HiltonDublinDBConnection {
 	 * @param additionalSQL
 	 * @return List<Room>
 	 */
-	public List<Room> getRooms(int roomNumber, int typeID, boolean smoking, boolean occupied, String additionalSQL){
+	public List<Room> getRooms(String roomNumber, String typeID, String smoking, String occupied, String additionalSQL){
 		List<Room> rooms = new ArrayList<Room>();
 		
-		String []values = {Integer.toString(roomNumber), Integer.toString(typeID), Boolean.toString(smoking), Boolean.toString(occupied)};
+		//Converting
+		smoking = convertBooleanToTinyInt(smoking);
+		occupied = convertBooleanToTinyInt(occupied);
+		
+		//Values and table
+		String []values = {roomNumber, typeID, smoking, occupied};
 		String []tables = {ROOM};
 		
+		//Get sql Statement
 		String sqlStatement = createSelectStatement(tables, ROOM_COLUMNS, ROOM_COLUMNS, values, additionalSQL);
 		
+		//Execute Query
 		
-		try {
-			Statement statement;
-			statement = dbConnection.createStatement();
-			ResultSet resultSet = statement.executeQuery(sqlStatement);
-			
-			while(resultSet.next()){
+		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
+		try{
+			while(rs.next()){
 				Room room = new Room();
-				room.setRoomNumber(resultSet.getInt(ROOM_NUMBER));
-				room.setTypeID(resultSet.getInt(ROOM_TYPEID));
-				room.setSmoking(resultSet.getBoolean(ROOM_SMOKING));
-				room.setOccupied(resultSet.getBoolean(ROOM_OCCUPIED));
+				room.setRoomNumber(rs.getInt(ROOM_NUMBER));
+				room.setTypeID(rs.getInt(ROOM_TYPEID));
+				room.setSmoking(rs.getBoolean(ROOM_SMOKING));
+				room.setOccupied(rs.getBoolean(ROOM_OCCUPIED));
 				
 				rooms.add(room);
 			}
 		} catch (SQLException e) {
-			System.out.println("executeQuery failed with sql Statement \"" + sqlStatement + "\"");
+			System.out.println("Read ResultSet Failed.");
 			e.printStackTrace();
 			return null;
 		}
@@ -250,8 +334,4 @@ public class HiltonDublinDBConnection {
 		return rooms;
 	}
 
-	
-	
-
-	
 }
