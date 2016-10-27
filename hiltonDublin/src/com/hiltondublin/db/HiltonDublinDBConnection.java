@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -141,8 +143,74 @@ public class HiltonDublinDBConnection {
 		return true;
 	}
 	
+	
 	/**
-	 * Returns all rooms from the database that are specified by the parameters
+	 * Creates a Select SQL Statement specified by the table name(s) and the given columns with values as a condition
+	 * @param tables
+	 * @param selectedColumns
+	 * @param conditionColumns
+	 * @param conditionValues
+	 * @param additionalSQL
+	 * @return String
+	 */
+	public String createSelectStatement(String [] tables, String[] selectedColumns, String[] conditionColumns, String[] conditionValues, String additionalSQL) {
+		if(tables == null){
+			System.out.println("Create SQL Statement failed. No tables selected!");
+		}
+		
+		if(selectedColumns == null){
+			System.out.println("Create SQL Statement failed. Selected Columns are missing!");
+			return null;
+		}
+		
+		String sqlStatement = "SELEC ";
+		boolean firstSelectedColumn = true;
+		for(String selectedColumn : selectedColumns){
+			if(firstSelectedColumn){
+				firstSelectedColumn = false;
+			}
+			else{
+				sqlStatement += ", ";
+			}
+			sqlStatement += selectedColumn;
+		}
+		sqlStatement += " FROM ";
+		boolean firstTable = true;
+		for(String table : tables){
+			if(firstTable){
+				firstTable = false;
+			}
+			else{
+				sqlStatement += ", ";
+			}
+			sqlStatement += table;
+		}
+		sqlStatement += " WHERE ";
+		int numberOfColumns = conditionColumns.length;
+		boolean firstCondition = true;
+		for(int i = 0; i < numberOfColumns; i++){
+			if( !(conditionValues[i]!=null || conditionValues[i].trim().equals(""))){
+				if(firstCondition){
+					firstCondition = false;
+				}
+				else{
+					sqlStatement += "AND ";
+				}
+				sqlStatement += conditionColumns[i] + "='" + conditionValues[i] + "' ";
+			}
+		}
+		if( !(additionalSQL==null || additionalSQL.trim().equals(""))){
+			sqlStatement += "AND " + additionalSQL + " ";
+		}
+		sqlStatement += ";";
+		
+		return sqlStatement;
+	}
+	
+	
+	/**
+	 * Returns all rooms from the database that are specified by the parameters.
+	 * If parameter is null it won't be included in the conditions from the sql statement.
 	 * @param roomNumber
 	 * @param typeID
 	 * @param smoking
@@ -156,55 +224,34 @@ public class HiltonDublinDBConnection {
 		String []values = {Integer.toString(roomNumber), Integer.toString(typeID), Boolean.toString(smoking), Boolean.toString(occupied)};
 		String []tables = {ROOM};
 		
-		String sqlStatement = createSelectStatement(tables, ROOM_COLUMNS, values, additionalSQL);
+		String sqlStatement = createSelectStatement(tables, ROOM_COLUMNS, ROOM_COLUMNS, values, additionalSQL);
 		
-		//TODO Execute Query
+		
+		try {
+			Statement statement;
+			statement = dbConnection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sqlStatement);
+			
+			while(resultSet.next()){
+				Room room = new Room();
+				room.setRoomNumber(resultSet.getInt(ROOM_NUMBER));
+				room.setTypeID(resultSet.getInt(ROOM_TYPEID));
+				room.setSmoking(resultSet.getBoolean(ROOM_SMOKING));
+				room.setOccupied(resultSet.getBoolean(ROOM_OCCUPIED));
+				
+				rooms.add(room);
+			}
+		} catch (SQLException e) {
+			System.out.println("executeQuery failed with sql Statement \"" + sqlStatement + "\"");
+			e.printStackTrace();
+			return null;
+		}
 		
 		return rooms;
 	}
 
 	
-	/**
-	 * Creates a Select SQL Statement specified by the table name(s) and the given columns with values as a condition
-	 * @param tables
-	 * @param columns
-	 * @param values
-	 * @param additionalSQL
-	 * @return String
-	 */
-	public String createSelectStatement(String [] tables, String[] columns, String[] values, String additionalSQL) {
-		String sqlStatement = "SELEC * FROM ";
-		boolean firstTable = true;
-		for(String table : tables){
-			if(firstTable){
-				firstTable = false;
-			}
-			else{
-				sqlStatement += ", ";
-			}
-			sqlStatement += table;
-		}
-		sqlStatement += " WHERE ";
-		int numberOfColumns = columns.length;
-		boolean firstCondition = true;
-		for(int i = 0; i < numberOfColumns; i++){
-			if( !(values[i]!=null || values[i].trim().equals(""))){
-				if(firstCondition){
-					firstCondition = false;
-				}
-				else{
-					sqlStatement += "AND ";
-				}
-				sqlStatement += columns[i] + "='" + values[i] + "' ";
-			}
-		}
-		if( !(additionalSQL==null || additionalSQL.trim().equals(""))){
-			sqlStatement += "AND " + additionalSQL + " ";
-		}
-		sqlStatement += ";";
-		
-		return sqlStatement;
-	}
+	
 
 	
 }
