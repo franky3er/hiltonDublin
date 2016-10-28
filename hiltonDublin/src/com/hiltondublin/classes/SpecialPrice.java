@@ -3,7 +3,7 @@ package com.hiltondublin.classes;
 import java.util.Date;
 
 public class SpecialPrice {
-	private int typeID;
+	private int roomTypeID;
 	private String comment;
 	private Date date;
 	private double price;
@@ -22,10 +22,10 @@ public class SpecialPrice {
 		this.price = price;
 	}
 	public int getTypeID() {
-		return typeID;
+		return roomTypeID;
 	}
 	public void setTypeID(int typeID) {
-		this.typeID = typeID;
+		this.roomTypeID = typeID;
 	}
 	public String getComment() {
 		return comment;

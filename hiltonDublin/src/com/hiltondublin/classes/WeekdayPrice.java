@@ -1,6 +1,7 @@
 package com.hiltondublin.classes;
 
 public class WeekdayPrice {
+	private int roomTypeID;
 	private int weekday;
 	private double price;
 	
@@ -16,5 +17,11 @@ public class WeekdayPrice {
 	}
 	public void setPrice(double price) {
 		this.price = price;
+	}
+	public int getRoomTypeID() {
+		return roomTypeID;
+	}
+	public void setRoomTypeID(int roomTypeID) {
+		this.roomTypeID = roomTypeID;
 	}
 }

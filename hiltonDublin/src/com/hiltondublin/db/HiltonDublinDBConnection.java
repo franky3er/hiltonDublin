@@ -19,6 +19,7 @@ import com.hiltondublin.classes.Reservation;
 import com.hiltondublin.classes.Room;
 import com.hiltondublin.classes.RoomType;
 import com.hiltondublin.classes.SpecialPrice;
+import com.hiltondublin.classes.WeekdayPrice;
 
 public class HiltonDublinDBConnection {
 	//MySQL Date Format
@@ -87,6 +88,7 @@ public class HiltonDublinDBConnection {
 	public final static String WEEKDAYPRICE_ROOMTYPEID = WEEKDAYPRICE + "." + "TYPEID";
 	public final static String WEEKDAYPRICE_PRICE = WEEKDAYPRICE + "." + "PRICE";
 	public final static String WEEKDAYPRICE_WEEKDAY = WEEKDAYPRICE + "." + "WEEKDAY";
+	public final static String []WEEKDAYPRICE_COLUMNS = {WEEKDAYPRICE_ROOMTYPEID, WEEKDAYPRICE_PRICE, WEEKDAYPRICE_WEEKDAY};
 	
 	
 	
@@ -1148,6 +1150,104 @@ public class HiltonDublinDBConnection {
 
 		// Execute update
 		return executeUpdate(sqlStatement);
+	}
+	
+	
+	//------------------------------------------------------------------------------------------
+	//-----------------------------------------WEEKDAYPRICES------------------------------------
+	//------------------------------------------------------------------------------------------
+	
+	/**
+	 * Returns all special prices from the database that are specified by the parameters.
+	 * If parameter is null it won't be included in the conditions from the sql statement.
+	 * @param roomTypeID
+	 * @param price
+	 * @param weekday
+	 * @param additionalSQLCondition
+	 * @return List<WeekdayPrice>
+	 */
+	public List<WeekdayPrice> getWeekdayPrices(String roomTypeID, String price, String weekday, String additionalSQLCondition){
+		List<WeekdayPrice> weekdayPrices = new ArrayList<WeekdayPrice>();
+		
+		//Write Values and Tables in Arrays
+		String []values = {roomTypeID, price, weekday};
+		String []tables = {WEEKDAYPRICE};
+				
+		//Get SQL Statement
+		String sqlStatement = createSelectStatement(tables, WEEKDAYPRICE_COLUMNS, WEEKDAYPRICE_COLUMNS, values, additionalSQLCondition);
+				
+		//Execute Query
+		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
+				
+		//Process Result Set
+		try{
+			while(rs.next()){
+				WeekdayPrice weekdayPrice = new WeekdayPrice();
+				
+				weekdayPrice.setRoomTypeID(rs.getInt(WEEKDAYPRICE_ROOMTYPEID));
+				weekdayPrice.setPrice(rs.getDouble(WEEKDAYPRICE_PRICE));
+				weekdayPrice.setWeekday(rs.getInt(WEEKDAYPRICE_WEEKDAY));
+				
+				weekdayPrices.add(weekdayPrice);
+			}
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("Read ResultSet Failed.");
+			e.printStackTrace();
+			return null;
+		}
+		
+		return weekdayPrices;
+	}
+	
+	/**
+	 * Inserts a weekday price into the database specified from the given parameter.
+	 * If a parameter is null or empty it won't be recorded in the SQL Statement.
+	 * @param roomTypeID
+	 * @param price
+	 * @param weekday
+	 * @return boolean
+	 */
+	public boolean insertWeekdayPrice(String roomTypeID, String price, String weekday){
+		
+		// Create value array
+		String[] values = { roomTypeID, price, weekday };
+
+		// Return cell List with contained values
+		List<Cell> cells = getCellList(WEEKDAYPRICE_COLUMNS, values);
+
+		// Create insert SQL Statement
+		String sqlStatement = createInsertStatement(WEEKDAYPRICE, cells);
+
+		// Execute update
+		return executeUpdate(sqlStatement);
+		
+	}
+	
+	/**
+	 * Inserts a weekday price into the database
+	 * @param weekdayPrice
+	 * @return boolean
+	 */
+	public boolean insertWeekdayPrice(WeekdayPrice weekdayPrice){
+		
+		//Get values in String format
+		String roomTypeID = Integer.toString(weekdayPrice.getRoomTypeID());
+		String price = Double.toString(weekdayPrice.getPrice());
+		String weekday = Integer.toString(weekdayPrice.getWeekday());
+		
+		// Create value array
+		String[] values = { roomTypeID, price, weekday };
+
+		// Return cell List with contained values
+		List<Cell> cells = getCellList(WEEKDAYPRICE_COLUMNS, values);
+
+		// Create insert SQL Statement
+		String sqlStatement = createInsertStatement(WEEKDAYPRICE, cells);
+
+		// Execute update
+		return executeUpdate(sqlStatement);
+		
 	}
 
 }
