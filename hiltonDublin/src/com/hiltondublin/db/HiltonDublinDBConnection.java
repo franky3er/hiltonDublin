@@ -18,6 +18,7 @@ import com.hiltondublin.classes.Rating;
 import com.hiltondublin.classes.Reservation;
 import com.hiltondublin.classes.Room;
 import com.hiltondublin.classes.RoomType;
+import com.hiltondublin.classes.SpecialPrice;
 
 public class HiltonDublinDBConnection {
 	//MySQL Date Format
@@ -1024,6 +1025,129 @@ public class HiltonDublinDBConnection {
 				
 		//Execute update
 		return executeUpdate(sqlStatement);	
+	}
+	
+	
+	
+	
+	//------------------------------------------------------------------------------------------
+	//-----------------------------------------SPECIALPRICE-------------------------------------
+	//------------------------------------------------------------------------------------------
+	
+	/**
+	 * Returns all special prices from the database that are specified by the parameters.
+	 * If parameter is null it won't be included in the conditions from the sql statement.
+	 * @param roomTypeID
+	 * @param date
+	 * @param price
+	 * @param comment
+	 * @param additionalSQLCondition
+	 * @return List<SpecialPrice>
+	 */
+	public List<SpecialPrice> getSpecialPrices(String roomTypeID, String date, String price, String comment, String additionalSQLCondition){
+		List<SpecialPrice> specialPrices = new ArrayList<SpecialPrice>();		
+		
+		//Check if Date is in right format
+		try {
+			if(!date.equals(mySQLDateFormat.format(mySQLDateFormat.parse(date)))){
+				System.out.println("date is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+				return null;
+			}
+		} catch (ParseException e1) {
+			System.out.println("date is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+			return null;
+		}
+		
+		
+		//Write Values and Tables in Arrays
+		String []values = {roomTypeID, date, price, comment};
+		String []tables = {SPECIALPRICE};
+				
+		//Get SQL Statement
+		String sqlStatement = createSelectStatement(tables, SPECIALPRICE_COLUMNS, SPECIALPRICE_COLUMNS, values, additionalSQLCondition);
+				
+		//Execute Query
+		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
+				
+		//Process Result Set
+		try{
+			while(rs.next()){
+				SpecialPrice specialPrice = new SpecialPrice();
+				
+				specialPrice.setTypeID(rs.getInt(SPECIALPRICE_ROOMTYPEID));
+				specialPrice.setDate(rs.getDate(SPECIALPRICE_DATE));
+				specialPrice.setPrice(rs.getDouble(SPECIALPRICE_PRICE));
+				specialPrice.setComment(rs.getString(SPECIALPRICE_COMMENT));
+				
+				specialPrices.add(specialPrice);				
+			}
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("Read ResultSet Failed.");
+			e.printStackTrace();
+			return null;
+		}
+		
+		return specialPrices;
+	}
+	
+	/**
+	 * Inserts a special price into the database specified from the given parameter.
+	 * If a parameter is null or empty it won't be recorded in the SQL Statement.
+	 * @param roomTypeID
+	 * @param date
+	 * @param price
+	 * @param comment
+	 * @return boolean
+	 */
+	public boolean insertSpecialPrice(String roomTypeID, String date, String price, String comment) {
+		// Check if Date is in right format
+		try {
+			if (!date.equals(mySQLDateFormat.format(mySQLDateFormat.parse(date)))) {
+				System.out.println("date is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+				return false;
+			}
+		} catch (ParseException e1) {
+			System.out.println("date is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+			return false;
+		}
+
+		// Create value array
+		String[] values = { roomTypeID, date, price, comment };
+
+		// Return cell List with contained values
+		List<Cell> cells = getCellList(SPECIALPRICE_COLUMNS, values);
+
+		// Create insert SQL Statement
+		String sqlStatement = createInsertStatement(SPECIALPRICE, cells);
+
+		// Execute update
+		return executeUpdate(sqlStatement);
+	}
+
+	/**
+	 * Inserts a special price to the database
+	 * @param specialPrice
+	 * @return boolean
+	 */
+	public boolean insertSpecialPrice(SpecialPrice specialPrice){
+		// Get values in String format
+		String roomTypeID = Integer.toString(specialPrice.getTypeID());
+		String date = mySQLDateFormat.format(specialPrice.getDate());
+		String price = Double.toString(specialPrice.getPrice());
+		String comment = specialPrice.getComment();
+
+		// Create value array
+		String[] values = { roomTypeID, date, price, comment };
+
+		// Return cell List with contained values
+		List<Cell> cells = getCellList(SPECIALPRICE_COLUMNS, values);
+
+		// Create insert SQL Statement
+		String sqlStatement = createInsertStatement(SPECIALPRICE, cells);
+
+		// Execute update
+		return executeUpdate(sqlStatement);
 	}
 
 }
