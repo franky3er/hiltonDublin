@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import com.hiltondublin.classes.Rating;
 import com.hiltondublin.classes.Room;
 import com.hiltondublin.classes.RoomType;
 
@@ -40,7 +41,16 @@ public class HiltonDublinDBConnection {
 	public final static String ROOMTYPE_DESCRIPTION = ROOMTYPE + "." + "DESCRIPTION";
 	public final static String []ROOMTYPE_COLUMNS = {ROOMTYPE_TYPEID, ROOMTYPE_NAME, ROOMTYPE_PICTURE, ROOMTYPE_STANDARDPRICE, ROOMTYPE_DESCRIPTION};
 	
-	//
+	//Rating table constants
+	public final static String RATING = "RATING";
+	public final static String RATING_RATINGID = RATING + "." + "RATINGID";
+	public final static String RATING_ROOMTYPEID = RATING + "." + "TYPEID";
+	public final static String RATING_GUESTID = RATING + "." + "GUESTID";
+	public final static String RATING_RATING = RATING + "." + "RATING";
+	public final static String RATING_COMMENT = RATING + "." + "COMMENT";
+	public final static String []RATING_COLUMNS = {RATING_RATINGID, RATING_ROOMTYPEID, RATING_GUESTID, RATING_RATING, RATING_COMMENT};
+	
+	
 	
 	//Attributes
 	private static HiltonDublinDBConnection instance;
@@ -573,7 +583,7 @@ public class HiltonDublinDBConnection {
 	 * @return boolean
 	 */
 	public boolean insertRoomType(String typeID, String name, String picture, String standardPrice, String description){
-		//Create cell List
+		//Create value array
 		String []values = {typeID, name, picture, standardPrice, description};
 				
 		//Return cell List with contained values
@@ -610,9 +620,100 @@ public class HiltonDublinDBConnection {
 	
 	
 	
+	//------------------------------------------------------------------------------------------
+	//-----------------------------------------RATING-------------------------------------------
+	//------------------------------------------------------------------------------------------
+	
+	/**
+	 * Returns all room types from the database that are specified by the parameters.
+	 * If parameter is null it won't be included in the conditions from the sql statement.
+	 * @param ratingID
+	 * @param roomTypeID
+	 * @param guestID
+	 * @param rating
+	 * @param comment
+	 * @param additionalSQLCondition
+	 * @return
+	 */
+	public List<Rating> getRatings(String ratingID, String roomTypeID, String guestID, String rating, String comment, String additionalSQLCondition){
+		List<Rating> ratings = new ArrayList<Rating>();
+		
+		//Write Values and Tables in Arrays
+		String []values = {ratingID, roomTypeID, guestID, rating, comment};
+		String []tables = {RATING};
+				
+		//Get SQL Statement
+		String sqlStatement = createSelectStatement(tables, RATING_COLUMNS, RATING_COLUMNS, values, additionalSQLCondition);
+				
+		//Execute Query
+		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
+				
+		//Process Result Set
+		try{
+			while(rs.next()){
+				Rating ratingObj = new Rating();
+				
+				ratingObj.setRatingID(rs.getInt(RATING_RATINGID));
+				ratingObj.setTypeID(rs.getInt(RATING_ROOMTYPEID));
+				ratingObj.setGuestID(rs.getInt(RATING_GUESTID));
+				ratingObj.setRating(rs.getInt(RATING_RATING));
+				ratingObj.setComment(rs.getString(RATING_COMMENT));
+				
+				//Set objects of rating
+				ratingObj.setRoomType(getRoomTypes(Integer.toString(ratingObj.getTypeID()), null, null, null, null, null).get(0));
+				//TODO ratingObj.setGuest(Guest);
+			}
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("Read ResultSet Failed.");
+			e.printStackTrace();
+			return null;
+		}
+		
+		return ratings;
+	}
 	
 	
 	
 	
+	public boolean insertRating(String ratingID, String roomTypeID, String guestID, String rating, String comment){
+		
+		//Create value array
+		String []values = {ratingID, roomTypeID, guestID, rating, comment};
+		
+		//Return cell List with contained values
+		List<Cell> cells = getCellList(RATING_COLUMNS, values);
+				
+		//Create insert SQL Statement
+		String sqlStatement = createInsertStatement(RATING, cells);
+				
+		//Execute update
+		return executeUpdate(sqlStatement);	
+		
+	}
+	
+	
+	
+	public boolean insertRating(Rating ratingObj){
+		//Get values in String format
+		String ratingID = Integer.toString(ratingObj.getRatingID());
+		String roomTypeID = Integer.toString(ratingObj.getTypeID());
+		String guestID = Integer.toString(ratingObj.getGuestID());
+		String rating = Integer.toString(ratingObj.getRating());
+		String comment = ratingObj.getComment();
+		
+		//Create value array
+		String []values = {ratingID, roomTypeID, guestID, rating, comment};
+		
+		//Return cell List with contained values
+		List<Cell> cells = getCellList(RATING_COLUMNS, values);
+				
+		//Create insert SQL Statement
+		String sqlStatement = createInsertStatement(RATING, cells);
+				
+		//Execute update
+		return executeUpdate(sqlStatement);	
+		
+	}
 
 }
