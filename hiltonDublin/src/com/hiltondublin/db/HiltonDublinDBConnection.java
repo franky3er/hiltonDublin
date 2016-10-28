@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import com.hiltondublin.classes.ConsumerProduct;
 import com.hiltondublin.classes.Rating;
 import com.hiltondublin.classes.Room;
 import com.hiltondublin.classes.RoomType;
@@ -49,6 +50,13 @@ public class HiltonDublinDBConnection {
 	public final static String RATING_RATING = RATING + "." + "RATING";
 	public final static String RATING_COMMENT = RATING + "." + "COMMENT";
 	public final static String []RATING_COLUMNS = {RATING_RATINGID, RATING_ROOMTYPEID, RATING_GUESTID, RATING_RATING, RATING_COMMENT};
+	
+	//ConsumerProduct table constants
+	public final static String CONSUMERPRODUCT = "CONSUMERPRODUCT";
+	public final static String CONSUMERPRODUCT_PRODUCTID = CONSUMERPRODUCT + "." + "PRODUCTID";
+	public final static String CONSUMERPRODUCT_NAME = CONSUMERPRODUCT + "." + "NAME";
+	public final static String CONSUMERPRODUCT_PRICE = CONSUMERPRODUCT + "." + "PRICE";
+	public final static String []CONSUMERPRODUCT_COLUMNS = {CONSUMERPRODUCT_PRODUCTID, CONSUMERPRODUCT_NAME, CONSUMERPRODUCT_PRICE};
 	
 	
 	
@@ -559,6 +567,9 @@ public class HiltonDublinDBConnection {
 				roomType.setStandardPrice(rs.getDouble(ROOMTYPE_STANDARDPRICE));
 				roomType.setDescription(rs.getString(ROOMTYPE_DESCRIPTION));
 				
+				//TODO roomType.setSpecialPrices();
+				//TODO roomType.setWeekdayPrices();
+				
 				roomTypes.add(roomType);
 			}
 			rs.close();
@@ -600,7 +611,7 @@ public class HiltonDublinDBConnection {
 	/**
 	 * Inserts a room type into the database
 	 * @param roomType
-	 * @return
+	 * @return Boolean
 	 */
 	public boolean insertRoomType(RoomType roomType){
 		String []values = {Integer.toString(roomType.getRoomTypeID()), 
@@ -674,8 +685,16 @@ public class HiltonDublinDBConnection {
 	}
 	
 	
-	
-	
+	/**
+	 * Inserts a Rating into the database specified from the given parameter.
+	 * If a parameter is null or empty it won't be recorded in the SQL Statement.
+	 * @param ratingID
+	 * @param roomTypeID
+	 * @param guestID
+	 * @param rating
+	 * @param comment
+	 * @return Boolean
+	 */
 	public boolean insertRating(String ratingID, String roomTypeID, String guestID, String rating, String comment){
 		
 		//Create value array
@@ -693,7 +712,11 @@ public class HiltonDublinDBConnection {
 	}
 	
 	
-	
+	/**
+	 * Inserts a Rating type into the database
+	 * @param ratingObj
+	 * @return Boolean
+	 */
 	public boolean insertRating(Rating ratingObj){
 		//Get values in String format
 		String ratingID = Integer.toString(ratingObj.getRatingID());
@@ -714,6 +737,97 @@ public class HiltonDublinDBConnection {
 		//Execute update
 		return executeUpdate(sqlStatement);	
 		
+	}
+	
+	
+	
+	//------------------------------------------------------------------------------------------
+	//-----------------------------------------CONSUMERPRODUCT----------------------------------
+	//------------------------------------------------------------------------------------------
+	
+	/**
+	 * Returns all Consumer Products from the database that are specified by the parameters.
+	 * If parameter is null it won't be included in the conditions from the sql statement.
+	 * @param consumerProductID
+	 * @param name
+	 * @param price
+	 * @param additionalSQLCondition
+	 * @return List<ConsumerProduct>
+	 */
+	public List<ConsumerProduct> getConsumerProducts(String consumerProductID, String name, String price, String additionalSQLCondition){
+		List<ConsumerProduct> consumerProducts = new ArrayList<ConsumerProduct>();
+		
+		//Write Values and Tables in Arrays
+		String []values = {consumerProductID, name, price};
+		String []tables = {CONSUMERPRODUCT};
+				
+		//Get SQL Statement
+		String sqlStatement = createSelectStatement(tables, CONSUMERPRODUCT_COLUMNS, CONSUMERPRODUCT_COLUMNS, values, additionalSQLCondition);
+				
+		//Execute Query
+		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
+				
+		//Process Result Set
+		try{
+			while(rs.next()){
+				ConsumerProduct consumerProduct = new ConsumerProduct();
+				
+				consumerProduct.setProductID(rs.getInt(CONSUMERPRODUCT_PRODUCTID));
+				consumerProduct.setName(rs.getString(CONSUMERPRODUCT_NAME));
+				consumerProduct.setPrice(rs.getDouble(CONSUMERPRODUCT_PRICE));
+				
+				consumerProducts.add(consumerProduct);
+			}
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("Read ResultSet Failed.");
+			e.printStackTrace();
+			return null;
+		}
+			
+		return consumerProducts;
+	}
+	
+	
+	/**
+	 * Inserts a Consumer Product into the database specified from the given parameter.
+	 * If a parameter is null or empty it won't be recorded in the SQL Statement.
+	 * @param consumerProductID
+	 * @param name
+	 * @param price
+	 * @return Boolean
+	 */
+	public boolean insertConsumerProduct(String consumerProductID, String name, String price){
+		//Create value array
+		String []values = {consumerProductID, name, price};
+		
+		//Return cell List with contained values
+		List<Cell> cells = getCellList(CONSUMERPRODUCT_COLUMNS, values);
+				
+		//Create insert SQL Statement
+		String sqlStatement = createInsertStatement(CONSUMERPRODUCT, cells);
+				
+		//Execute update
+		return executeUpdate(sqlStatement);	
+	}
+	
+	public boolean insertConsumerProduct(ConsumerProduct consumerProduct){
+		//Get values in String format
+		String consumerProductID = Integer.toString(consumerProduct.getProductID());
+		String name = consumerProduct.getName();
+		String price = Double.toString(consumerProduct.getPrice());
+		
+		//Create value array
+		String []values = {consumerProductID, name, price};
+				
+		//Return cell List with contained values
+		List<Cell> cells = getCellList(CONSUMERPRODUCT_COLUMNS, values);
+				
+		//Create insert SQL Statement
+		String sqlStatement = createInsertStatement(CONSUMERPRODUCT, cells);
+				
+		//Execute update
+		return executeUpdate(sqlStatement);
 	}
 
 }
