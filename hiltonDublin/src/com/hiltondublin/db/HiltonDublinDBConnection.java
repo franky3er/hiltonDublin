@@ -73,6 +73,19 @@ public class HiltonDublinDBConnection {
 	public final static String RESERVATION_PAID = RESERVATION + "." + "PAID";
 	public final static String []RESERVATION_COLUMNS = {RESERVATION_RESERVATIONID, RESERVATION_GUESTID, RESERVATION_ARRIVALDATE, RESERVATION_DEPARTUREDATE, RESERVATION_PAID};
 	
+	//SpecialPrice table constants
+	public final static String SPECIALPRICE = "SPECIALPRICE";
+	public final static String SPECIALPRICE_ROOMTYPEID = SPECIALPRICE + "." + "TYPEID";
+	public final static String SPECIALPRICE_DATE = SPECIALPRICE + "." + "DATE";
+	public final static String SPECIALPRICE_PRICE = SPECIALPRICE + "." + "PRICE";
+	public final static String SPECIALPRICE_COMMENT = SPECIALPRICE + "." + "COMMENT";
+	public final static String []SPECIALPRICE_COLUMNS = {SPECIALPRICE_ROOMTYPEID, SPECIALPRICE_DATE, SPECIALPRICE_PRICE, SPECIALPRICE_COMMENT};
+	
+	//WeekdayPrice table constants
+	public final static String WEEKDAYPRICE = "WEEKDAYPRICE";
+	public final static String WEEKDAYPRICE_ROOMTYPEID = WEEKDAYPRICE + "." + "TYPEID";
+	public final static String WEEKDAYPRICE_PRICE = WEEKDAYPRICE + "." + "PRICE";
+	public final static String WEEKDAYPRICE_WEEKDAY = WEEKDAYPRICE + "." + "WEEKDAY";
 	
 	
 	
