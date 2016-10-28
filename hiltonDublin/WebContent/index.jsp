@@ -1,5 +1,17 @@
+<%@page import="com.hiltondublin.db.HiltonDublinDBConnection"%>
+<%@page import="com.hiltondublin.classes.Room" %>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    
+<%HiltonDublinDBConnection con = HiltonDublinDBConnection.getInstance(); 
+
+	List<Room> rooms = con.getRooms(null, null, Boolean.toString(false), null, null);
+	for(Room room : rooms){
+		System.out.println("Room: " + room.getRoomNumber());
+	}
+
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
