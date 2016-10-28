@@ -16,7 +16,7 @@ import com.hiltondublin.classes.RoomType;
 
 public class HiltonDublinDBConnection {
 	//Database Properties constants
-	public final static String DB_PROPERTIES_FILENAME = "db.properties";
+	public final static String DB_PROPERTIES_FILENAME = "hiltonDublinDB.properties";
 	public final static String HILTONDUBLIN_DB_DRIVER = "hiltondublin.db.driver";
 	public final static String HILTONDUBLIN_DB_URL = "hiltondublin.db.url";
 	public final static String HILTONDUBLIN_DB_USERNAME = "hiltondublin.db.username";
@@ -258,8 +258,7 @@ public class HiltonDublinDBConnection {
 	 */
 	public String createInsertStatement(String table, List<Cell> cells){
 		
-		String sqlStatement = null;
-		sqlStatement += "INSERT INTO " + table + "( ";
+		String sqlStatement = "INSERT INTO " + table + "( ";
 		boolean firstColumn = true;
 		for(Cell cell : cells){
 			if(firstColumn){
@@ -383,6 +382,7 @@ public class HiltonDublinDBConnection {
 				Cell cell = new Cell();
 				cell.setColumn(columns[i]);
 				cell.setValue(value);
+				cells.add(cell);
 			}
 			i++;
 		}
@@ -390,6 +390,10 @@ public class HiltonDublinDBConnection {
 		return cells;
 	}
 	
+	
+	//------------------------------------------------------------------------------------------
+	//-----------------------------------------ROOM---------------------------------------------
+	//------------------------------------------------------------------------------------------
 	
 	/**
 	 * Returns all rooms from the database that are specified by the parameters.
@@ -427,6 +431,10 @@ public class HiltonDublinDBConnection {
 				room.setSmoking(rs.getBoolean(ROOM_SMOKING));
 				room.setOccupied(rs.getBoolean(ROOM_OCCUPIED));
 				
+				//Add roomType Object
+				RoomType roomType = getRoomTypes(Integer.toString(room.getTypeID()), null, null, null, null, null).get(0);
+				room.setType(roomType);
+				
 				rooms.add(room);
 			}
 			rs.close();
@@ -452,6 +460,10 @@ public class HiltonDublinDBConnection {
 	 * @return boolean
 	 */
 	public boolean insertRoom(String roomNumber, String typeID, String smoking, String occupied){
+		//Convert Booleans to tinyint
+		smoking = convertBooleanToTinyInt(smoking);
+		occupied = convertBooleanToTinyInt(occupied);
+		
 		//Create cell List
 		String []values = {roomNumber, typeID, smoking, occupied};
 		
@@ -466,34 +478,42 @@ public class HiltonDublinDBConnection {
 	}
 	
 	
-	
 	/**
-	 * Inserts a room type into the database specified from the given parameter.
-	 * If a parameter is null or empty it won't be recorded in the SQL Statement.
-	 * @param typeID
-	 * @param name
-	 * @param picture
-	 * @param standardPrice
-	 * @param description
-	 * @return boolean
+	 * Inserts a room
+	 * @param room
+	 * @return Boolean
 	 */
-	public boolean insertRoomType(String typeID, String name, String picture, String standardPrice, String description){
+	public boolean insertRoom(Room room){
+		//Get values in String format
+		String roomNumber = Integer.toString(room.getRoomNumber());
+		String typeID = Integer.toString(room.getTypeID());
+		String smoking = Boolean.toString(room.isSmoking());
+		String occupied = Boolean.toString(room.isOccupied());
+		
+		//Convert Booleans to tinyint
+		smoking = convertBooleanToTinyInt(smoking);
+		occupied = convertBooleanToTinyInt(occupied);
+				
 		//Create cell List
-		String []values = {typeID, name, picture, standardPrice, description};
+		String []values = {roomNumber, typeID, smoking, occupied};
 				
 		//Return cell List with contained values
-		List<Cell> cells = getCellList(ROOMTYPE_COLUMNS, values);
-		
+		List<Cell> cells = getCellList(ROOM_COLUMNS, values);
+				
 		//Create insert SQL Statement
-		String sqlStatement = createInsertStatement(ROOMTYPE, cells);
-		
+		String sqlStatement = createInsertStatement(ROOM, cells);
+				
 		//Execute update
-		return executeUpdate(sqlStatement);		
+		return executeUpdate(sqlStatement);
 	}
 	
-
 	
-
+	
+	
+	//------------------------------------------------------------------------------------------
+	//-----------------------------------------ROOMTYPE-----------------------------------------
+	//------------------------------------------------------------------------------------------
+	
 	/**
 	 * Returns all room types from the database that are specified by the parameters.
 	 * If parameter is null it won't be included in the conditions from the sql statement.
@@ -540,5 +560,59 @@ public class HiltonDublinDBConnection {
 		
 		return roomTypes;
 	}
+	
+	
+	/**
+	 * Inserts a room type into the database specified from the given parameter.
+	 * If a parameter is null or empty it won't be recorded in the SQL Statement.
+	 * @param typeID
+	 * @param name
+	 * @param picture
+	 * @param standardPrice
+	 * @param description
+	 * @return boolean
+	 */
+	public boolean insertRoomType(String typeID, String name, String picture, String standardPrice, String description){
+		//Create cell List
+		String []values = {typeID, name, picture, standardPrice, description};
+				
+		//Return cell List with contained values
+		List<Cell> cells = getCellList(ROOMTYPE_COLUMNS, values);
+		
+		//Create insert SQL Statement
+		String sqlStatement = createInsertStatement(ROOMTYPE, cells);
+		
+		//Execute update
+		return executeUpdate(sqlStatement);	
+	}
+	
+	
+	/**
+	 * Inserts a room type into the database
+	 * @param roomType
+	 * @return
+	 */
+	public boolean insertRoomType(RoomType roomType){
+		String []values = {Integer.toString(roomType.getRoomTypeID()), 
+				roomType.getName(), roomType.getPictureRessource(), 
+				Double.toString(roomType.getStandardPrice()), 
+				roomType.getDescription()};
+		
+		//Return cell List with contained values
+		List<Cell> cells = getCellList(ROOMTYPE_COLUMNS, values);
+		
+		//Create insert SQL Statement
+		String sqlStatement = createInsertStatement(ROOMTYPE, cells);
+		
+		//Execute update
+		return executeUpdate(sqlStatement);	
+	}
+	
+	
+	
+	
+	
+	
+	
 
 }
