@@ -7,16 +7,22 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 import com.hiltondublin.classes.ConsumerProduct;
 import com.hiltondublin.classes.Rating;
+import com.hiltondublin.classes.Reservation;
 import com.hiltondublin.classes.Room;
 import com.hiltondublin.classes.RoomType;
 
 public class HiltonDublinDBConnection {
+	//MySQL Date Format
+	public final static SimpleDateFormat mySQLDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
 	//Database Properties constants
 	public final static String DB_PROPERTIES_FILENAME = "hiltonDublinDB.properties";
 	public final static String HILTONDUBLIN_DB_DRIVER = "hiltondublin.db.driver";
@@ -57,6 +63,16 @@ public class HiltonDublinDBConnection {
 	public final static String CONSUMERPRODUCT_NAME = CONSUMERPRODUCT + "." + "NAME";
 	public final static String CONSUMERPRODUCT_PRICE = CONSUMERPRODUCT + "." + "PRICE";
 	public final static String []CONSUMERPRODUCT_COLUMNS = {CONSUMERPRODUCT_PRODUCTID, CONSUMERPRODUCT_NAME, CONSUMERPRODUCT_PRICE};
+	
+	//Reservation table constants
+	public final static String RESERVATION = "RESERVATION";
+	public final static String RESERVATION_RESERVATIONID = RESERVATION + "." + "RESERVATIONID";
+	public final static String RESERVATION_GUESTID = RESERVATION + "." + "GUESTID";
+	public final static String RESERVATION_ARRIVALDATE = RESERVATION + "." + "ARRIVALDATE";
+	public final static String RESERVATION_DEPARTUREDATE = RESERVATION + "." + "DEPARTUREDATE";
+	public final static String RESERVATION_PAID = RESERVATION + "." + "PAID";
+	public final static String []RESERVATION_COLUMNS = {RESERVATION_RESERVATIONID, RESERVATION_GUESTID, RESERVATION_ARRIVALDATE, RESERVATION_DEPARTUREDATE, RESERVATION_PAID};
+	
 	
 	
 	
@@ -811,6 +827,11 @@ public class HiltonDublinDBConnection {
 		return executeUpdate(sqlStatement);	
 	}
 	
+	/**
+	 * inserts a consumer product to the database
+	 * @param consumerProduct
+	 * @return Boolean
+	 */
 	public boolean insertConsumerProduct(ConsumerProduct consumerProduct){
 		//Get values in String format
 		String consumerProductID = Integer.toString(consumerProduct.getProductID());
@@ -828,6 +849,168 @@ public class HiltonDublinDBConnection {
 				
 		//Execute update
 		return executeUpdate(sqlStatement);
+	}
+	
+	
+	
+	
+	//------------------------------------------------------------------------------------------
+	//-----------------------------------------RESERVATION--------------------------------------
+	//------------------------------------------------------------------------------------------
+	
+	/**
+	 * Returns all Reservations from the database that are specified by the parameters.
+	 * If parameter is null it won't be included in the conditions from the sql statement.
+	 * @param reservationID
+	 * @param guestID
+	 * @param arrivalDate
+	 * @param departureDate
+	 * @param paid
+	 * @param additionalSQLCondition
+	 * @return List<Reservation>
+	 */
+	public List<Reservation> getReservations(String reservationID, String guestID, String arrivalDate, String departureDate, String paid, String additionalSQLCondition){
+		List<Reservation> reservations = new ArrayList<Reservation>();
+		//Check if Date is in right format
+		try {
+			if(!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(arrivalDate)))){
+				System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+				return null;
+			}
+		} catch (ParseException e1) {
+			System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+			return null;
+		}
+		try {
+			if(!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(departureDate)))){
+				System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+				return null;
+			}
+		} catch (ParseException e1) {
+			System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+			return null;
+		}
+		
+		//convert boolean to tinyint
+		paid = convertBooleanToTinyInt(paid);
+		
+		//Write Values and Tables in Arrays
+		String []values = {reservationID, guestID, arrivalDate, departureDate, paid};
+		String []tables = {RESERVATION};
+				
+		//Get SQL Statement
+		String sqlStatement = createSelectStatement(tables, RESERVATION_COLUMNS, RESERVATION_COLUMNS, values, additionalSQLCondition);
+				
+		//Execute Query
+		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
+				
+		//Process Result Set
+		try{
+			while(rs.next()){
+				Reservation reservation = new Reservation();
+				
+				reservation.setBookingNumber(rs.getInt(RESERVATION_RESERVATIONID));
+				reservation.setGuestID(rs.getInt(RESERVATION_GUESTID));
+				reservation.setArrivalDate(rs.getDate(RESERVATION_ARRIVALDATE));
+				reservation.setDepartureDate(rs.getDate(RESERVATION_DEPARTUREDATE));
+				reservation.setPaid(rs.getBoolean(RESERVATION_PAID));
+				
+				//TODO reservation.setGuests()
+				//TODO reservation.setRooms()
+				//TODO reservation.setProducts()
+				
+				reservations.add(reservation);
+			}
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("Read ResultSet Failed.");
+			e.printStackTrace();
+			return null;
+		}
+		
+		return reservations;
+	}
+	
+	
+	/**
+	 * Inserts a Reservation into the database specified from the given parameter.
+	 * If a parameter is null or empty it won't be recorded in the SQL Statement.
+	 * @param reservationID
+	 * @param guestID
+	 * @param arrivalDate
+	 * @param departureDate
+	 * @param paid
+	 * @param additionalSQLCondition
+	 * @return
+	 */
+	public boolean insertReservation(String reservationID, String guestID, String arrivalDate, String departureDate, String paid, String additionalSQLCondition){
+		
+		//Check if Date is in right format
+		try {
+			if(!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(arrivalDate)))){
+				System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+				return false;
+			}
+		} catch (ParseException e1) {
+			System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+			return false;
+		}
+		try {
+			if(!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(departureDate)))){
+				System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+				return false;
+			}
+		} catch (ParseException e1) {
+			System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+			return false;
+		}
+		
+		//Convert boolean to tinyint
+		paid = convertBooleanToTinyInt(paid);
+		
+		
+		//Create value array
+		String []values = {reservationID, guestID, arrivalDate, departureDate, paid};
+		
+		//Return cell List with contained values
+		List<Cell> cells = getCellList(RESERVATION_COLUMNS, values);
+				
+		//Create insert SQL Statement
+		String sqlStatement = createInsertStatement(RESERVATION, cells);
+				
+		//Execute update
+		return executeUpdate(sqlStatement);	
+		
+	}
+	
+	/**
+	 * Inserts a Reservation to the Database
+	 * @param reservation
+	 * @return boolean
+	 */
+	public boolean insertReservation(Reservation reservation){
+		//Get values in String format
+		String reservationID = Integer.toString(reservation.getBookingNumber());
+		String guestID = Integer.toString(reservation.getGuestID());
+		String arrivalDate = mySQLDateFormat.format(reservation.getArrivalDate());
+		String departureDate = mySQLDateFormat.format(reservation.getDepartureDate());
+		String paid = Boolean.toString(reservation.isPaid());
+		
+		//Convert boolean to tinyint
+		paid = convertBooleanToTinyInt(paid);
+				
+				
+		//Create value array
+		String []values = {reservationID, guestID, arrivalDate, departureDate, paid};
+		
+		//Return cell List with contained values
+		List<Cell> cells = getCellList(RESERVATION_COLUMNS, values);
+				
+		//Create insert SQL Statement
+		String sqlStatement = createInsertStatement(RESERVATION, cells);
+				
+		//Execute update
+		return executeUpdate(sqlStatement);	
 	}
 
 }

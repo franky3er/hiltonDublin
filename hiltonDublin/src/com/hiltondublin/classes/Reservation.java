@@ -7,8 +7,10 @@ import com.hiltondublin.users.Guest;
 
 public class Reservation {
 	private int bookingNumber; //=reservationID
+	private int guestID;
 	private Date arrivalDate;
 	private Date departureDate;
+	private boolean paid;
 	private Guest guest;
 	private List<Room> rooms = null;
 	private List<ConsumerProduct> consumerProducts = null;
@@ -53,5 +55,17 @@ public class Reservation {
 	}
 	public void setConsumerProducts(List<ConsumerProduct> consumerProducts) {
 		this.consumerProducts = consumerProducts;
+	}
+	public int getGuestID() {
+		return guestID;
+	}
+	public void setGuestID(int guestID) {
+		this.guestID = guestID;
+	}
+	public boolean isPaid() {
+		return paid;
+	}
+	public void setPaid(boolean paid) {
+		this.paid = paid;
 	}
 }
