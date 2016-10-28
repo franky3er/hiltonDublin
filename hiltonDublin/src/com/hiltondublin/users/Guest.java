@@ -22,7 +22,7 @@ public class Guest {
 	public double getPassportNr() {
 		return passportNr;
 	}
-	public void setPassportNr(double passportNr) {
+	public void setPassportNr(int passportNr) {
 		this.passportNr = passportNr;
 	}
 	
