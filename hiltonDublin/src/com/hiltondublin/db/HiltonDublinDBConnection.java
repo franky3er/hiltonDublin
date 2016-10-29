@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -89,6 +90,18 @@ public class HiltonDublinDBConnection {
 	public final static String WEEKDAYPRICE_PRICE = WEEKDAYPRICE + "." + "PRICE";
 	public final static String WEEKDAYPRICE_WEEKDAY = WEEKDAYPRICE + "." + "WEEKDAY";
 	public final static String []WEEKDAYPRICE_COLUMNS = {WEEKDAYPRICE_ROOMTYPEID, WEEKDAYPRICE_PRICE, WEEKDAYPRICE_WEEKDAY};
+	
+	//Resereved_Room Table
+	public final static String RESERVED_ROOM = "RESERVED_ROOM";
+	public final static String RESERVED_ROOM_ROOMNUMBER = RESERVED_ROOM + "." + "ROOMNUMBER";
+	public final static String RESERVED_ROOM_RESERVATIONID = RESERVED_ROOM + "." + "RESERVATIONID";
+	public final static String []RESERVED_ROOM_COLUMNS = {RESERVED_ROOM_ROOMNUMBER, RESERVED_ROOM_RESERVATIONID};
+	
+	//Reserved_Products Table
+	public final static String RESERVED_PRODUCT = "RESERVED_PRODUCT";
+	public final static String RESERVED_PRODUCT_PRODUCTID = RESERVED_PRODUCT + "." + "PRODUCTID";
+	public final static String RESERVED_PRODUCT_RESERVATIONID = RESERVED_PRODUCT + "." + "RESERVATIONID";
+	public final static String []RESERVED_PRODUCT_COLUMNS = {RESERVED_PRODUCT_PRODUCTID, RESERVED_PRODUCT_RESERVATIONID};
 	
 	
 	
@@ -446,6 +459,30 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	
 	/**
+	 * Returns the Select Statement to get all rooms specified by the given parameters.
+	 * If a parameter is null or empty it won't be recorded in the sql Statement.
+	 * @param roomNumber
+	 * @param typeID
+	 * @param smoking
+	 * @param occupied
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String getRoomsAsSQLStatement(String roomNumber, String typeID, String smoking, String occupied, String additionalSQLCondition){
+		//Converting
+		smoking = convertBooleanToTinyInt(smoking);
+		occupied = convertBooleanToTinyInt(occupied);
+			
+		//Write values and tables in arrays
+		String []values = {roomNumber, typeID, smoking, occupied};
+		String []tables = {ROOM};
+				
+		//Get sql Statement
+		return createSelectStatement(tables, ROOM_COLUMNS, ROOM_COLUMNS, values, additionalSQLCondition);		
+	}
+	
+	
+	/**
 	 * Returns all rooms from the database that are specified by the parameters.
 	 * If parameter is null it won't be included in the conditions from the sql statement.
 	 * @param roomNumber
@@ -458,17 +495,10 @@ public class HiltonDublinDBConnection {
 	public List<Room> getRooms(String roomNumber, String typeID, String smoking, String occupied, String additionalSQLCondition){
 		List<Room> rooms = new ArrayList<Room>();
 		
-		//Converting
-		smoking = convertBooleanToTinyInt(smoking);
-		occupied = convertBooleanToTinyInt(occupied);
-		
-		//Write values and tables in arrays
-		String []values = {roomNumber, typeID, smoking, occupied};
-		String []tables = {ROOM};
 		
 		//Get sql Statement
-		String sqlStatement = createSelectStatement(tables, ROOM_COLUMNS, ROOM_COLUMNS, values, additionalSQLCondition);
-		
+		String sqlStatement = getRoomsAsSQLStatement(roomNumber, typeID, smoking, occupied, additionalSQLCondition);
+				
 		//Execute Query
 		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
 		
@@ -565,6 +595,27 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	
 	/**
+	 * Returns the Select Statement to get all room types specified by the given parameters.
+	 * If a parameter is null or empty it won't be recorded in the sql Statement.
+	 * @param typeID
+	 * @param name
+	 * @param picture
+	 * @param standardprice
+	 * @param description
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String getRoomTypesAsSQLStatement(String typeID, String name, String picture, String standardprice, String description, String additionalSQLCondition){
+		//Write Values and Tables in Arrays
+		String []values = {typeID, name, picture, standardprice, description};
+		String []tables = {ROOMTYPE};
+				
+		//Get SQL Statement
+		return createSelectStatement(tables, ROOMTYPE_COLUMNS, ROOMTYPE_COLUMNS, values, additionalSQLCondition);
+				
+	}
+	
+	/**
 	 * Returns all room types from the database that are specified by the parameters.
 	 * If parameter is null it won't be included in the conditions from the sql statement.
 	 * @param typeID
@@ -578,12 +629,7 @@ public class HiltonDublinDBConnection {
 	public List<RoomType> getRoomTypes(String typeID, String name, String picture, String standardprice, String description, String additionalSQLCondition){
 		List <RoomType> roomTypes = new ArrayList<RoomType>();
 		
-		//Write Values and Tables in Arrays
-		String []values = {typeID, name, picture, standardprice, description};
-		String []tables = {ROOMTYPE};
-		
-		//Get SQL Statement
-		String sqlStatement = createSelectStatement(tables, ROOMTYPE_COLUMNS, ROOMTYPE_COLUMNS, values, additionalSQLCondition);
+		String sqlStatement = getRoomTypesAsSQLStatement(typeID, name, picture, standardprice, description, additionalSQLCondition);
 		
 		//Execute Query
 		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
@@ -599,8 +645,8 @@ public class HiltonDublinDBConnection {
 				roomType.setStandardPrice(rs.getDouble(ROOMTYPE_STANDARDPRICE));
 				roomType.setDescription(rs.getString(ROOMTYPE_DESCRIPTION));
 				
-				//TODO roomType.setSpecialPrices();
-				//TODO roomType.setWeekdayPrices();
+				roomType.setSpecialPrices(getSpecialPrices(Integer.toString(roomType.getRoomTypeID()), null, null, null, null));
+				roomType.setWeekdayPrices(getWeekdayPrices(Integer.toString(roomType.getRoomTypeID()), null, null, null));
 				
 				roomTypes.add(roomType);
 			}
@@ -668,6 +714,27 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	
 	/**
+	 * Returns the Select Statement to get all ratings specified by the given parameters.
+	 * If a parameter is null or empty it won't be recorded in the sql Statement.
+	 * @param ratingID
+	 * @param roomTypeID
+	 * @param guestID
+	 * @param rating
+	 * @param comment
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String getRatingsAsSQLStatement(String ratingID, String roomTypeID, String guestID, String rating, String comment, String additionalSQLCondition){
+		//Write Values and Tables in Arrays
+		String []values = {ratingID, roomTypeID, guestID, rating, comment};
+		String []tables = {RATING};
+						
+		//Get SQL Statement
+		return createSelectStatement(tables, RATING_COLUMNS, RATING_COLUMNS, values, additionalSQLCondition);
+					
+	}
+	
+	/**
 	 * Returns all room types from the database that are specified by the parameters.
 	 * If parameter is null it won't be included in the conditions from the sql statement.
 	 * @param ratingID
@@ -681,13 +748,9 @@ public class HiltonDublinDBConnection {
 	public List<Rating> getRatings(String ratingID, String roomTypeID, String guestID, String rating, String comment, String additionalSQLCondition){
 		List<Rating> ratings = new ArrayList<Rating>();
 		
-		//Write Values and Tables in Arrays
-		String []values = {ratingID, roomTypeID, guestID, rating, comment};
-		String []tables = {RATING};
-				
-		//Get SQL Statement
-		String sqlStatement = createSelectStatement(tables, RATING_COLUMNS, RATING_COLUMNS, values, additionalSQLCondition);
-				
+		//Create Select SQL Statement
+		String sqlStatement = getRatingsAsSQLStatement(ratingID, roomTypeID, guestID, rating, comment, additionalSQLCondition);
+		
 		//Execute Query
 		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
 				
@@ -778,6 +841,25 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	
 	/**
+	 * Returns the Select Statement to get all consumer products specified by the given parameters.
+	 * If a parameter is null or empty it won't be recorded in the sql Statement.
+	 * @param consumerProductID
+	 * @param name
+	 * @param price
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String getConsumerProductsAsSQLStatement(String consumerProductID, String name, String price, String additionalSQLCondition){
+		//Write Values and Tables in Arrays
+		String []values = {consumerProductID, name, price};
+		String []tables = {CONSUMERPRODUCT};
+				
+		//Get SQL Statement
+		return createSelectStatement(tables, CONSUMERPRODUCT_COLUMNS, CONSUMERPRODUCT_COLUMNS, values, additionalSQLCondition);
+				
+	}
+	
+	/**
 	 * Returns all Consumer Products from the database that are specified by the parameters.
 	 * If parameter is null it won't be included in the conditions from the sql statement.
 	 * @param consumerProductID
@@ -789,13 +871,9 @@ public class HiltonDublinDBConnection {
 	public List<ConsumerProduct> getConsumerProducts(String consumerProductID, String name, String price, String additionalSQLCondition){
 		List<ConsumerProduct> consumerProducts = new ArrayList<ConsumerProduct>();
 		
-		//Write Values and Tables in Arrays
-		String []values = {consumerProductID, name, price};
-		String []tables = {CONSUMERPRODUCT};
-				
-		//Get SQL Statement
-		String sqlStatement = createSelectStatement(tables, CONSUMERPRODUCT_COLUMNS, CONSUMERPRODUCT_COLUMNS, values, additionalSQLCondition);
-				
+		//Create Select SQL Statement
+		String sqlStatement = getConsumerProductsAsSQLStatement(consumerProductID, name, price, additionalSQLCondition);
+		
 		//Execute Query
 		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
 				
@@ -875,6 +953,49 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	
 	/**
+	 * Returns the Select Statement to get all reservations specified by the given parameters.
+	 * If a parameter is null or empty it won't be recorded in the sql Statement.
+	 * @param reservationID
+	 * @param guestID
+	 * @param arrivalDate
+	 * @param departureDate
+	 * @param paid
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String getReservationsAsSQLStatement(String reservationID, String guestID, String arrivalDate, String departureDate, String paid, String additionalSQLCondition){
+		// Check if Date is in right format
+		try {
+			if (!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(arrivalDate)))) {
+				System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+				return null;
+			}
+		} catch (ParseException e1) {
+			System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+			return null;
+		}
+		try {
+			if (!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(departureDate)))) {
+				System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+				return null;
+			}
+		} catch (ParseException e1) {
+			System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+			return null;
+		}
+
+		// convert boolean to tinyint
+		paid = convertBooleanToTinyInt(paid);
+
+		// Write Values and Tables in Arrays
+		String[] values = { reservationID, guestID, arrivalDate, departureDate, paid };
+		String[] tables = { RESERVATION };
+		
+		//Get SQL Statement
+		return createSelectStatement(tables, RESERVATION_COLUMNS, RESERVATION_COLUMNS, values, additionalSQLCondition);
+	}
+	
+	/**
 	 * Returns all Reservations from the database that are specified by the parameters.
 	 * If parameter is null it won't be included in the conditions from the sql statement.
 	 * @param reservationID
@@ -887,36 +1008,10 @@ public class HiltonDublinDBConnection {
 	 */
 	public List<Reservation> getReservations(String reservationID, String guestID, String arrivalDate, String departureDate, String paid, String additionalSQLCondition){
 		List<Reservation> reservations = new ArrayList<Reservation>();
-		//Check if Date is in right format
-		try {
-			if(!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(arrivalDate)))){
-				System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-				return null;
-			}
-		} catch (ParseException e1) {
-			System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-			return null;
-		}
-		try {
-			if(!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(departureDate)))){
-				System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-				return null;
-			}
-		} catch (ParseException e1) {
-			System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-			return null;
-		}
 		
-		//convert boolean to tinyint
-		paid = convertBooleanToTinyInt(paid);
+		//Create SQL Select Statement
+		String sqlStatement = getReservationsAsSQLStatement(reservationID, guestID, arrivalDate, departureDate, paid, additionalSQLCondition);
 		
-		//Write Values and Tables in Arrays
-		String []values = {reservationID, guestID, arrivalDate, departureDate, paid};
-		String []tables = {RESERVATION};
-				
-		//Get SQL Statement
-		String sqlStatement = createSelectStatement(tables, RESERVATION_COLUMNS, RESERVATION_COLUMNS, values, additionalSQLCondition);
-				
 		//Execute Query
 		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
 				
@@ -1015,7 +1110,6 @@ public class HiltonDublinDBConnection {
 		//Convert boolean to tinyint
 		paid = convertBooleanToTinyInt(paid);
 				
-				
 		//Create value array
 		String []values = {reservationID, guestID, arrivalDate, departureDate, paid};
 		
@@ -1037,18 +1131,16 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	
 	/**
-	 * Returns all special prices from the database that are specified by the parameters.
-	 * If parameter is null it won't be included in the conditions from the sql statement.
+	 * Returns the Select Statement to get all special prices specified by the given parameters.
+	 * If a parameter is null or empty it won't be recorded in the sql Statement.
 	 * @param roomTypeID
 	 * @param date
 	 * @param price
 	 * @param comment
 	 * @param additionalSQLCondition
-	 * @return List<SpecialPrice>
+	 * @return String
 	 */
-	public List<SpecialPrice> getSpecialPrices(String roomTypeID, String date, String price, String comment, String additionalSQLCondition){
-		List<SpecialPrice> specialPrices = new ArrayList<SpecialPrice>();		
-		
+	public String getSpecialPricesAsSQLStatements(String roomTypeID, String date, String price, String comment, String additionalSQLCondition){
 		//Check if Date is in right format
 		try {
 			if(!date.equals(mySQLDateFormat.format(mySQLDateFormat.parse(date)))){
@@ -1066,7 +1158,25 @@ public class HiltonDublinDBConnection {
 		String []tables = {SPECIALPRICE};
 				
 		//Get SQL Statement
-		String sqlStatement = createSelectStatement(tables, SPECIALPRICE_COLUMNS, SPECIALPRICE_COLUMNS, values, additionalSQLCondition);
+		return createSelectStatement(tables, SPECIALPRICE_COLUMNS, SPECIALPRICE_COLUMNS, values, additionalSQLCondition);
+				
+	}
+	
+	/**
+	 * Returns all special prices from the database that are specified by the parameters.
+	 * If parameter is null it won't be included in the conditions from the sql statement.
+	 * @param roomTypeID
+	 * @param date
+	 * @param price
+	 * @param comment
+	 * @param additionalSQLCondition
+	 * @return List<SpecialPrice>
+	 */
+	public List<SpecialPrice> getSpecialPrices(String roomTypeID, String date, String price, String comment, String additionalSQLCondition){
+		List<SpecialPrice> specialPrices = new ArrayList<SpecialPrice>();		
+		
+		//Create Select SQL Statement
+		String sqlStatement = getSpecialPricesAsSQLStatements(roomTypeID, date, price, comment, additionalSQLCondition);
 				
 		//Execute Query
 		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
@@ -1158,6 +1268,25 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	
 	/**
+	 * Returns the Select Statement to get all weekday prices specified by the given parameters.
+	 * If a parameter is null or empty it won't be recorded in the sql Statement.
+	 * @param roomTypeID
+	 * @param price
+	 * @param weekday
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String getWeekdayPricesAsSQLStatement(String roomTypeID, String price, String weekday, String additionalSQLCondition){
+		//Write Values and Tables in Arrays
+		String []values = {roomTypeID, price, weekday};
+		String []tables = {WEEKDAYPRICE};
+				
+		//Get SQL Statement
+		return createSelectStatement(tables, WEEKDAYPRICE_COLUMNS, WEEKDAYPRICE_COLUMNS, values, additionalSQLCondition);
+				
+	}
+	
+	/**
 	 * Returns all special prices from the database that are specified by the parameters.
 	 * If parameter is null it won't be included in the conditions from the sql statement.
 	 * @param roomTypeID
@@ -1169,13 +1298,9 @@ public class HiltonDublinDBConnection {
 	public List<WeekdayPrice> getWeekdayPrices(String roomTypeID, String price, String weekday, String additionalSQLCondition){
 		List<WeekdayPrice> weekdayPrices = new ArrayList<WeekdayPrice>();
 		
-		//Write Values and Tables in Arrays
-		String []values = {roomTypeID, price, weekday};
-		String []tables = {WEEKDAYPRICE};
-				
-		//Get SQL Statement
-		String sqlStatement = createSelectStatement(tables, WEEKDAYPRICE_COLUMNS, WEEKDAYPRICE_COLUMNS, values, additionalSQLCondition);
-				
+		//Create Select SQL Statement
+		String sqlStatement = getWeekdayPricesAsSQLStatement(roomTypeID, price, weekday, additionalSQLCondition);
+		
 		//Execute Query
 		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
 				
@@ -1248,6 +1373,24 @@ public class HiltonDublinDBConnection {
 		// Execute update
 		return executeUpdate(sqlStatement);
 		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//------------------------------------------------------------------------------------------
+	//----------------------------------Additional Functions------------------------------------
+	//------------------------------------------------------------------------------------------
+	public boolean checkIfRoomsAvailable(RoomType roomType, int ammountOfRooms, Date arrivalDate, Date departureDate){
+		//TODO check if rooms available
+		
+		return true;
 	}
 
 }
