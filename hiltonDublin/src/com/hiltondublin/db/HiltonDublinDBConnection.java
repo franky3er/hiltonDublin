@@ -21,6 +21,7 @@ import com.hiltondublin.classes.Room;
 import com.hiltondublin.classes.RoomType;
 import com.hiltondublin.classes.SpecialPrice;
 import com.hiltondublin.classes.WeekdayPrice;
+import com.hiltondublin.users.Guest;
 
 public class HiltonDublinDBConnection {
 	//MySQL Date Format
@@ -102,6 +103,17 @@ public class HiltonDublinDBConnection {
 	public final static String RESERVED_PRODUCT_PRODUCTID = RESERVED_PRODUCT + "." + "PRODUCTID";
 	public final static String RESERVED_PRODUCT_RESERVATIONID = RESERVED_PRODUCT + "." + "RESERVATIONID";
 	public final static String []RESERVED_PRODUCT_COLUMNS = {RESERVED_PRODUCT_PRODUCTID, RESERVED_PRODUCT_RESERVATIONID};
+	
+	//Guest Table
+	public final static String GUEST = "GUEST";
+	public final static String GUEST_GUESTID = GUEST + "." + "GUESTID";
+	public final static String GUEST_FIRSTNAME = GUEST + "." + "FIRSTNAME";
+	public final static String GUEST_LASTNAME = GUEST + "." + "LASTNAME";
+	public final static String GUEST_PHONENUMBER = GUEST + "." + "PHONENUMBER";
+	public final static String GUEST_EMAIL = GUEST + "." + "EMAIL";
+	public final static String GUEST_ADDRESS = GUEST + "." + "ADDRESS";
+	public final static String GUEST_PASSPORTNR = GUEST + "." + "GUEST_PASSPORTNR";
+	public final static String []GUEST_COLUMNS = { GUEST_GUESTID, GUEST_FIRSTNAME, GUEST_LASTNAME, GUEST_PHONENUMBER, GUEST_EMAIL, GUEST_ADDRESS, GUEST_PASSPORTNR };
 	
 	
 	
@@ -787,6 +799,8 @@ public class HiltonDublinDBConnection {
 				//Set objects of rating
 				ratingObj.setRoomType(getRoomTypes(Integer.toString(ratingObj.getTypeID()), null, null, null, null, null).get(0));
 				//TODO ratingObj.setGuest(Guest);
+				
+				ratings.add(ratingObj);
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -1581,6 +1595,138 @@ public class HiltonDublinDBConnection {
 		return assignRoomToReservation(Integer.toString(product.getProductID()), Integer.toString(reservation.getBookingNumber()));
 	}
 	
+	
+	
+	//------------------------------------------------------------------------------------------
+	//-----------------------------------------RESERVED_PRODUCTS--------------------------------
+	//------------------------------------------------------------------------------------------
+	
+	/**
+	 * 
+	 * @param selectedColumns
+	 * @param guestID
+	 * @param firstName
+	 * @param lastName
+	 * @param phoneNumber
+	 * @param email
+	 * @param address
+	 * @param passportNr
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String getGuestsAsSQLStatement(String []selectedColumns, String guestID, String firstName, String lastName, String phoneNumber, String email, String address, String passportNr, String additionalSQLCondition){
+		//Write Values and Tables in Arrays
+		String []values = {guestID, firstName, lastName, phoneNumber, email, address, passportNr};
+		String []tables = {GUEST};
+				
+		if(selectedColumns == null){
+			selectedColumns = GUEST_COLUMNS;
+		}
+								
+		//Get SQL Statement
+		return createSelectStatement(tables, selectedColumns, RATING_COLUMNS, values, additionalSQLCondition);
+	}
+	
+	/**
+	 * Returns all guests from the database that are specified by the parameters.
+	 * If parameter is null it won't be included in the conditions from the sql statement.
+	 * @param guestID
+	 * @param firstName
+	 * @param lastName
+	 * @param phoneNumber
+	 * @param email
+	 * @param address
+	 * @param passportNr
+	 * @param additionalSQLCondition
+	 * @return List<Guest>
+	 */
+	public List<Guest> getGuests(String guestID, String firstName, String lastName, String phoneNumber, String email, String address, String passportNr, String additionalSQLCondition){
+		List<Guest> guests = new ArrayList<Guest>();
+		
+		//Create Select SQL Statement
+		String sqlStatement = getGuestsAsSQLStatement(null, guestID, firstName, lastName, phoneNumber, email, address, passportNr, additionalSQLCondition);
+
+		//Execute Query
+		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
+				
+		//Process Result Set
+		try{
+			while(rs.next()){
+				Guest guest = new Guest();
+				
+				guest.setGuestID(rs.getInt(GUEST_GUESTID));
+				guest.setFirstName(rs.getString(GUEST_FIRSTNAME));
+				guest.setLastName(rs.getString(GUEST_LASTNAME));
+				guest.setPhoneNumber(rs.getString(GUEST_PHONENUMBER));
+				guest.setEmail(rs.getString(GUEST_EMAIL));
+				guest.setAddress(rs.getString(GUEST_ADDRESS));
+				guest.setPassportNr(rs.getInt(GUEST_PASSPORTNR));
+				
+				guests.add(guest);
+			}
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("Read ResultSet Failed.");
+			e.printStackTrace();
+			return null;
+		}
+			return guests;
+	}
+	
+	/**
+	 * Inserts a guest into the database specified from the given parameter.
+	 * If a parameter is null or empty it won't be recorded in the SQL Statement.
+	 * @param guestID
+	 * @param firstName
+	 * @param lastName
+	 * @param phoneNumber
+	 * @param email
+	 * @param address
+	 * @param passportNr
+	 * @return boolean
+	 */
+	public boolean insertGuest(String guestID, String firstName, String lastName, String phoneNumber, String email, String address, String passportNr){
+		//Create value array
+		String []values = {guestID, firstName, lastName, phoneNumber, email, address, passportNr};
+				
+		//Return cell List with contained values
+		List<Cell> cells = getCellList(GUEST_COLUMNS, values);
+						
+		//Create insert SQL Statement
+		String sqlStatement = createInsertStatement(GUEST, cells);
+						
+		//Execute update
+		return executeUpdate(sqlStatement);	
+	}
+	
+	/**
+	 * Inserts a guest to the database.
+	 * @param guest
+	 * @return boolean
+	 */
+	public boolean insertGuest(Guest guest){
+		String guestID, firstName, lastName, phoneNumber, email, address, passportNr;
+		
+		if(guest.getGuestID() == -1){
+			guestID = null;
+		}
+		else{
+			guestID = Integer.toString(guest.getGuestID());
+		}
+		firstName = guest.getFirstName();
+		lastName = guest.getLastName();
+		phoneNumber = guest.getPhoneNumber();
+		email = guest.getEmail();
+		address = guest.getAddress();
+		if(guest.getPassportNr() == -1){
+			passportNr = null;
+		}
+		else {
+			passportNr = Integer.toString(guest.getPassportNr());
+		}
+		
+		return insertGuest(guestID, firstName, lastName, phoneNumber, email, address, passportNr);
+	}
 	
 	
 	

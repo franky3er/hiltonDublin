@@ -20,7 +20,7 @@ public class Guest extends User {
 		this.address = address;
 	}
 	
-	public double getPassportNr() {
+	public int getPassportNr() {
 		return passportNr;
 	}
 	public void setPassportNr(int passportNr) {
