@@ -1,6 +1,5 @@
 package com.hiltondublin.users;
 
-import com.hiltondublin.languages.English;
 
 public class Guest extends User {
 	private int guestID;

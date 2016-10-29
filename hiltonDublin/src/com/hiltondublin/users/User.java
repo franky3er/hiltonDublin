@@ -8,7 +8,7 @@ public abstract class User {
 	protected String lastName = null;
 	protected String phoneNumber = null;
 	protected String email = null;
-	private Language language = null;
+	protected Language language = null;
 	
 	public User(){
 		setLanguage(new English());
