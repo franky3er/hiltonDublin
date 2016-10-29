@@ -3,13 +3,13 @@ package com.hiltondublin.classes;
 import java.util.List;
 
 public class RoomType {
-	private String name;
-	private int roomTypeID;
-	private double standardPrice;
+	private String name = null;
+	private int roomTypeID = -1;
+	private double standardPrice = -1;
 	private List<SpecialPrice> specialPrices = null;
 	private List<WeekdayPrice> weekdayPrices = null;
-	private String description;
-	private String pictureRessource;
+	private String description = null;
+	private String pictureRessource = null;
 	
 	public String getName() {
 		return name;

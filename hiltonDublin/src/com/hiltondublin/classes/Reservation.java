@@ -6,12 +6,12 @@ import java.util.List;
 import com.hiltondublin.users.Guest;
 
 public class Reservation {
-	private int bookingNumber; //=reservationID
-	private int guestID;
-	private Date arrivalDate;
-	private Date departureDate;
+	private int bookingNumber = -1; //=reservationID
+	private int guestID = -1;
+	private Date arrivalDate = null;
+	private Date departureDate = null;
 	private boolean paid;
-	private Guest guest;
+	private Guest guest = null;
 	private List<Room> rooms = null;
 	private List<ConsumerProduct> consumerProducts = null;
 	

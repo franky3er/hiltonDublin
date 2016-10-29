@@ -3,10 +3,10 @@ package com.hiltondublin.classes;
 import java.util.Date;
 
 public class SpecialPrice {
-	private int roomTypeID;
-	private String comment;
-	private Date date;
-	private double price;
+	private int roomTypeID = -1;
+	private String comment = null;
+	private Date date = null;
+	private double price = -1;
 	
 	public Date getDate() {
 		return date;

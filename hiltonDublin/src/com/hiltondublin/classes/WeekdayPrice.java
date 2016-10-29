@@ -1,9 +1,9 @@
 package com.hiltondublin.classes;
 
 public class WeekdayPrice {
-	private int roomTypeID;
-	private int weekday;
-	private double price;
+	private int roomTypeID = -1;
+	private int weekday = -1;
+	private double price = -1;
 	
 	public int getWeekday() {
 		return weekday;

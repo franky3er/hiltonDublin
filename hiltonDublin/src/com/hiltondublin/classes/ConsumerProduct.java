@@ -1,9 +1,9 @@
 package com.hiltondublin.classes;
 
 public class ConsumerProduct {
-	private int productID;
+	private int productID = -1;
 	private String name;
-	private double price;
+	private double price = -1;
 	
 	public int getProductID() {
 		return productID;

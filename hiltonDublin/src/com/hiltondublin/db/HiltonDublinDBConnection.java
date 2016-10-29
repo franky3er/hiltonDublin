@@ -569,26 +569,26 @@ public class HiltonDublinDBConnection {
 	 */
 	public boolean insertRoom(Room room){
 		//Get values in String format
-		String roomNumber = Integer.toString(room.getRoomNumber());
-		String typeID = Integer.toString(room.getTypeID());
-		String smoking = Boolean.toString(room.isSmoking());
-		String occupied = Boolean.toString(room.isOccupied());
+		String roomNumber, typeID, smoking, occupied;
+		if(room.getRoomNumber() == -1){
+			roomNumber = null;
+		} else {
+			roomNumber = Integer.toString(room.getRoomNumber());
+		}
+		if(room.getTypeID() == -1){
+			typeID = null;
+		}
+		else {
+			typeID = Integer.toString(room.getTypeID());
+		}
+		smoking = Boolean.toString(room.isSmoking());
+		occupied = Boolean.toString(room.isOccupied());
 		
 		//Convert Booleans to tinyint
 		smoking = convertBooleanToTinyInt(smoking);
 		occupied = convertBooleanToTinyInt(occupied);
 				
-		//Create cell List
-		String []values = {roomNumber, typeID, smoking, occupied};
-				
-		//Return cell List with contained values
-		List<Cell> cells = getCellList(ROOM_COLUMNS, values);
-				
-		//Create insert SQL Statement
-		String sqlStatement = createInsertStatement(ROOM, cells);
-				
-		//Execute update
-		return executeUpdate(sqlStatement);
+		return insertRoom(roomNumber, typeID, smoking, occupied);
 	}
 	
 	
@@ -700,19 +700,26 @@ public class HiltonDublinDBConnection {
 	 * @return Boolean
 	 */
 	public boolean insertRoomType(RoomType roomType){
-		String []values = {Integer.toString(roomType.getRoomTypeID()), 
-				roomType.getName(), roomType.getPictureRessource(), 
-				Double.toString(roomType.getStandardPrice()), 
-				roomType.getDescription()};
+		String typeID, name, picture, standardPrice, description;
 		
-		//Return cell List with contained values
-		List<Cell> cells = getCellList(ROOMTYPE_COLUMNS, values);
+		if(roomType.getRoomTypeID() == -1){
+			typeID = null;
+		}
+		else{
+			typeID = Integer.toString(roomType.getRoomTypeID());
+		}
+		name = roomType.getName();
+		picture = roomType.getPictureRessource();
+		if(roomType.getStandardPrice() == -1){
+			standardPrice = null;
+		}
+		else{
+			standardPrice = Double.toString(roomType.getStandardPrice());
+		}
+		description = roomType.getDescription();
 		
-		//Create insert SQL Statement
-		String sqlStatement = createInsertStatement(ROOMTYPE, cells);
 		
-		//Execute update
-		return executeUpdate(sqlStatement);	
+		return insertRoomType(typeID, name, picture, standardPrice, description);
 	}
 	
 	
@@ -825,24 +832,35 @@ public class HiltonDublinDBConnection {
 	 * @return Boolean
 	 */
 	public boolean insertRating(Rating ratingObj){
-		//Get values in String format
-		String ratingID = Integer.toString(ratingObj.getRatingID());
-		String roomTypeID = Integer.toString(ratingObj.getTypeID());
-		String guestID = Integer.toString(ratingObj.getGuestID());
-		String rating = Integer.toString(ratingObj.getRating());
-		String comment = ratingObj.getComment();
+		String ratingID, roomTypeID, guestID, rating, comment;
 		
-		//Create value array
-		String []values = {ratingID, roomTypeID, guestID, rating, comment};
+		if(ratingObj.getRatingID() == -1){
+			ratingID = null;
+		}
+		else {
+			ratingID = Integer.toString(ratingObj.getRatingID());
+		}
+		if(ratingObj.getTypeID() == -1){
+			roomTypeID = null;
+		}
+		else {
+			roomTypeID = Integer.toString(ratingObj.getTypeID());
+		}
+		if(ratingObj.getGuestID() == -1){
+			guestID = null;
+		}
+		else{
+			guestID = Integer.toString(ratingObj.getGuestID());
+		}
+		if(ratingObj.getRating() == -1){
+			rating = null;
+		}
+		else {
+			rating = Integer.toString(ratingObj.getRating());
+		}
+		comment = ratingObj.getComment();
 		
-		//Return cell List with contained values
-		List<Cell> cells = getCellList(RATING_COLUMNS, values);
-				
-		//Create insert SQL Statement
-		String sqlStatement = createInsertStatement(RATING, cells);
-				
-		//Execute update
-		return executeUpdate(sqlStatement);	
+		return insertRating(ratingID, roomTypeID, guestID, rating, comment);
 		
 	}
 	
@@ -943,22 +961,22 @@ public class HiltonDublinDBConnection {
 	 * @return Boolean
 	 */
 	public boolean insertConsumerProduct(ConsumerProduct consumerProduct){
-		//Get values in String format
-		String consumerProductID = Integer.toString(consumerProduct.getProductID());
-		String name = consumerProduct.getName();
-		String price = Double.toString(consumerProduct.getPrice());
+		String consumerProductID, name, price;
+		if(consumerProduct.getProductID() == -1){
+			consumerProductID = null;
+		}
+		else {
+			consumerProductID = Integer.toString(consumerProduct.getProductID());
+		}
+		name = consumerProduct.getName();
+		if(consumerProduct.getPrice() == -1){
+			price = null;
+		}
+		else {
+			price = Double.toString(consumerProduct.getPrice());
+		}
 		
-		//Create value array
-		String []values = {consumerProductID, name, price};
-				
-		//Return cell List with contained values
-		List<Cell> cells = getCellList(CONSUMERPRODUCT_COLUMNS, values);
-				
-		//Create insert SQL Statement
-		String sqlStatement = createInsertStatement(CONSUMERPRODUCT, cells);
-				
-		//Execute update
-		return executeUpdate(sqlStatement);
+		return insertConsumerProduct(consumerProductID, name, price);
 	}
 	
 	
@@ -1078,7 +1096,7 @@ public class HiltonDublinDBConnection {
 	 * @param additionalSQLCondition
 	 * @return
 	 */
-	public boolean insertReservation(String reservationID, String guestID, String arrivalDate, String departureDate, String paid, String additionalSQLCondition){
+	public boolean insertReservation(String reservationID, String guestID, String arrivalDate, String departureDate, String paid){
 		
 		//Check if Date is in right format
 		
@@ -1127,31 +1145,34 @@ public class HiltonDublinDBConnection {
 	
 	/**
 	 * Inserts a Reservation to the Database
+	 * Inserts the assigned Rooms from that reservation to the Reserved_Rooms table of the Database
+	 * Inserts the assigned Products from that reservation to the Reserved_Product table of the Database
 	 * @param reservation
 	 * @return boolean
 	 */
 	public boolean insertReservation(Reservation reservation){
-		//Get values in String format
-		String reservationID = Integer.toString(reservation.getBookingNumber());
-		String guestID = Integer.toString(reservation.getGuestID());
-		String arrivalDate = mySQLDateFormat.format(reservation.getArrivalDate());
-		String departureDate = mySQLDateFormat.format(reservation.getDepartureDate());
-		String paid = Boolean.toString(reservation.isPaid());
+		String reservationID, guestID, arrivalDate, departureDate, paid;
+		
+		if(reservation.getBookingNumber() == -1){
+			reservationID = null;
+		}
+		else {
+			reservationID = Integer.toString(reservation.getBookingNumber());
+		}
+		if(reservation.getGuestID() == -1){
+			guestID = null;
+		}
+		else {
+			guestID = Integer.toString(reservation.getGuestID());
+		}
+		arrivalDate = mySQLDateFormat.format(reservation.getArrivalDate());
+		departureDate = mySQLDateFormat.format(reservation.getDepartureDate());
+		paid = Boolean.toString(reservation.isPaid());
 		
 		//Convert boolean to tinyint
 		paid = convertBooleanToTinyInt(paid);
 				
-		//Create value array
-		String []values = {reservationID, guestID, arrivalDate, departureDate, paid};
-		
-		//Return cell List with contained values
-		List<Cell> cells = getCellList(RESERVATION_COLUMNS, values);
-				
-		//Create insert SQL Statement
-		String sqlStatement = createInsertStatement(RESERVATION, cells);
-				
-		//Execute update
-		return executeUpdate(sqlStatement);	
+		return insertReservation(reservationID, guestID, arrivalDate, departureDate, paid);
 	}
 	
 	
@@ -1283,23 +1304,24 @@ public class HiltonDublinDBConnection {
 	 * @return boolean
 	 */
 	public boolean insertSpecialPrice(SpecialPrice specialPrice){
-		// Get values in String format
-		String roomTypeID = Integer.toString(specialPrice.getTypeID());
-		String date = mySQLDateFormat.format(specialPrice.getDate());
-		String price = Double.toString(specialPrice.getPrice());
-		String comment = specialPrice.getComment();
+		String roomTypeID, date, price, comment;
+		
+		if(specialPrice.getTypeID() == -1){
+			roomTypeID = null;
+		}
+		else{
+			roomTypeID = Integer.toString(specialPrice.getTypeID());
+		}
+		date = mySQLDateFormat.format(specialPrice.getDate());
+		if(specialPrice.getPrice() == -1){
+			price = null;
+		}
+		else {
+			price = Double.toString(specialPrice.getPrice());
+		}
+		comment = specialPrice.getComment();
 
-		// Create value array
-		String[] values = { roomTypeID, date, price, comment };
-
-		// Return cell List with contained values
-		List<Cell> cells = getCellList(SPECIALPRICE_COLUMNS, values);
-
-		// Create insert SQL Statement
-		String sqlStatement = createInsertStatement(SPECIALPRICE, cells);
-
-		// Execute update
-		return executeUpdate(sqlStatement);
+		return insertSpecialPrice(roomTypeID, date, price, comment);
 	}
 	
 	
@@ -1399,23 +1421,28 @@ public class HiltonDublinDBConnection {
 	 * @return boolean
 	 */
 	public boolean insertWeekdayPrice(WeekdayPrice weekdayPrice){
+		String roomTypeID, price, weekday;
 		
-		//Get values in String format
-		String roomTypeID = Integer.toString(weekdayPrice.getRoomTypeID());
-		String price = Double.toString(weekdayPrice.getPrice());
-		String weekday = Integer.toString(weekdayPrice.getWeekday());
+		if(weekdayPrice.getRoomTypeID() == -1){
+			roomTypeID = null;
+		}
+		else {
+			roomTypeID = Integer.toString(weekdayPrice.getRoomTypeID());
+		}
+		if(weekdayPrice.getPrice() == -1){
+			price = null;
+		}
+		else {
+			price = Double.toString(weekdayPrice.getPrice());
+		}
+		if(weekdayPrice.getWeekday() == -1){
+			weekday = null;
+		}
+		else {
+			weekday = Integer.toString(weekdayPrice.getWeekday());
+		}
 		
-		// Create value array
-		String[] values = { roomTypeID, price, weekday };
-
-		// Return cell List with contained values
-		List<Cell> cells = getCellList(WEEKDAYPRICE_COLUMNS, values);
-
-		// Create insert SQL Statement
-		String sqlStatement = createInsertStatement(WEEKDAYPRICE, cells);
-
-		// Execute update
-		return executeUpdate(sqlStatement);
+		return insertWeekdayPrice(roomTypeID, price, weekday);
 		
 	}
 	

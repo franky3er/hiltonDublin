@@ -1,11 +1,11 @@
 package com.hiltondublin.classes;
 
 public class Room {
-	private int roomNumber;
+	private int roomNumber = -1;
 	private boolean smoking;
 	private boolean occupied;
-	private int typeID;
-	private RoomType type;
+	private int typeID = -1;
+	private RoomType type = null;
 	
 	public int getRoomNumber() {
 		return roomNumber;

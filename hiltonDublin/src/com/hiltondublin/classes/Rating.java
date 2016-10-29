@@ -3,13 +3,13 @@ package com.hiltondublin.classes;
 import com.hiltondublin.users.Guest;
 
 public class Rating {
-	private int ratingID;
-	private int typeID;
-	private int guestID;
-	private int rating;
-	private String comment;
-	private RoomType roomType;
-	private Guest guest;
+	private int ratingID = -1;
+	private int typeID = -1;
+	private int guestID = -1;
+	private int rating = -1;
+	private String comment = null;
+	private RoomType roomType = null;
+	private Guest guest = null;
 	public int getRatingID() {
 		return ratingID;
 	}
