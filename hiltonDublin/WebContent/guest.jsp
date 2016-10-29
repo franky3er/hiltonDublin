@@ -14,4 +14,3 @@
 	</div>
 </body>
 <%@ include file="navigationSlideGuestFooter.jsp" %>
-</html>
