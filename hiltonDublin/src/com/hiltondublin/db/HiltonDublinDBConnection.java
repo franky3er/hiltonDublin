@@ -468,7 +468,7 @@ public class HiltonDublinDBConnection {
 	 * @param additionalSQLCondition
 	 * @return String
 	 */
-	public String getRoomsAsSQLStatement(String roomNumber, String typeID, String smoking, String occupied, String additionalSQLCondition){
+	public String getRoomsAsSQLStatement(String selectedColumns[], String roomNumber, String typeID, String smoking, String occupied, String additionalSQLCondition){
 		//Converting
 		smoking = convertBooleanToTinyInt(smoking);
 		occupied = convertBooleanToTinyInt(occupied);
@@ -476,9 +476,13 @@ public class HiltonDublinDBConnection {
 		//Write values and tables in arrays
 		String []values = {roomNumber, typeID, smoking, occupied};
 		String []tables = {ROOM};
+		
+		if(selectedColumns == null){
+			selectedColumns = ROOM_COLUMNS;
+		}
 				
 		//Get sql Statement
-		return createSelectStatement(tables, ROOM_COLUMNS, ROOM_COLUMNS, values, additionalSQLCondition);		
+		return createSelectStatement(tables, selectedColumns, ROOM_COLUMNS, values, additionalSQLCondition);		
 	}
 	
 	
@@ -497,7 +501,7 @@ public class HiltonDublinDBConnection {
 		
 		
 		//Get sql Statement
-		String sqlStatement = getRoomsAsSQLStatement(roomNumber, typeID, smoking, occupied, additionalSQLCondition);
+		String sqlStatement = getRoomsAsSQLStatement(null, roomNumber, typeID, smoking, occupied, additionalSQLCondition);
 				
 		//Execute Query
 		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
@@ -605,13 +609,17 @@ public class HiltonDublinDBConnection {
 	 * @param additionalSQLCondition
 	 * @return String
 	 */
-	public String getRoomTypesAsSQLStatement(String typeID, String name, String picture, String standardprice, String description, String additionalSQLCondition){
+	public String getRoomTypesAsSQLStatement(String []selectedColumns, String typeID, String name, String picture, String standardprice, String description, String additionalSQLCondition){
 		//Write Values and Tables in Arrays
 		String []values = {typeID, name, picture, standardprice, description};
 		String []tables = {ROOMTYPE};
+		
+		if(selectedColumns==null){
+			selectedColumns = ROOMTYPE_COLUMNS;
+		}
 				
 		//Get SQL Statement
-		return createSelectStatement(tables, ROOMTYPE_COLUMNS, ROOMTYPE_COLUMNS, values, additionalSQLCondition);
+		return createSelectStatement(tables, selectedColumns, ROOMTYPE_COLUMNS, values, additionalSQLCondition);
 				
 	}
 	
@@ -629,7 +637,7 @@ public class HiltonDublinDBConnection {
 	public List<RoomType> getRoomTypes(String typeID, String name, String picture, String standardprice, String description, String additionalSQLCondition){
 		List <RoomType> roomTypes = new ArrayList<RoomType>();
 		
-		String sqlStatement = getRoomTypesAsSQLStatement(typeID, name, picture, standardprice, description, additionalSQLCondition);
+		String sqlStatement = getRoomTypesAsSQLStatement(null, typeID, name, picture, standardprice, description, additionalSQLCondition);
 		
 		//Execute Query
 		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
@@ -724,13 +732,17 @@ public class HiltonDublinDBConnection {
 	 * @param additionalSQLCondition
 	 * @return String
 	 */
-	public String getRatingsAsSQLStatement(String ratingID, String roomTypeID, String guestID, String rating, String comment, String additionalSQLCondition){
+	public String getRatingsAsSQLStatement(String []selectedColumns, String ratingID, String roomTypeID, String guestID, String rating, String comment, String additionalSQLCondition){
 		//Write Values and Tables in Arrays
 		String []values = {ratingID, roomTypeID, guestID, rating, comment};
 		String []tables = {RATING};
+		
+		if(selectedColumns == null){
+			selectedColumns = RATING_COLUMNS;
+		}
 						
 		//Get SQL Statement
-		return createSelectStatement(tables, RATING_COLUMNS, RATING_COLUMNS, values, additionalSQLCondition);
+		return createSelectStatement(tables, selectedColumns, RATING_COLUMNS, values, additionalSQLCondition);
 					
 	}
 	
@@ -749,7 +761,7 @@ public class HiltonDublinDBConnection {
 		List<Rating> ratings = new ArrayList<Rating>();
 		
 		//Create Select SQL Statement
-		String sqlStatement = getRatingsAsSQLStatement(ratingID, roomTypeID, guestID, rating, comment, additionalSQLCondition);
+		String sqlStatement = getRatingsAsSQLStatement(null, ratingID, roomTypeID, guestID, rating, comment, additionalSQLCondition);
 		
 		//Execute Query
 		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
@@ -849,13 +861,17 @@ public class HiltonDublinDBConnection {
 	 * @param additionalSQLCondition
 	 * @return String
 	 */
-	public String getConsumerProductsAsSQLStatement(String consumerProductID, String name, String price, String additionalSQLCondition){
+	public String getConsumerProductsAsSQLStatement(String []selectedColumns, String consumerProductID, String name, String price, String additionalSQLCondition){
 		//Write Values and Tables in Arrays
 		String []values = {consumerProductID, name, price};
 		String []tables = {CONSUMERPRODUCT};
+		
+		if(selectedColumns == null){
+			selectedColumns = CONSUMERPRODUCT_COLUMNS;
+		}
 				
 		//Get SQL Statement
-		return createSelectStatement(tables, CONSUMERPRODUCT_COLUMNS, CONSUMERPRODUCT_COLUMNS, values, additionalSQLCondition);
+		return createSelectStatement(tables, selectedColumns, CONSUMERPRODUCT_COLUMNS, values, additionalSQLCondition);
 				
 	}
 	
@@ -872,7 +888,7 @@ public class HiltonDublinDBConnection {
 		List<ConsumerProduct> consumerProducts = new ArrayList<ConsumerProduct>();
 		
 		//Create Select SQL Statement
-		String sqlStatement = getConsumerProductsAsSQLStatement(consumerProductID, name, price, additionalSQLCondition);
+		String sqlStatement = getConsumerProductsAsSQLStatement(null, consumerProductID, name, price, additionalSQLCondition);
 		
 		//Execute Query
 		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
@@ -963,25 +979,29 @@ public class HiltonDublinDBConnection {
 	 * @param additionalSQLCondition
 	 * @return String
 	 */
-	public String getReservationsAsSQLStatement(String reservationID, String guestID, String arrivalDate, String departureDate, String paid, String additionalSQLCondition){
+	public String getReservationsAsSQLStatement(String []selectedColumns, String reservationID, String guestID, String arrivalDate, String departureDate, String paid, String additionalSQLCondition){
 		// Check if Date is in right format
-		try {
-			if (!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(arrivalDate)))) {
+		if(!isNullOrEmpty(arrivalDate)){
+			try {
+				if (!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(arrivalDate)))) {
+					System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+					return null;
+				}
+			} catch (ParseException e1) {
 				System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
 				return null;
 			}
-		} catch (ParseException e1) {
-			System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-			return null;
 		}
-		try {
-			if (!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(departureDate)))) {
+		if(!isNullOrEmpty(departureDate)){
+			try {
+				if (!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(departureDate)))) {
+					System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+					return null;
+				}
+			} catch (ParseException e1) {
 				System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
 				return null;
 			}
-		} catch (ParseException e1) {
-			System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-			return null;
 		}
 
 		// convert boolean to tinyint
@@ -991,8 +1011,12 @@ public class HiltonDublinDBConnection {
 		String[] values = { reservationID, guestID, arrivalDate, departureDate, paid };
 		String[] tables = { RESERVATION };
 		
+		if(selectedColumns == null){
+			selectedColumns = RESERVATION_COLUMNS;
+		}
+		
 		//Get SQL Statement
-		return createSelectStatement(tables, RESERVATION_COLUMNS, RESERVATION_COLUMNS, values, additionalSQLCondition);
+		return createSelectStatement(tables, selectedColumns, RESERVATION_COLUMNS, values, additionalSQLCondition);
 	}
 	
 	/**
@@ -1010,7 +1034,7 @@ public class HiltonDublinDBConnection {
 		List<Reservation> reservations = new ArrayList<Reservation>();
 		
 		//Create SQL Select Statement
-		String sqlStatement = getReservationsAsSQLStatement(reservationID, guestID, arrivalDate, departureDate, paid, additionalSQLCondition);
+		String sqlStatement = getReservationsAsSQLStatement(null, reservationID, guestID, arrivalDate, departureDate, paid, additionalSQLCondition);
 		
 		//Execute Query
 		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
@@ -1027,8 +1051,8 @@ public class HiltonDublinDBConnection {
 				reservation.setPaid(rs.getBoolean(RESERVATION_PAID));
 				
 				//TODO reservation.setGuests()
-				//TODO reservation.setRooms()
-				//TODO reservation.setProducts()
+				reservation.setRooms(getReservedRooms(Integer.toString(reservation.getBookingNumber())));
+				reservation.setConsumerProducts(getReservedProducts(Integer.toString(reservation.getBookingNumber())));
 				
 				reservations.add(reservation);
 			}
@@ -1057,7 +1081,11 @@ public class HiltonDublinDBConnection {
 	public boolean insertReservation(String reservationID, String guestID, String arrivalDate, String departureDate, String paid, String additionalSQLCondition){
 		
 		//Check if Date is in right format
+		
 		try {
+			if(isNullOrEmpty(arrivalDate)){
+				System.out.println("arrivalDate is null or empty!");
+			}
 			if(!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(arrivalDate)))){
 				System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
 				return false;
@@ -1067,6 +1095,9 @@ public class HiltonDublinDBConnection {
 			return false;
 		}
 		try {
+			if(isNullOrEmpty(departureDate)){
+				System.out.println("departureDate is null or empty!");
+			}
 			if(!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(departureDate)))){
 				System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
 				return false;
@@ -1140,25 +1171,31 @@ public class HiltonDublinDBConnection {
 	 * @param additionalSQLCondition
 	 * @return String
 	 */
-	public String getSpecialPricesAsSQLStatements(String roomTypeID, String date, String price, String comment, String additionalSQLCondition){
+	public String getSpecialPricesAsSQLStatements(String []selectedColumns, String roomTypeID, String date, String price, String comment, String additionalSQLCondition){
 		//Check if Date is in right format
-		try {
-			if(!date.equals(mySQLDateFormat.format(mySQLDateFormat.parse(date)))){
+		if(!isNullOrEmpty(date)){
+			try {
+				if(!date.equals(mySQLDateFormat.format(mySQLDateFormat.parse(date)))){
+					System.out.println("date is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+					return null;
+				}
+			} catch (ParseException e1) {
 				System.out.println("date is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
 				return null;
 			}
-		} catch (ParseException e1) {
-			System.out.println("date is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-			return null;
 		}
 		
 		
 		//Write Values and Tables in Arrays
 		String []values = {roomTypeID, date, price, comment};
 		String []tables = {SPECIALPRICE};
+		
+		if(selectedColumns == null){
+			selectedColumns = SPECIALPRICE_COLUMNS;
+		}
 				
 		//Get SQL Statement
-		return createSelectStatement(tables, SPECIALPRICE_COLUMNS, SPECIALPRICE_COLUMNS, values, additionalSQLCondition);
+		return createSelectStatement(tables, selectedColumns, SPECIALPRICE_COLUMNS, values, additionalSQLCondition);
 				
 	}
 	
@@ -1176,7 +1213,7 @@ public class HiltonDublinDBConnection {
 		List<SpecialPrice> specialPrices = new ArrayList<SpecialPrice>();		
 		
 		//Create Select SQL Statement
-		String sqlStatement = getSpecialPricesAsSQLStatements(roomTypeID, date, price, comment, additionalSQLCondition);
+		String sqlStatement = getSpecialPricesAsSQLStatements(null, roomTypeID, date, price, comment, additionalSQLCondition);
 				
 		//Execute Query
 		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
@@ -1215,6 +1252,9 @@ public class HiltonDublinDBConnection {
 	public boolean insertSpecialPrice(String roomTypeID, String date, String price, String comment) {
 		// Check if Date is in right format
 		try {
+			if(isNullOrEmpty(date)){
+				System.out.println("date is null or empty!");
+			}
 			if (!date.equals(mySQLDateFormat.format(mySQLDateFormat.parse(date)))) {
 				System.out.println("date is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
 				return false;
@@ -1276,13 +1316,17 @@ public class HiltonDublinDBConnection {
 	 * @param additionalSQLCondition
 	 * @return String
 	 */
-	public String getWeekdayPricesAsSQLStatement(String roomTypeID, String price, String weekday, String additionalSQLCondition){
+	public String getWeekdayPricesAsSQLStatement(String []selectedColumns, String roomTypeID, String price, String weekday, String additionalSQLCondition){
 		//Write Values and Tables in Arrays
 		String []values = {roomTypeID, price, weekday};
 		String []tables = {WEEKDAYPRICE};
+		
+		if(selectedColumns == null){
+			selectedColumns = WEEKDAYPRICE_COLUMNS;
+		}
 				
 		//Get SQL Statement
-		return createSelectStatement(tables, WEEKDAYPRICE_COLUMNS, WEEKDAYPRICE_COLUMNS, values, additionalSQLCondition);
+		return createSelectStatement(tables, selectedColumns, WEEKDAYPRICE_COLUMNS, values, additionalSQLCondition);
 				
 	}
 	
@@ -1299,7 +1343,7 @@ public class HiltonDublinDBConnection {
 		List<WeekdayPrice> weekdayPrices = new ArrayList<WeekdayPrice>();
 		
 		//Create Select SQL Statement
-		String sqlStatement = getWeekdayPricesAsSQLStatement(roomTypeID, price, weekday, additionalSQLCondition);
+		String sqlStatement = getWeekdayPricesAsSQLStatement(null, roomTypeID, price, weekday, additionalSQLCondition);
 		
 		//Execute Query
 		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
@@ -1375,11 +1419,140 @@ public class HiltonDublinDBConnection {
 		
 	}
 	
+	//------------------------------------------------------------------------------------------
+	//-----------------------------------------RESERVED_ROOMS-----------------------------------
+	//------------------------------------------------------------------------------------------
+	
+	/**
+	 * 
+	 * @param []selectedColumns
+	 * @param roomNumber
+	 * @param reservationID
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String getReserved_RoomsAsSQLStatement(String []selectedColumns, String roomNumber, String reservationID, String additionalSQLCondition){
+		//Write Values and Tables in Arrays
+		String []values = {roomNumber, reservationID};
+		String []tables = {RESERVED_ROOM};
+		
+		if(selectedColumns == null){
+			selectedColumns = RESERVED_ROOM_COLUMNS;
+		}
+						
+		//Get SQL Statement
+		return createSelectStatement(tables, selectedColumns, RESERVED_ROOM_COLUMNS, values, additionalSQLCondition);
+	}
+	
+	/**
+	 * Returns a List of all rooms that are assigned to one reservation
+	 * @param reservationID
+	 * @return List<Room>
+	 */
+	public List<Room> getReservedRooms(String reservationID){
+		String [] subQuerySelectedColumns = { RESERVED_ROOM_ROOMNUMBER };
+		return getRooms(null, null, null, null, ROOM_NUMBER + " IN ( " + getReserved_RoomsAsSQLStatement(subQuerySelectedColumns, null, reservationID, null) + " )");
+	}
+	
+	/**
+	 * Assigns a room to a reservation. Inserts a Reserved_Room into the database specified by the given parameters.
+	 * If a parameter is null or empty it won't be recorded in the SQL Statement.
+	 * @param roomNumber
+	 * @param reservationID
+	 * @return
+	 */
+	public boolean assignRoomToReservation(String roomNumber, String reservationID){
+		// Create value array
+		String[] values = { roomNumber, reservationID };
+
+		// Return cell List with contained values
+		List<Cell> cells = getCellList(RESERVED_ROOM_COLUMNS, values);
+
+		// Create insert SQL Statement
+		String sqlStatement = createInsertStatement(RESERVED_ROOM, cells);
+
+		// Execute update
+		return executeUpdate(sqlStatement);
+				
+	}
+	
+	/**
+	 * Assigns a room to a reservation. Inserts a Reserved_Room into the database.
+	 * @param room
+	 * @param reservation
+	 * @return
+	 */
+	public boolean assignRoomToReservation(Room room, Reservation reservation){
+		return assignRoomToReservation(Integer.toString(room.getRoomNumber()), Integer.toString(reservation.getBookingNumber()));
+	}
 	
 	
 	
 	
+	//------------------------------------------------------------------------------------------
+	//-----------------------------------------RESERVED_PRODUCTS--------------------------------
+	//------------------------------------------------------------------------------------------
+		
+	/**
+	 * 
+	 * @param []selectedColumns
+	 * @param productID
+	 * @param reservationID
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String getReserved_ProductAsSQLStatement(String []selectedColumns, String productID, String reservationID, String additionalSQLCondition){
+		//Write Values and Tables in Arrays
+		String []values = {productID, reservationID};
+		String []tables = {RESERVED_ROOM};
+			
+		if(selectedColumns == null){
+			selectedColumns = RESERVED_ROOM_COLUMNS;
+		}
+						
+		//Get SQL Statement
+		return createSelectStatement(tables, selectedColumns, RESERVED_ROOM_COLUMNS, values, additionalSQLCondition);
+	}
+		
+	/**
+	 * Returns a List of all products that are assigned to one reservation
+	 * @param productID
+	 * @return List<Room>
+	 */
+	public List<ConsumerProduct> getReservedProducts(String reservationID){
+		String [] subQuerySelectedColumns = { RESERVED_PRODUCT_PRODUCTID };
+		return getConsumerProducts(null, null, null, CONSUMERPRODUCT_PRODUCTID + " IN ( " + getReserved_ProductAsSQLStatement(subQuerySelectedColumns, null, reservationID, null) + " )");
+	}
 	
+	/**
+	 * Assigns a product to a reservation. Inserts a Reserved_Product into the database specified by the given parameters.
+	 * If a parameter is null or empty it won't be recorded in the SQL Statement.
+	 * @param productID
+	 * @param reservationID
+	 * @return
+	 */
+	public boolean assignProductToReservation(String productID, String reservationID){
+		// Create value array
+		String[] values = { productID, reservationID };
+		// Return cell List with contained values
+		List<Cell> cells = getCellList(RESERVED_PRODUCT_COLUMNS, values);
+
+		// Create insert SQL Statement
+		String sqlStatement = createInsertStatement(RESERVED_PRODUCT, cells);
+		// Execute update
+		return executeUpdate(sqlStatement);
+				
+	}
+		
+	/**
+	 * Assigns a product to a reservation. Inserts a Reserved_Product into the database.
+	 * @param product
+	 * @param reservation
+	 * @return
+	 */
+	public boolean assignProductToReservation(ConsumerProduct product, Reservation reservation){
+		return assignRoomToReservation(Integer.toString(product.getProductID()), Integer.toString(reservation.getBookingNumber()));
+	}
 	
 	
 	
@@ -1387,8 +1560,8 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	//----------------------------------Additional Functions------------------------------------
 	//------------------------------------------------------------------------------------------
-	public boolean checkIfRoomsAvailable(RoomType roomType, int ammountOfRooms, Date arrivalDate, Date departureDate){
-		//TODO check if rooms available
+	public boolean roomsAvailable(RoomType roomType, int ammountOfRooms, Date arrivalDate, Date departureDate){
+		//TODO check if rooms from a certain room type are available to a certain time
 		
 		return true;
 	}
