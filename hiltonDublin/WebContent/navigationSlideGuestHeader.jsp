@@ -5,7 +5,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>Insert title here</title>
+	<title>Welcome to Hilton Hotel</title>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/hilton.css" />
 </head>
 <body>
@@ -13,10 +13,10 @@
 		<img src="${pageContext.request.contextPath}/resources/Pictures/hiltonLogo.png" alt="Hilton Logo" title="Hilton Logo" />
 		<div id="loginArea">
 		</div>
-		<form action="index.html" method="get">
+		<form action="index.jsp" method="get">
 			<input class="navigationPage" type="submit" value="Home" />
 		</form>
-		<form action="guest.html" method="get">
+		<form action="guest.jsp" method="get">
 			<input class="navigationPage" type="submit" value="Guest" />
 		</form>
 		<form action="employee.html" method="get">
