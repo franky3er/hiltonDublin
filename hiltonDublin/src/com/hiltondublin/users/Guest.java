@@ -1,6 +1,8 @@
 package com.hiltondublin.users;
 
-public class Guest {
+import com.hiltondublin.languages.English;
+
+public class Guest extends User {
 	private int guestID;
 	private String address;
 	private int passportNr;

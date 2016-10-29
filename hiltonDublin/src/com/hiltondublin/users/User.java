@@ -1,10 +1,18 @@
 package com.hiltondublin.users;
 
+import com.hiltondublin.languages.English;
+import com.hiltondublin.languages.Language;
+
 public abstract class User {
 	protected String firstName = null;
 	protected String lastName = null;
 	protected String phoneNumber = null;
 	protected String email = null;
+	private Language language = null;
+	
+	public User(){
+		setLanguage(new English());
+	}
 	
 	public String getFirstName() {
 		return firstName;
@@ -29,5 +37,13 @@ public abstract class User {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public Language getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(Language language) {
+		this.language = language;
 	}
 }
