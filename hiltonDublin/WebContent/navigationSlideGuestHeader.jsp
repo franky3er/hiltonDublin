@@ -1,6 +1,9 @@
 <%@page import="com.hiltondublin.db.HiltonDublinDBConnection"%>
 <%@page import="com.hiltondublin.users.User" %>
 <%@page import="com.hiltondublin.users.Guest" %>
+<%@page import="com.hiltondublin.languages.English" %>
+<%@page import="com.hiltondublin.languages.German" %>
+<%@page import="com.hiltondublin.languages.Korean" %>
 <%!
 //Constants
 private static final String ENGLISH = "english";
@@ -22,10 +25,23 @@ public String selectedLanguage(String language, String selectedLanguage){
 %>
 
 <%
-//Language selected
-String language = request.getParameter("language");
-if(language!=null){
-	System.out.println("Selected Language: " + language);
+//Selected Language
+String language = ENGLISH;
+if(request.getParameter("language")!=null){
+	System.out.println("Changed language to " + request.getParameter("language"));
+	session.setAttribute("language", request.getParameter("language"));
+}
+if(session.getAttribute("language")!=null){
+	language = (String) session.getAttribute("language");
+}
+if(language.equals(ENGLISH)){
+	user.setLanguage(new English());
+}
+if(language.equals(GERMAN)){
+	user.setLanguage(new German());
+}
+if(language.equals(KOREAN)){
+	user.setLanguage(new Korean());
 }
 
 //Page Name
@@ -70,7 +86,7 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 				</label>
 			</div>
 			<div id="headRight" class="head1_3">
-			<form action="/hiltonDublin/Home" method="post">
+			<form action="<%=uri %>" method="post">
 				<select name="language" size="1" onchange="this.form.submit()">
 					<option value="<%=ENGLISH %>" <%=selectedLanguage(ENGLISH, language) %>>English</option>
 					<option value="<%=GERMAN %>" <%=selectedLanguage(GERMAN, language) %>>German</option>
