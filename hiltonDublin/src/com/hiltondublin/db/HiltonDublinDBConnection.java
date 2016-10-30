@@ -1841,10 +1841,30 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	//----------------------------------Additional Functions------------------------------------
 	//------------------------------------------------------------------------------------------
-	public boolean roomsAvailable(RoomType roomType, int ammountOfRooms, Date arrivalDate, Date departureDate){
+	
+	/**
+	 * Returns a List of rooms from a certain room type which are available to a certain time
+	 * @param roomType
+	 * @param ammountOfRooms
+	 * @param arrivalDate
+	 * @param departureDate
+	 * @return List<Room>
+	 */
+	public List<Room> getAvailableRooms(RoomType roomType, int ammountOfRooms, Date arrivalDate, Date departureDate){
 		//TODO check if rooms from a certain room type are available to a certain time
+		String arrDate = mySQLDateFormat.format(arrivalDate);
+		String depDate = mySQLDateFormat.format(departureDate);
+		String additionalSQLCondition = ROOM_NUMBER + " IN ( SELECT " + RESERVED_ROOM_ROOMNUMBER + " FROM " + RESERVED_ROOM;
+		additionalSQLCondition += " WHERE " + RESERVED_ROOM_RESERVATIONID + " NOT IN ("; 
+		additionalSQLCondition += " SELECT " + RESERVATION_RESERVATIONID + " FROM " + RESERVATION;
+		additionalSQLCondition += " WHERE " + RESERVATION_ARRIVALDATE + " BETWEEN '" + arrDate + "' AND '" + depDate + "' ";
+		additionalSQLCondition += " OR " + RESERVATION_DEPARTUREDATE + " BETWEEN " + arrDate + "' AND '" + depDate + "' )) ";
+		additionalSQLCondition += " OR " + ROOM_NUMBER + " NOT IN ( SELECT " + RESERVED_ROOM_ROOMNUMBER + " FROM " + RESERVED_ROOM + ")";
 		
-		return true;
+		List<Room> rooms = getRooms(null, null, null, null, additionalSQLCondition);
+		
+		
+		return rooms;
 	}
 
 }
