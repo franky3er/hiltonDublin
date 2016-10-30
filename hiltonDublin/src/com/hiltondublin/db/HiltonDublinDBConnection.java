@@ -1852,7 +1852,6 @@ public class HiltonDublinDBConnection {
 	 * @return List<Room>
 	 */
 	public List<Room> getAvailableRooms(RoomType roomType, int ammountOfRooms, Date arrivalDate, Date departureDate){
-		//TODO check if rooms from a certain room type are available to a certain time
 		String arrDate = mySQLDateFormat.format(arrivalDate);
 		String depDate = mySQLDateFormat.format(departureDate);
 		String additionalSQLCondition = ROOM_NUMBER + " IN ( SELECT " + RESERVED_ROOM_ROOMNUMBER + " FROM " + RESERVED_ROOM;
