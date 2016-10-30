@@ -1,6 +1,7 @@
 <%@page import="com.hiltondublin.db.HiltonDublinDBConnection"%>
 <%@page import="com.hiltondublin.users.User" %>
 <%@page import="com.hiltondublin.users.Guest" %>
+<%@page import="com.hiltondublin.languages.Language" %>
 <%@page import="com.hiltondublin.languages.English" %>
 <%@page import="com.hiltondublin.languages.German" %>
 <%@page import="com.hiltondublin.languages.Korean" %>
@@ -12,6 +13,7 @@ private static final String KOREAN = "korean";
 
 private HiltonDublinDBConnection dbConnection = HiltonDublinDBConnection.getInstance(); 
 private User user = new Guest();
+private Language language;
 
 public String selectedLanguage(String language, String selectedLanguage){
 	String selected = "selected";
@@ -26,23 +28,25 @@ public String selectedLanguage(String language, String selectedLanguage){
 
 <%
 //Selected Language
-String language = ENGLISH;
+String selectedLanguage = ENGLISH;
 if(request.getParameter("language")!=null){
 	System.out.println("Changed language to " + request.getParameter("language"));
 	session.setAttribute("language", request.getParameter("language"));
 }
 if(session.getAttribute("language")!=null){
-	language = (String) session.getAttribute("language");
+	selectedLanguage = (String) session.getAttribute("language");
 }
-if(language.equals(ENGLISH)){
+if(selectedLanguage.equals(ENGLISH)){
 	user.setLanguage(new English());
 }
-if(language.equals(GERMAN)){
+if(selectedLanguage.equals(GERMAN)){
 	user.setLanguage(new German());
 }
-if(language.equals(KOREAN)){
+if(selectedLanguage.equals(KOREAN)){
 	user.setLanguage(new Korean());
 }
+
+language = user.getLanguage();
 
 //Page Name
 String uri = request.getRequestURI();
@@ -64,23 +68,23 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 		<img src="${pageContext.request.contextPath}/resources/Pictures/hiltonLogo.png" alt="Hilton Logo" title="Hilton Logo" />
 		<div id="loginArea">
 		</div>
-		<form action="index.jsp" method="get">
-			<input class="navigationPage" type="submit" value="Home" />
+		<form action="Home" method="get">
+			<input class="navigationPage" type="submit" value="<%=language.navigationSlideHome() %>" />
 		</form>
-		<form action="guest.jsp" method="get">
-			<input class="navigationPage" type="submit" value="Guest" />
+		<form action="Guest" method="get">
+			<input class="navigationPage" type="submit" value="<%=language.navigationSlideGuest() %>" />
 		</form>
 		<form action="employee.html" method="get">
-			<input class="navigationPage" type="submit" value="Employee" />
+			<input class="navigationPage" type="submit" value="<%=language.navigationSlideEmployee() %>" />
 		</form>
 		<form action="admin.html" method="get">
-			<input class="navigationPage" type="submit" value="Admin" />
+			<input class="navigationPage" type="submit" value="<%=language.navigationSlideAdmin() %>" />
 		</form>
 	</div>
 	<div id="headline">
 			<div id="headLeft" class="head1_3"><p class="heading"><%=pageName %></p></div>
 			<div id="headCenter" class="head1_3">
-				<label>Disability
+				<label><%=language.navigationSlideDisability() %>
 					<input type="radio" name="disabled" value="1"/>
 					<input type="radio" name="disabled" value="0" checked/>
 				</label>
@@ -88,9 +92,9 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 			<div id="headRight" class="head1_3">
 			<form action="<%=uri %>" method="post">
 				<select name="language" size="1" onchange="this.form.submit()">
-					<option value="<%=ENGLISH %>" <%=selectedLanguage(ENGLISH, language) %>>English</option>
-					<option value="<%=GERMAN %>" <%=selectedLanguage(GERMAN, language) %>>German</option>
-					<option value="<%=KOREAN %>" <%=selectedLanguage(KOREAN, language) %>>Korean</option>
+					<option value="<%=ENGLISH %>" <%=selectedLanguage(ENGLISH, selectedLanguage) %>>English</option>
+					<option value="<%=GERMAN %>" <%=selectedLanguage(GERMAN, selectedLanguage) %>>German</option>
+					<option value="<%=KOREAN %>" <%=selectedLanguage(KOREAN, selectedLanguage) %>>Korean</option>
 				</select>
 			</form>
 			</div>

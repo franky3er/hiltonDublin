@@ -1,3 +1,3 @@
 <%@ include file="navigationSlideGuestHeader.jsp" %>
-<h1>Welcome to Hilton Dublin</h1>
+<h1><%=language.homeWelcome() %></h1>
 <%@ include file="navigationSlideGuestFooter.jsp" %>
