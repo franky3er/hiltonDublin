@@ -222,6 +222,32 @@ public class HiltonDublinDBConnection {
 	}
 	
 	/**
+	 * Checks if connected to database
+	 * @return boolean
+	 */
+	public boolean isConnected(){
+		try {
+			if(dbConnection != null){
+				boolean connected = (!dbConnection.isClosed());
+				if(connected){
+					return true;
+				}
+				else{
+					System.out.println("Not connected to database!");
+					return false;
+				}
+			}
+			else {
+				System.out.println("Not connected to database!");
+				return false;
+			}
+		} catch (SQLException e) {
+			System.out.println("Not connected to database!");
+			return false;
+		}
+	}
+	
+	/**
 	 * Disconnect from the database
 	 * @return boolean
 	 * true if disconnection was successful
@@ -513,6 +539,10 @@ public class HiltonDublinDBConnection {
 	 * @return List<Room>
 	 */
 	public List<Room> getRooms(String roomNumber, String typeID, String smoking, String occupied, String additionalSQLCondition){
+		if(!isConnected()){
+			return null;
+		}
+		
 		List<Room> rooms = new ArrayList<Room>();
 		
 		
@@ -560,6 +590,10 @@ public class HiltonDublinDBConnection {
 	 * @return boolean
 	 */
 	public boolean insertRoom(String roomNumber, String typeID, String smoking, String occupied){
+		if(!isConnected()){
+			return false;
+		}
+		
 		//Convert Booleans to tinyint
 		smoking = convertBooleanToTinyInt(smoking);
 		occupied = convertBooleanToTinyInt(occupied);
@@ -651,6 +685,9 @@ public class HiltonDublinDBConnection {
 	 * @return List<RoomType>
 	 */
 	public List<RoomType> getRoomTypes(String typeID, String name, String picture, String standardprice, String description, String additionalSQLCondition){
+		if(!isConnected()){
+			return null;
+		}
 		List <RoomType> roomTypes = new ArrayList<RoomType>();
 		
 		String sqlStatement = getRoomTypesAsSQLStatement(null, typeID, name, picture, standardprice, description, additionalSQLCondition);
@@ -696,6 +733,10 @@ public class HiltonDublinDBConnection {
 	 * @return boolean
 	 */
 	public boolean insertRoomType(String typeID, String name, String picture, String standardPrice, String description){
+		if(!isConnected()){
+			return false;
+		}
+		
 		//Create value array
 		String []values = {typeID, name, picture, standardPrice, description};
 				
@@ -781,6 +822,10 @@ public class HiltonDublinDBConnection {
 	 * @return
 	 */
 	public List<Rating> getRatings(String ratingID, String roomTypeID, String guestID, String rating, String comment, String additionalSQLCondition){
+		if(!isConnected()){
+			return null;
+		}
+		
 		List<Rating> ratings = new ArrayList<Rating>();
 		
 		//Create Select SQL Statement
@@ -828,6 +873,9 @@ public class HiltonDublinDBConnection {
 	 * @return Boolean
 	 */
 	public boolean insertRating(String ratingID, String roomTypeID, String guestID, String rating, String comment){
+		if(!isConnected()){
+			return false;
+		}
 		
 		//Create value array
 		String []values = {ratingID, roomTypeID, guestID, rating, comment};
@@ -921,6 +969,10 @@ public class HiltonDublinDBConnection {
 	 * @return List<ConsumerProduct>
 	 */
 	public List<ConsumerProduct> getConsumerProducts(String consumerProductID, String name, String price, String additionalSQLCondition){
+		if(!isConnected()){
+			return null;
+		}
+		
 		List<ConsumerProduct> consumerProducts = new ArrayList<ConsumerProduct>();
 		
 		//Create Select SQL Statement
@@ -960,6 +1012,10 @@ public class HiltonDublinDBConnection {
 	 * @return Boolean
 	 */
 	public boolean insertConsumerProduct(String consumerProductID, String name, String price){
+		if(!isConnected()){
+			return false;
+		}
+		
 		//Create value array
 		String []values = {consumerProductID, name, price};
 		
@@ -1067,6 +1123,10 @@ public class HiltonDublinDBConnection {
 	 * @return List<Reservation>
 	 */
 	public List<Reservation> getReservations(String reservationID, String guestID, String arrivalDate, String departureDate, String paid, String additionalSQLCondition){
+		if(!isConnected()){
+			return null;
+		}
+		
 		List<Reservation> reservations = new ArrayList<Reservation>();
 		
 		//Create SQL Select Statement
@@ -1115,6 +1175,10 @@ public class HiltonDublinDBConnection {
 	 * @return
 	 */
 	public boolean insertReservation(String reservationID, String guestID, String arrivalDate, String departureDate, String paid){
+		if(!isConnected()){
+			return false;
+		}
+		
 		
 		//Check if Date is in right format
 		
@@ -1168,7 +1232,7 @@ public class HiltonDublinDBConnection {
 	 * @param reservation
 	 * @return boolean
 	 */
-	public boolean insertReservation(Reservation reservation){
+	public boolean insertReservation(Reservation reservation){		
 		String reservationID, guestID, arrivalDate, departureDate, paid;
 		
 		if(reservation.getBookingNumber() == -1){
@@ -1249,6 +1313,10 @@ public class HiltonDublinDBConnection {
 	 * @return List<SpecialPrice>
 	 */
 	public List<SpecialPrice> getSpecialPrices(String roomTypeID, String date, String price, String comment, String additionalSQLCondition){
+		if(!isConnected()){
+			return null;
+		}
+		
 		List<SpecialPrice> specialPrices = new ArrayList<SpecialPrice>();		
 		
 		//Create Select SQL Statement
@@ -1289,6 +1357,10 @@ public class HiltonDublinDBConnection {
 	 * @return boolean
 	 */
 	public boolean insertSpecialPrice(String roomTypeID, String date, String price, String comment) {
+		if(!isConnected()){
+			return false;
+		}
+		
 		// Check if Date is in right format
 		try {
 			if(isNullOrEmpty(date)){
@@ -1380,6 +1452,10 @@ public class HiltonDublinDBConnection {
 	 * @return List<WeekdayPrice>
 	 */
 	public List<WeekdayPrice> getWeekdayPrices(String roomTypeID, String price, String weekday, String additionalSQLCondition){
+		if(!isConnected()){
+			return null;
+		}
+		
 		List<WeekdayPrice> weekdayPrices = new ArrayList<WeekdayPrice>();
 		
 		//Create Select SQL Statement
@@ -1418,6 +1494,9 @@ public class HiltonDublinDBConnection {
 	 * @return boolean
 	 */
 	public boolean insertWeekdayPrice(String roomTypeID, String price, String weekday){
+		if(!isConnected()){
+			return false;
+		}
 		
 		// Create value array
 		String[] values = { roomTypeID, price, weekday };
@@ -1495,6 +1574,10 @@ public class HiltonDublinDBConnection {
 	 * @return List<Room>
 	 */
 	public List<Room> getReservedRooms(String reservationID){
+		if(!isConnected()){
+			return null;
+		}
+		
 		String [] subQuerySelectedColumns = { RESERVED_ROOM_ROOMNUMBER };
 		return getRooms(null, null, null, null, ROOM_NUMBER + " IN ( " + getReserved_RoomsAsSQLStatement(subQuerySelectedColumns, null, reservationID, null) + " )");
 	}
@@ -1507,6 +1590,10 @@ public class HiltonDublinDBConnection {
 	 * @return
 	 */
 	public boolean assignRoomToReservation(String roomNumber, String reservationID){
+		if(!isConnected()){
+			return false;
+		}
+		
 		// Create value array
 		String[] values = { roomNumber, reservationID };
 
@@ -1565,6 +1652,10 @@ public class HiltonDublinDBConnection {
 	 * @return List<Room>
 	 */
 	public List<ConsumerProduct> getReservedProducts(String reservationID){
+		if(!isConnected()){
+			return null;
+		}
+		
 		String [] subQuerySelectedColumns = { RESERVED_PRODUCT_PRODUCTID };
 		return getConsumerProducts(null, null, null, CONSUMERPRODUCT_PRODUCTID + " IN ( " + getReserved_ProductAsSQLStatement(subQuerySelectedColumns, null, reservationID, null) + " )");
 	}
@@ -1577,6 +1668,10 @@ public class HiltonDublinDBConnection {
 	 * @return
 	 */
 	public boolean assignProductToReservation(String productID, String reservationID){
+		if(!isConnected()){
+			return false;
+		}
+		
 		// Create value array
 		String[] values = { productID, reservationID };
 		// Return cell List with contained values
@@ -1619,6 +1714,7 @@ public class HiltonDublinDBConnection {
 	 * @return String
 	 */
 	public String getGuestsAsSQLStatement(String []selectedColumns, String guestID, String firstName, String lastName, String phoneNumber, String email, String address, String passportNr, String additionalSQLCondition){
+		
 		//Write Values and Tables in Arrays
 		String []values = {guestID, firstName, lastName, phoneNumber, email, address, passportNr};
 		String []tables = {GUEST};
@@ -1645,6 +1741,10 @@ public class HiltonDublinDBConnection {
 	 * @return List<Guest>
 	 */
 	public List<Guest> getGuests(String guestID, String firstName, String lastName, String phoneNumber, String email, String address, String passportNr, String additionalSQLCondition){
+		if(!isConnected()){
+			return null;
+		}
+		
 		List<Guest> guests = new ArrayList<Guest>();
 		
 		//Create Select SQL Statement
@@ -1690,6 +1790,10 @@ public class HiltonDublinDBConnection {
 	 * @return boolean
 	 */
 	public boolean insertGuest(String guestID, String firstName, String lastName, String phoneNumber, String email, String address, String passportNr){
+		if(!isConnected()){
+			return false;
+		}
+		
 		//Create value array
 		String []values = {guestID, firstName, lastName, phoneNumber, email, address, passportNr};
 				
