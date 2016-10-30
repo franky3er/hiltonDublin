@@ -167,11 +167,15 @@ public class HiltonDublinDBConnection {
 		System.out.println("Load \"" + DB_PROPERTIES_FILENAME + "\"");
 		dbProperties = new Properties();
 		InputStream input = null;
-		input = getClass().getClassLoader().getResourceAsStream(DB_PROPERTIES_FILENAME);
 		try {
+			input = getClass().getClassLoader().getResourceAsStream(DB_PROPERTIES_FILENAME);
 			this.dbProperties.load(input);
 		} catch (IOException e) {
 			System.out.println("Failed to load \"" + DB_PROPERTIES_FILENAME + "\"");
+			e.printStackTrace();
+			return false;
+		} catch (NullPointerException e){
+			System.out.println("Can't find \"" + DB_PROPERTIES_FILENAME + "\". Check if 'resources' folder is under 'Java Resources'");
 			e.printStackTrace();
 			return false;
 		}
@@ -798,7 +802,7 @@ public class HiltonDublinDBConnection {
 				
 				//Set objects of rating
 				ratingObj.setRoomType(getRoomTypes(Integer.toString(ratingObj.getTypeID()), null, null, null, null, null).get(0));
-				//TODO ratingObj.setGuest(Guest);
+				ratingObj.setGuest(getGuests(Integer.toString(ratingObj.getGuestID()), null, null, null, null, null, null, null).get(0));
 				
 				ratings.add(ratingObj);
 			}
@@ -1082,7 +1086,7 @@ public class HiltonDublinDBConnection {
 				reservation.setDepartureDate(rs.getDate(RESERVATION_DEPARTUREDATE));
 				reservation.setPaid(rs.getBoolean(RESERVATION_PAID));
 				
-				//TODO reservation.setGuests()
+				reservation.setGuest(getGuests(Integer.toString(reservation.getGuestID()), null, null, null, null, null, null, null).get(0));
 				reservation.setRooms(getReservedRooms(Integer.toString(reservation.getBookingNumber())));
 				reservation.setConsumerProducts(getReservedProducts(Integer.toString(reservation.getBookingNumber())));
 				
