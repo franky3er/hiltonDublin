@@ -1843,7 +1843,8 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	
 	/**
-	 * Returns a List of rooms from a certain room type which are available to a certain time
+	 * Returns a List of rooms from a certain room type which are available to a certain time.
+	 * If there are not enough rooms available the function returns null.
 	 * @param roomType
 	 * @param ammountOfRooms
 	 * @param arrivalDate
@@ -1863,6 +1864,10 @@ public class HiltonDublinDBConnection {
 		
 		List<Room> rooms = getRooms(null, null, null, null, additionalSQLCondition);
 		
+		if (rooms.size() < ammountOfRooms){
+			System.out.println("Not enough rooms available at the moment!");
+			return null;
+		}
 		
 		return rooms;
 	}
