@@ -14,9 +14,18 @@
 			<th colspan="2">Your Review</th>
 		</tr>
 		<tr>
+			<td>
+				<select name="roomtype">
+					<option value="1">Single</option>
+					<option value="2">Double</option>
+					<option value="3">Twin</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
 			<td>Your rating</td>
 			<td>
-				<select id="rating" name="rating">
+				<select name="rating">
 					<option value="1">1</option>
 					<option value="2">2</option>
 					<option value="3">3</option>
@@ -37,10 +46,10 @@
 	</table>
 	</form>
 <%
+		int ratingID = null;
 		String comment = request.getParameter("comment");
 		int rating = Integer.parseInt(request.getParameter("rating"));
-		int typeID = '3';
-		int ratingID = '1';
+		int typeID = Integer.parseInt(request.getParameter("roomtype"));
 		int guestID = '1';
 		
 		
@@ -56,9 +65,7 @@
 		String guestid = String.valueOf(guestID);
 		String rating = String.valueOf(rate);
 		
-		try{		dbConnection.insertRating(rate);
-		}catch (Exception e){
-            out.println("An exception occurred: " + e.getMessage());
-        }
+		dbConnection.insertRating(rate);
+		
 %>	
 	<%@ include file="navigationSlideGuestFooter.jsp" %>
