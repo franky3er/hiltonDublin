@@ -479,23 +479,20 @@ public class HiltonDublinDBConnection {
 	}
 	
 	
-	private boolean executeUpdate(String sqlStatement) {
+	private ResultSet executeUpdate(String sqlStatement) {
 		try {
 			Statement statement;
 			System.out.println("Execute Update: \"" + sqlStatement + "\"");
 			statement = dbConnection.createStatement();
-			int numberOfRows = statement.executeUpdate(sqlStatement);
-			statement.close();
-			if(numberOfRows == 0){
-				return false;
+			int numberOfRows = statement.executeUpdate(sqlStatement, Statement.RETURN_GENERATED_KEYS);
+			if(numberOfRows==0){
+				return null;
 			}
-			else {
-				return true;
-			}
+			return statement.getGeneratedKeys();
 		} catch (SQLException e) {
 			System.out.println("Execute Update failed: \"" + sqlStatement + "\"");
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 	}
 	
@@ -649,11 +646,11 @@ public class HiltonDublinDBConnection {
 	 * @param typeID
 	 * @param smoking
 	 * @param occupied
-	 * @return boolean
+	 * @return ResultSet
 	 */
-	public boolean insertRoom(String roomNumber, String typeID, String smoking, String occupied){
+	public ResultSet insertRoom(String roomNumber, String typeID, String smoking, String occupied){
 		if(!isConnected()){
-			return false;
+			return null;
 		}
 		
 		//Convert Booleans to tinyint
@@ -671,15 +668,17 @@ public class HiltonDublinDBConnection {
 		
 		//Execute update
 		return executeUpdate(sqlStatement);
+		
+		
 	}
 	
 	
 	/**
 	 * Inserts a room
 	 * @param room
-	 * @return Boolean
+	 * @return ResultSet
 	 */
-	public boolean insertRoom(Room room){
+	public ResultSet insertRoom(Room room){
 		//Get values in String format
 		String roomNumber, typeID, smoking, occupied;
 		if(room.getRoomNumber() == -1){
@@ -794,9 +793,9 @@ public class HiltonDublinDBConnection {
 	 * @param description
 	 * @return boolean
 	 */
-	public boolean insertRoomType(String typeID, String name, String picture, String standardPrice, String description){
+	public ResultSet insertRoomType(String typeID, String name, String picture, String standardPrice, String description){
 		if(!isConnected()){
-			return false;
+			return null;
 		}
 		
 		//Create value array
@@ -816,9 +815,9 @@ public class HiltonDublinDBConnection {
 	/**
 	 * Inserts a room type into the database
 	 * @param roomType
-	 * @return Boolean
+	 * @return ResultSet
 	 */
-	public boolean insertRoomType(RoomType roomType){
+	public ResultSet insertRoomType(RoomType roomType){
 		String typeID, name, picture, standardPrice, description;
 		
 		if(roomType.getRoomTypeID() == -1){
@@ -932,11 +931,11 @@ public class HiltonDublinDBConnection {
 	 * @param guestID
 	 * @param rating
 	 * @param comment
-	 * @return Boolean
+	 * @return ResultSet
 	 */
-	public boolean insertRating(String ratingID, String roomTypeID, String guestID, String rating, String comment){
+	public ResultSet insertRating(String ratingID, String roomTypeID, String guestID, String rating, String comment){
 		if(!isConnected()){
-			return false;
+			return null;
 		}
 		
 		//Create value array
@@ -957,9 +956,9 @@ public class HiltonDublinDBConnection {
 	/**
 	 * Inserts a Rating type into the database
 	 * @param ratingObj
-	 * @return Boolean
+	 * @return ResultSet
 	 */
-	public boolean insertRating(Rating ratingObj){
+	public ResultSet insertRating(Rating ratingObj){
 		String ratingID, roomTypeID, guestID, rating, comment;
 		
 		if(ratingObj.getRatingID() == -1){
@@ -1071,11 +1070,11 @@ public class HiltonDublinDBConnection {
 	 * @param consumerProductID
 	 * @param name
 	 * @param price
-	 * @return Boolean
+	 * @return ResultSet
 	 */
-	public boolean insertConsumerProduct(String consumerProductID, String name, String price){
+	public ResultSet insertConsumerProduct(String consumerProductID, String name, String price){
 		if(!isConnected()){
-			return false;
+			return null;
 		}
 		
 		//Create value array
@@ -1094,9 +1093,9 @@ public class HiltonDublinDBConnection {
 	/**
 	 * inserts a consumer product to the database
 	 * @param consumerProduct
-	 * @return Boolean
+	 * @return ResultSet
 	 */
-	public boolean insertConsumerProduct(ConsumerProduct consumerProduct){
+	public ResultSet insertConsumerProduct(ConsumerProduct consumerProduct){
 		String consumerProductID, name, price;
 		if(consumerProduct.getProductID() == -1){
 			consumerProductID = null;
@@ -1234,11 +1233,11 @@ public class HiltonDublinDBConnection {
 	 * @param departureDate
 	 * @param paid
 	 * @param additionalSQLCondition
-	 * @return
+	 * @return ResultSet
 	 */
-	public boolean insertReservation(String reservationID, String guestID, String arrivalDate, String departureDate, String paid){
+	public ResultSet insertReservation(String reservationID, String guestID, String arrivalDate, String departureDate, String paid){
 		if(!isConnected()){
-			return false;
+			return null;
 		}
 		
 		
@@ -1250,11 +1249,11 @@ public class HiltonDublinDBConnection {
 			}
 			if(!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(arrivalDate)))){
 				System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-				return false;
+				return null;
 			}
 		} catch (ParseException e1) {
 			System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-			return false;
+			return null;
 		}
 		try {
 			if(isNullOrEmpty(departureDate)){
@@ -1262,11 +1261,11 @@ public class HiltonDublinDBConnection {
 			}
 			if(!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(departureDate)))){
 				System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-				return false;
+				return null;
 			}
 		} catch (ParseException e1) {
 			System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-			return false;
+			return null;
 		}
 		
 		//Convert boolean to tinyint
@@ -1292,9 +1291,9 @@ public class HiltonDublinDBConnection {
 	 * Inserts the assigned Rooms from that reservation to the Reserved_Rooms table of the Database
 	 * Inserts the assigned Products from that reservation to the Reserved_Product table of the Database
 	 * @param reservation
-	 * @return boolean
+	 * @return ResultSet
 	 */
-	public boolean insertReservation(Reservation reservation){		
+	public ResultSet insertReservation(Reservation reservation){		
 		String reservationID, guestID, arrivalDate, departureDate, paid;
 		
 		if(reservation.getBookingNumber() == -1){
@@ -1416,11 +1415,11 @@ public class HiltonDublinDBConnection {
 	 * @param date
 	 * @param price
 	 * @param comment
-	 * @return boolean
+	 * @return ResultSet
 	 */
-	public boolean insertSpecialPrice(String roomTypeID, String date, String price, String comment) {
+	public ResultSet insertSpecialPrice(String roomTypeID, String date, String price, String comment) {
 		if(!isConnected()){
-			return false;
+			return null;
 		}
 		
 		// Check if Date is in right format
@@ -1430,11 +1429,11 @@ public class HiltonDublinDBConnection {
 			}
 			if (!date.equals(mySQLDateFormat.format(mySQLDateFormat.parse(date)))) {
 				System.out.println("date is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-				return false;
+				return null;
 			}
 		} catch (ParseException e1) {
 			System.out.println("date is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-			return false;
+			return null;
 		}
 
 		// Create value array
@@ -1453,9 +1452,9 @@ public class HiltonDublinDBConnection {
 	/**
 	 * Inserts a special price to the database
 	 * @param specialPrice
-	 * @return boolean
+	 * @return ResultSet
 	 */
-	public boolean insertSpecialPrice(SpecialPrice specialPrice){
+	public ResultSet insertSpecialPrice(SpecialPrice specialPrice){
 		String roomTypeID, date, price, comment;
 		
 		if(specialPrice.getTypeID() == -1){
@@ -1553,11 +1552,11 @@ public class HiltonDublinDBConnection {
 	 * @param roomTypeID
 	 * @param price
 	 * @param weekday
-	 * @return boolean
+	 * @return ResultSet
 	 */
-	public boolean insertWeekdayPrice(String roomTypeID, String price, String weekday){
+	public ResultSet insertWeekdayPrice(String roomTypeID, String price, String weekday){
 		if(!isConnected()){
-			return false;
+			return null;
 		}
 		
 		// Create value array
@@ -1577,9 +1576,9 @@ public class HiltonDublinDBConnection {
 	/**
 	 * Inserts a weekday price into the database
 	 * @param weekdayPrice
-	 * @return boolean
+	 * @return ResultSet
 	 */
-	public boolean insertWeekdayPrice(WeekdayPrice weekdayPrice){
+	public ResultSet insertWeekdayPrice(WeekdayPrice weekdayPrice){
 		String roomTypeID, price, weekday;
 		
 		if(weekdayPrice.getRoomTypeID() == -1){
@@ -1651,9 +1650,9 @@ public class HiltonDublinDBConnection {
 	 * @param reservationID
 	 * @return
 	 */
-	public boolean assignRoomToReservation(String roomNumber, String reservationID){
+	public ResultSet assignRoomToReservation(String roomNumber, String reservationID){
 		if(!isConnected()){
-			return false;
+			return null;
 		}
 		
 		// Create value array
@@ -1676,7 +1675,7 @@ public class HiltonDublinDBConnection {
 	 * @param reservation
 	 * @return
 	 */
-	public boolean assignRoomToReservation(Room room, Reservation reservation){
+	public ResultSet assignRoomToReservation(Room room, Reservation reservation){
 		return assignRoomToReservation(Integer.toString(room.getRoomNumber()), Integer.toString(reservation.getBookingNumber()));
 	}
 	
@@ -1727,11 +1726,11 @@ public class HiltonDublinDBConnection {
 	 * If a parameter is null or empty it won't be recorded in the SQL Statement.
 	 * @param productID
 	 * @param reservationID
-	 * @return
+	 * @return ResultSet
 	 */
-	public boolean assignProductToReservation(String productID, String reservationID){
+	public ResultSet assignProductToReservation(String productID, String reservationID){
 		if(!isConnected()){
-			return false;
+			return null;
 		}
 		
 		// Create value array
@@ -1750,9 +1749,9 @@ public class HiltonDublinDBConnection {
 	 * Assigns a product to a reservation. Inserts a Reserved_Product into the database.
 	 * @param product
 	 * @param reservation
-	 * @return
+	 * @return ResultSet
 	 */
-	public boolean assignProductToReservation(ConsumerProduct product, Reservation reservation){
+	public ResultSet assignProductToReservation(ConsumerProduct product, Reservation reservation){
 		return assignRoomToReservation(Integer.toString(product.getProductID()), Integer.toString(reservation.getBookingNumber()));
 	}
 	
@@ -1849,11 +1848,11 @@ public class HiltonDublinDBConnection {
 	 * @param email
 	 * @param address
 	 * @param passportNr
-	 * @return boolean
+	 * @return ResultSet
 	 */
-	public boolean insertGuest(String guestID, String firstName, String lastName, String phoneNumber, String email, String address, String passportNr){
+	public ResultSet insertGuest(String guestID, String firstName, String lastName, String phoneNumber, String email, String address, String passportNr){
 		if(!isConnected()){
-			return false;
+			return null;
 		}
 		
 		//Create value array
@@ -1872,9 +1871,9 @@ public class HiltonDublinDBConnection {
 	/**
 	 * Inserts a guest to the database.
 	 * @param guest
-	 * @return boolean
+	 * @return ResultSet
 	 */
-	public boolean insertGuest(Guest guest){
+	public ResultSet insertGuest(Guest guest){
 		String guestID, firstName, lastName, phoneNumber, email, address, passportNr;
 		
 		if(guest.getGuestID() == -1){
