@@ -6,77 +6,85 @@
     
 <%@ include file="navigationSlideGuestHeader.jsp" %>
 
-<%
-	//guest info
-	String firstname = request.getParameter("firstname");
-	String lastname = request.getParameter("lastname");
-	String address = request.getParameter("address");
-	String email = request.getParameter("email");
-	String phonenr = request.getParameter("phonenr");
-	String passportnr = request.getParameter("passportnr");
-
-
-	//room info
-	String checkin = request.getParameter("checkin");
-	String checkout = request.getParameter("checkout");
-	String numberofguest = request.getParameter("numberOfGuests");
-	String smoking = request.getParameter("smoking");
-	
-	String roomNumber = null;
-	String typeID = null;
-	String occupied = "false";
-	//String additionalSQL = HiltonDublinDBConnection.ROOM_NUMBER + ">'200'";
-	
-	List<String> roomsAsStrings = new ArrayList<String>();
-	List<String> roomNumbers = new ArrayList<String>();
-	List<Room> rooms = new ArrayList<Room>();
-	rooms = dbConnection.getRooms(roomNumber, typeID, smoking, occupied, null);
-	
-	for(Room room : rooms){
-		roomNumbers.add(String.valueOf(room.getRoomNumber()));
-		roomsAsStrings.add("RoomNumber: " + room.getRoomNumber() + "   typeID: " + room.getTypeID() + "   smoking: " + room.isSmoking());
-	}
-%>
-
 <script language = "javascript">
 
 //checking info is correct
-	function reserve()
+	function checkinfo()
 	{
-		//reservationID = roomNumber+name guestID = name+passportnr
-		roomNumber = request.getParameter("reserveroom");
-		boolean request = dbConnection.insertReservation(roomNumber+name, name+passportnr, checkin, checkout, "true");
+		String Guestquery = "insert into guest(GUESTID, FIRSTNAME, LASTNAME, PHONENUMBER, EMAIL, ADDRESS, PASSPORTNR) values('null', '"+request.getParameter("firstname")+"', '"
+				+request.getParameter("lastname")+"', '"+request.getParameter("phonenr")+"', '"
+				+request.getParameter("email")+"', '"+request.getParameter("address")+"', '"
+				+request.getParameter("passportnr")+"')";
 		
-		if(request != "false")
-		{
-			roomsh.submit();
-		}
-		else
-		{
-			roomsh.reset();
-		}
+		executeUpdate(Guestquery);
+		
+		check_guestinfo.submit();
 	}
 </script>
 
 
 <h1>Online Reservation</h1>
 
-<form id="roomsh" action="payment.jsp" method="post">
-
-	<%
-	for(String room : roomsAsStrings){
-	%>	
-	<p>
-		<input id="reserveroom" type="radio" name="reserveroom" value="room.substring(12,15)" checked>
-		<b><%=room %></b>
-	</p>
-	<%
-	}
-	%>
-	<input type="submit" value="Payment">
-
+<form id="check_guestinfo" action="onlinereservationsh.jsp" method="post">
+	<fieldset>
+		<legend>Guest Info</legend>
+		<table>
+			<tr>
+				<td><label for="firstname">FIRST NAME</label></td>
+				<td><input type="text" id="firstname" name="firstname" placeholder="Insert First Name" required></td>
+			</tr>
+			<tr>
+				<td><label for="lastname">LAST NAME</label></td>
+				<td><input type="text" id="lastname" name="lastname" placeholder="Insert Last Name" required></td>
+			</tr>
+			<tr>
+				<td><label for="address">ADDRESS</label></td>
+				<td><input type="text" id="address" name="address" placeholder="Insert Address" required></td>
+			</tr>
+			<tr>
+				<td><label for="email">EMAIL</label></td>
+				<td><input type="email" id="email" name="email" placeholder="ex) example@example.com" required></td>
+			</tr>
+			<tr>
+				<td><label for="phonenr">PHONE NR.</label></td>
+				<td><input type="tel" id="phonenr" name="phonenr" placeholder="Input just number" required></td>
+			</tr>
+			<tr>
+				<td><label for="passportnr">PASSPORT NR.</label></td>
+				<td><input type="text" id="passportnr" name="passportnr" placeholder="Insert PassportNumber" required></td>
+			</tr>
+			<tr>
+				<td></td>
+			</tr>
+		</table>
+	</fieldset>
+	<br>
+	<fieldset>
+		<legend>Booking Details</legend>
+		<table>
+		<tr>
+		<td>Check In</td>
+		<td>Check Out</td>
+		<td>Person</td>
+		<td>Smoking</td>
+		</tr>
+		<tr>
+		<td><input type="date" id="checkin" name="checkin" min="2016-11-01" required></td>
+		<td><input type="date" id="checkout" name="checkout" min="2016-11-02" required></td>
+		<td><input type="number" id="numberOfGuests" name="numberOfGuests" min="1" max="6" required></td>
+		<td>
+		<input id="smoking" type="radio" name="smoking" value="true" checked>
+		<label for="smoking">Yes</label>
+		<input id="smoking" type="radio" name="smoking" value="false" checked>
+		<label for="smoking">No</label>
+		</td>
+		</tr>
+		</table>
+	</fieldset>
+	<td colspan="2" align="center">
+		<input type="button" value="Submit" onclick="checkinfo()">
+		<input type="reset" value="Cancel">
+	</td>
 </form>
-
-
 
 <%@ include file="navigationSlideGuestFooter.jsp" %>
