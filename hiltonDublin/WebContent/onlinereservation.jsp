@@ -11,12 +11,14 @@
 //checking info is correct
 	function checkinfo()
 	{
-		String Guestquery = "insert into guest(GUESTID, FIRSTNAME, LASTNAME, PHONENUMBER, EMAIL, ADDRESS, PASSPORTNR) values('null', '"+request.getParameter("firstname")+"', '"
-				+request.getParameter("lastname")+"', '"+request.getParameter("phonenr")+"', '"
-				+request.getParameter("email")+"', '"+request.getParameter("address")+"', '"
-				+request.getParameter("passportnr")+"')";
+		String lastname = request.getParameter("lastname");
+		String firstname = request.getParameter("firstname");
+		String phonenr = request.getParameter("phonenr");
+		String email = request.getParameter("email");
+		String address = request.getParameter("address");
+		String passportnr = request.getParameter("passportnr");
 		
-		executeUpdate(Guestquery);
+		ResultSet Guestresult = dbConnection.insertGuest(null, firstname, lastname, phonenr, email, address, passportnr);
 		
 		check_guestinfo.submit();
 	}
@@ -82,7 +84,7 @@
 		</table>
 	</fieldset>
 	<td colspan="2" align="center">
-		<input type="button" value="Submit" onclick="checkinfo()">
+		<input type="submit" value="Submit">
 		<input type="reset" value="Cancel">
 	</td>
 </form>
