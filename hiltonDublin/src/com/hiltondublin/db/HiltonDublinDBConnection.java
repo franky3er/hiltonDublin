@@ -264,6 +264,67 @@ public class HiltonDublinDBConnection {
 		return true;
 	}
 	
+	/**
+	 * Creates a delete from table Statement specified by the given parameters.
+	 * @param table
+	 * @param conditionColumns
+	 * @param conditionValues
+	 * @param additionalSQL
+	 * @return String
+	 */
+	public String createDeleteStatement(String table, String[] conditionColumns, String[] conditionValues, String additionalSQL){
+		if(table == null){
+			System.out.println("Create SQL Delete Statement failed. No table selected!");
+		}
+		
+		String sqlStatement = "DELETE FROM " + table + " ";
+
+		//Checking if Conditions are available
+		boolean conditionsAvailable = false;
+		boolean primaryConditionsAvailable = false;
+		for(String conditionValue : conditionValues){
+			if(!isNullOrEmpty(conditionValue)){
+				conditionsAvailable = true;
+				primaryConditionsAvailable = true;
+				break;
+			}
+		}
+		if(!isNullOrEmpty(additionalSQL)){
+			conditionsAvailable = true;
+		}
+		
+		if(conditionsAvailable){
+			sqlStatement += " WHERE ";
+			int numberOfColumns = conditionColumns.length;
+			boolean firstCondition = true;
+			for(int i = 0; i < numberOfColumns; i++){
+				if( conditionValues[i]!=null ){
+					if( !conditionValues[i].isEmpty()){
+						if(firstCondition){
+							firstCondition = false;
+						}
+						else{
+							sqlStatement += "AND ";
+						}
+						sqlStatement += conditionColumns[i] + "='" + conditionValues[i] + "' ";
+					}
+				}
+			}
+			if( additionalSQL!=null){
+				if( !additionalSQL.isEmpty()){
+					if(primaryConditionsAvailable){
+						sqlStatement += "AND ";
+					}
+					sqlStatement += additionalSQL + " ";
+				}
+			}
+		}
+		sqlStatement += ";";
+				
+		
+		return sqlStatement;
+	}
+	
 	
 	/**
 	 * Creates a Select SQL Statement specified by the table name(s) and the given columns with values as a condition
@@ -277,6 +338,7 @@ public class HiltonDublinDBConnection {
 	public String createSelectStatement(String [] tables, String[] selectedColumns, String[] conditionColumns, String[] conditionValues, String additionalSQL) {
 		if(tables == null){
 			System.out.println("Create SQL Statement failed. No tables selected!");
+			return null;
 		}
 		
 		if(selectedColumns == null){
