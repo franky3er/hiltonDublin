@@ -21,4 +21,12 @@
   	<servlet-name>guest</servlet-name>
   	<url-pattern>/Guest</url-pattern>
   </servlet-mapping>
+  <servlet>
+  	<servlet-name>onlineReservation</servlet-name>
+  	<jsp-file>/onlinereservation.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>onlineReservation</servlet-name>
+  	<url-pattern>/Guest/Online-Reservation</url-pattern>
+  </servlet-mapping>
 </web-app>

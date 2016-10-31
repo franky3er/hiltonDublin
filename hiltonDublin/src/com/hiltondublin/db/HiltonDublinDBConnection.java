@@ -112,7 +112,7 @@ public class HiltonDublinDBConnection {
 	public final static String GUEST_PHONENUMBER = GUEST + "." + "PHONENUMBER";
 	public final static String GUEST_EMAIL = GUEST + "." + "EMAIL";
 	public final static String GUEST_ADDRESS = GUEST + "." + "ADDRESS";
-	public final static String GUEST_PASSPORTNR = GUEST + "." + "GUEST_PASSPORTNR";
+	public final static String GUEST_PASSPORTNR = GUEST + "." + "PASSPORTNR";
 	public final static String []GUEST_COLUMNS = { GUEST_GUESTID, GUEST_FIRSTNAME, GUEST_LASTNAME, GUEST_PHONENUMBER, GUEST_EMAIL, GUEST_ADDRESS, GUEST_PASSPORTNR };
 	
 	
@@ -1758,7 +1758,7 @@ public class HiltonDublinDBConnection {
 	
 	
 	//------------------------------------------------------------------------------------------
-	//-----------------------------------------RESERVED_PRODUCTS--------------------------------
+	//-----------------------------------------Guest--------------------------------------------
 	//------------------------------------------------------------------------------------------
 	
 	/**

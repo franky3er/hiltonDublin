@@ -5,7 +5,7 @@
 	Guests can make online reservations, cancel reservations, and check the ratings.
 	</p>
 		<div>
-		<form action="onlinereservation.html" method="get">
+		<form action="<%=getURLWithContextPath(request) %>/Guest/Online-Reservation" method="get">
 			<input class="navigationPage" type="submit" value="Reservation" />
 		</form>
 		<form action="cancellation.html" method="get">
