@@ -8,6 +8,11 @@ body {
 	background-image: url(../Pictures/background.jpg)
 }
 
+.loginError {
+	color: red;
+	
+}
+
 #navigationArea {
 	display: block;
 	float: left;
@@ -97,7 +102,6 @@ body {
 	margin-top: 3%;
 	background-color: white;
 	opacity: 0.9;
-	color: black;
 	padding-top: 1%;
 	padding-bottom: 1%;
 	padding-left: 2%;
@@ -120,3 +124,4 @@ body {
 #loginArea {
 	height: 17%;
 }
+

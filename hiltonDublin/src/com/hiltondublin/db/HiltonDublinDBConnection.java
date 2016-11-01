@@ -21,7 +21,10 @@ import com.hiltondublin.classes.Room;
 import com.hiltondublin.classes.RoomType;
 import com.hiltondublin.classes.SpecialPrice;
 import com.hiltondublin.classes.WeekdayPrice;
+import com.hiltondublin.users.Administrator;
+import com.hiltondublin.users.Employee;
 import com.hiltondublin.users.Guest;
+import com.hiltondublin.users.User;
 
 public class HiltonDublinDBConnection {
 	//MySQL Date Format
@@ -114,6 +117,18 @@ public class HiltonDublinDBConnection {
 	public final static String GUEST_ADDRESS = GUEST + "." + "ADDRESS";
 	public final static String GUEST_PASSPORTNR = GUEST + "." + "PASSPORTNR";
 	public final static String []GUEST_COLUMNS = { GUEST_GUESTID, GUEST_FIRSTNAME, GUEST_LASTNAME, GUEST_PHONENUMBER, GUEST_EMAIL, GUEST_ADDRESS, GUEST_PASSPORTNR };
+	
+	//Employee Table
+	public final static String EMPLOYEE = "EMPLOYEE";
+	public final static String EMPLOYEE_USERNAME = EMPLOYEE + "." + "USERNAME";
+	public final static String EMPLOYEE_FIRSTNAME = EMPLOYEE + "." + "FIRSTNAME";
+	public final static String EMPLOYEE_LASTNAME = EMPLOYEE + "." + "LASTNAME";
+	public final static String EMPLOYEE_PASSWORD = EMPLOYEE + "." + "PASSWORD";
+	public final static String EMPLOYEE_ADMIN = EMPLOYEE + "." + "ADMIN";
+	public final static String EMPLOYEE_EMAIL = EMPLOYEE + "." + "EMAIL";
+	public final static String EMPLOYEE_PHONENUMBER = EMPLOYEE + "." + "PHONENUMBER";
+	public final static String EMPLOYEE_SESSIONID = EMPLOYEE + "." + "SESSIONID";
+	public final static String []EMPLOYEE_COLUMNS = { EMPLOYEE_USERNAME, EMPLOYEE_FIRSTNAME, EMPLOYEE_LASTNAME, EMPLOYEE_PASSWORD, EMPLOYEE_ADMIN, EMPLOYEE_EMAIL, EMPLOYEE_PHONENUMBER, EMPLOYEE_SESSIONID };
 	
 	
 	
@@ -2160,7 +2175,7 @@ public class HiltonDublinDBConnection {
 		String table = GUEST;
 										
 		//Get SQL Statement
-		return createDeleteStatement(table, RATING_COLUMNS, values, additionalSQLCondition);
+		return createDeleteStatement(table, GUEST_COLUMNS, values, additionalSQLCondition);
 			
 	}
 	
@@ -2316,6 +2331,105 @@ public class HiltonDublinDBConnection {
 		}
 		
 		return insertGuest(guestID, firstName, lastName, phoneNumber, email, address, passportNr);
+	}
+	
+	//------------------------------------------------------------------------------------------
+	//-------------------------------------EMPLOYEE---------------------------------------------
+	//------------------------------------------------------------------------------------------
+	
+	/**
+	 * Creates a Select Statement to get all Employees / Administrators specified by the parameters.
+	 * If a condition parameter is null it won't be recorded in the SQL statement.
+	 * @param selectedColumns
+	 * @param username
+	 * @param firstName
+	 * @param lastName
+	 * @param password
+	 * @param admin
+	 * @param email
+	 * @param phoneNumber
+	 * @param sessionID
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String getEmployeesAsSQLStatement(String []selectedColumns, String username, String firstName, String lastName, String password, String admin, String email, String phoneNumber, String sessionID, String additionalSQLCondition){
+		//Convert boolean to tinyint
+		convertBooleanToTinyInt(admin);
+		
+		//Write Values and Tables in Arrays
+		String []values = {username, firstName, lastName, password, admin, email, phoneNumber, sessionID};
+		String []tables = {EMPLOYEE};
+						
+		if(selectedColumns == null){
+			selectedColumns = EMPLOYEE_COLUMNS;
+		}
+										
+		//Get SQL Statement
+		return createSelectStatement(tables, selectedColumns, EMPLOYEE_COLUMNS, values, additionalSQLCondition);
+			
+	}
+	
+	/**
+	 * Returns all Employees / Administrators specified by the parameters as a List<User>.
+	 * If a condition parameter is null it won't be recorded in the SQL Statement.
+	 * @param username
+	 * @param firstName
+	 * @param lastName
+	 * @param password
+	 * @param admin
+	 * @param email
+	 * @param phoneNumber
+	 * @param sessionID
+	 * @param additionalSQLCondition
+	 * @return List<User>
+	 */
+	public List<User> getEmployees(String username, String firstName, String lastName, String password, String admin, String email, String phoneNumber, String sessionID, String additionalSQLCondition){
+		List<User> users = new ArrayList<User>();
+		
+		//Create Select SQL Statement
+		String sqlStatement = getEmployeesAsSQLStatement(EMPLOYEE_COLUMNS, username, firstName, lastName, password, admin, email, phoneNumber, sessionID, additionalSQLCondition);
+		
+		//Execute Query
+		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
+						
+		//Process Result Set
+		try{
+			while(rs.next()){
+				User user;
+				if(rs.getBoolean(EMPLOYEE_ADMIN)){
+					Administrator administrator = new Administrator();
+					administrator.setUsername(rs.getString(EMPLOYEE_USERNAME));
+					administrator.setFirstName(rs.getString(EMPLOYEE_FIRSTNAME));
+					administrator.setLastName(rs.getString(EMPLOYEE_LASTNAME));
+					administrator.setPassword(rs.getString(EMPLOYEE_PASSWORD));
+					administrator.setEmail(rs.getString(EMPLOYEE_EMAIL));
+					administrator.setPhoneNumber(rs.getString(EMPLOYEE_PHONENUMBER));
+					administrator.setSessionID(rs.getInt(EMPLOYEE_SESSIONID));
+					user = administrator;
+				}
+				else{
+					Employee employee = new Employee();
+					employee.setUsername(rs.getString(EMPLOYEE_USERNAME));
+					employee.setFirstName(rs.getString(EMPLOYEE_FIRSTNAME));
+					employee.setLastName(rs.getString(EMPLOYEE_LASTNAME));
+					employee.setPassword(rs.getString(EMPLOYEE_PASSWORD));
+					employee.setEmail(rs.getString(EMPLOYEE_EMAIL));
+					employee.setPhoneNumber(rs.getString(EMPLOYEE_PHONENUMBER));
+					employee.setSessionID(rs.getInt(EMPLOYEE_SESSIONID));
+					user = employee;
+				}
+				
+				users.add(user);
+				
+			}
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("Read ResultSet Failed.");
+			e.printStackTrace();
+			return null;
+		}
+		
+		return users;
 	}
 	
 	

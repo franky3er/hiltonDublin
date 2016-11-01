@@ -21,7 +21,7 @@
 %>
 
 
-<%@ include file="navigationSlideGuestHeader.jsp" %>
+<%@ include file="navigationSlideEmployeeHeader.jsp" %>
 
 
 
@@ -36,4 +36,4 @@ for(String room : roomsAsStrings){
 
 
 
-<%@ include file="navigationSlideGuestFooter.jsp" %>
+<%@ include file="navigationSlideEmployeeFooter.jsp" %>

@@ -24,6 +24,10 @@ public String selectedLanguage(String language, String selectedLanguage){
 		return "";
 	}
 }
+
+public static String getURLWithContextPath(HttpServletRequest request) {
+   return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+}
 %>
 
 <%
@@ -68,10 +72,10 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 		<img src="${pageContext.request.contextPath}/resources/Pictures/hiltonLogo.png" alt="Hilton Logo" title="Hilton Logo" />
 		<div id="loginArea">
 		</div>
-		<form action="Home" method="get">
+		<form action="<%=getURLWithContextPath(request) %>/Home" method="get">
 			<input class="navigationPage" type="submit" value="<%=language.navigationSlideHome() %>" />
 		</form>
-		<form action="Guest" method="get">
+		<form action="<%=getURLWithContextPath(request) %>/Guest" method="get">
 			<input class="navigationPage" type="submit" value="<%=language.navigationSlideGuest() %>" />
 		</form>
 		<form action="employee.html" method="get">

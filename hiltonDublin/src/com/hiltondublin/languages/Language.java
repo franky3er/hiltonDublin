@@ -33,6 +33,22 @@ public abstract class Language {
 		return "Disability";
 	}
 	
+	public String navigationSlideLoginWrongUsername(){
+		return "Wrong Username!";
+	}
+	
+	public String navigationSlideLoginWrongPassword(){
+		return "Wrong Password!";
+	}
+	
+	public String navigationSlideLoginUsername(){
+		return "Username";
+	}
+	
+	public String navigationSlideLoginPassword(){
+		return "Password";
+	}
+	
 	
 	
 	//HOME

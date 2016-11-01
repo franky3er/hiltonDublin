@@ -5,6 +5,7 @@ public class German extends Language {
 		setName("German");
 	}
 	
+	//Navigation Slide
 	public String navigationSlideGuest(){
 		return "Gast";
 	}
@@ -19,6 +20,22 @@ public class German extends Language {
 	
 	public String navigationSlideDisability(){
 		return "Behinderung";
+	}
+	
+	public String navigationSlideLoginWrongUsername(){
+		return "Falscher Benutzername!";
+	}
+	
+	public String navigationSlideLoginWrongPassword(){
+		return "Falsches Passwort!";
+	}
+	
+	public String navigationSlideLoginUsername(){
+		return "Benutzername";
+	}
+	
+	public String navigationSlideLoginPassword(){
+		return "Passwort";
 	}
 	
 	//HOME
