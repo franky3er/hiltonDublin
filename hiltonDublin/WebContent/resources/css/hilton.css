@@ -10,7 +10,7 @@ body {
 
 .loginError {
 	color: red;
-	
+	margin-top: 0;
 }
 
 #navigationArea {
@@ -24,10 +24,6 @@ body {
 
 #navigationArea img {
 	width: 100%
-}
-
-#loginForm {
-	
 }
 
 #navigationArea .navigationPage{
@@ -48,14 +44,13 @@ body {
 
 #navigationArea .loginTextField {
 	width: 80%;
-	margin-bottom: 5%;
+	margin-bottom: 2%;
 	margin-right: 1%;
 	margin-left: 1%
 }
 
 #navigationArea .loginLogoutButton {
 	width: 50%;
-	margin-bottom: 5%;
 	margin-right: 1%;
 	margin-left: 1%;
 }
@@ -122,6 +117,6 @@ body {
 }
 
 #loginArea {
-	height: 17%;
+	height: 8%;
 }
 
