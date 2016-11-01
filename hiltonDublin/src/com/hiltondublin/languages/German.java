@@ -38,6 +38,18 @@ public class German extends Language {
 		return "Passwort";
 	}
 	
+	public String navigationSlideLoginLogin(){
+		return "einloggen";
+	}
+	
+	public String navigationSlideLoginLogout(){
+		return "ausloggen";
+	}
+	
+	public String navigationSlideLoginLoggedInAs(){
+		return "Eingeloggt als";
+	}
+	
 	//HOME
 	public String homeWelcome(){
 		return "Willkommen bei Hilton Dublin";

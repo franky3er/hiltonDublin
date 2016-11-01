@@ -49,6 +49,18 @@ public abstract class Language {
 		return "Password";
 	}
 	
+	public String navigationSlideLoginLogin(){
+		return "login";
+	}
+	
+	public String navigationSlideLoginLogout(){
+		return "logout";
+	}
+	
+	public String navigationSlideLoginLoggedInAs(){
+		return "Logged in as";
+	}
+	
 	
 	
 	//HOME
