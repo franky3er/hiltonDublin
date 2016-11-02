@@ -1,6 +1,7 @@
+<%@page import="com.hiltondublin.users.Administrator"%>
 <%@page import="com.hiltondublin.db.HiltonDublinDBConnection"%>
 <%@page import="com.hiltondublin.users.User" %>
-<%@page import="com.hiltondublin.users.Guest" %>
+<%@page import="com.hiltondublin.users.Employee" %>
 <%@page import="com.hiltondublin.languages.Language" %>
 <%@page import="com.hiltondublin.languages.English" %>
 <%@page import="com.hiltondublin.languages.German" %>
@@ -10,11 +11,10 @@
 private static final String ENGLISH = "english";
 private static final String GERMAN = "german";
 private static final String KOREAN = "korean";
-
 private HiltonDublinDBConnection dbConnection = HiltonDublinDBConnection.getInstance(); 
-private User user = new Guest();
+private User user = new Administrator();
 private Language language;
-
+private boolean loggedIn;
 public String selectedLanguage(String language, String selectedLanguage){
 	String selected = "selected";
 	if(language.equals(selectedLanguage)){
@@ -23,6 +23,18 @@ public String selectedLanguage(String language, String selectedLanguage){
 	else {
 		return "";
 	}
+}
+public static String getURLWithContextPath(HttpServletRequest request) {
+   return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+}
+public String getCurrentURL(HttpServletRequest request){
+	return request.getRequestURL().toString();
+}
+public boolean isLoggedIn(){
+	return loggedIn;
+}
+public void setLoggedIn(boolean loggedIn){
+	this.loggedIn = loggedIn;
 }
 %>
 
@@ -45,9 +57,25 @@ if(selectedLanguage.equals(GERMAN)){
 if(selectedLanguage.equals(KOREAN)){
 	user.setLanguage(new Korean());
 }
-
 language = user.getLanguage();
-
+//Check if logged in
+String loginError = null;
+Administrator admin = null;
+if(session.getAttribute("user") != null){
+	user = (User) session.getAttribute("user");
+	
+	if(user instanceof Administrator){
+		admin = (Administrator) user;
+		setLoggedIn(true);
+	}
+	else{
+		setLoggedIn(false);
+	}
+}
+else{
+	setLoggedIn(false);
+	loginError = (String) request.getAttribute("loginError");
+}
 //Page Name
 String uri = request.getRequestURI();
 String pageName = uri.substring(uri.lastIndexOf("/")+1);
@@ -67,11 +95,35 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 	<div id="navigationArea">
 		<img src="${pageContext.request.contextPath}/resources/Pictures/hiltonLogo.png" alt="Hilton Logo" title="Hilton Logo" />
 		<div id="loginArea">
+			<%if(isLoggedIn()) { %>
+			<form action="<%=request.getContextPath() %>/logout" id="loginForm" accept-charset="UTF-8" method="post" >
+				<p><%=language.navigationSlideLoginLoggedInAs() %> <b><%=admin.getUsername() %></b></p>
+				<input type="hidden" name="username" value="<%=admin.getUsername() %>" />
+				<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>">
+				<input type="submit" class="loginLogoutButton" name="<%=language.navigationSlideLoginLogout() %>" value="<%=language.navigationSlideLoginLogout() %>" />
+			</form>
+			<%} else { %>
+			<form action="<%=request.getContextPath() %>/login" id="loginForm" accept-charset="UTF-8" method="post" >
+				<input class="loginTextField" type="text" name="username" size="20" placeholder="<%=language.navigationSlideLoginUsername() %>"  /><br/>
+				<input class="loginTextField" type="password" name="password" size="20" placeholder="<%=language.navigationSlideLoginPassword() %>"  /><br/>
+				<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>">
+				<input class="loginLogoutButton" id="login" type="submit" name="<%=language.navigationSlideLoginLogin() %>" value="<%=language.navigationSlideLoginLogin() %>"/>
+			</form>
+				<%if(loginError != null){ %>
+					<%if(loginError.equals("1")) {%>
+			<p class="loginError"><%=language.navigationSlideLoginWrongUsername() %></p>
+					<%} else if(loginError.equals("2")) {%>
+			<p class="loginError"><%=language.navigationSlideLoginWrongPassword() %></p>
+					<%} %>
+				<%} %>
+			<%} %>
 		</div>
-		<form action="Home" method="get">
+		<div id="loginArea">
+		</div>
+		<form action="<%=getURLWithContextPath(request) %>/Home" method="get">
 			<input class="navigationPage" type="submit" value="<%=language.navigationSlideHome() %>" />
 		</form>
-		<form action="Guest" method="get">
+		<form action="<%=getURLWithContextPath(request) %>/Guest" method="get">
 			<input class="navigationPage" type="submit" value="<%=language.navigationSlideGuest() %>" />
 		</form>
 		<form action="employee.html" method="get">
@@ -80,6 +132,20 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 		<form action="admin.html" method="get">
 			<input class="navigationPage" type="submit" value="<%=language.navigationSlideAdmin() %>" />
 		</form>
+		<%if(loggedIn){ %>
+		<form action="modifyRoom.html" method="get">
+			<input class="navigationDetail" type="submit" value="Modify Room" />
+		</form>
+		<form action="modifyReservation.html" method="get">
+			<input class="navigationDetail" type="submit" value="Modify Reservation" />
+		</form>
+		<form action="modifyProduct.html" method="get">
+			<input class="navigationDetail" type="submit" value="Modify Product" />
+		</form>
+		<form action="registerEmployee.html" method="get">
+			<input class="navigationDetail" type="submit" value="Register Employee" />
+		</form>
+		<%} %>
 	</div>
 	<div id="headline">
 			<div id="headLeft" class="head1_3"><p class="heading"><%=pageName %></p></div>
@@ -102,3 +168,7 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 	
 	<div id="plain">
 		<div id="plaintext">
+		<%if(!isLoggedIn()){ %>
+		<h1><%=language.administratorAreaHeading() %></h1>
+		<p class="loginError"><%=language.administratorLoginMessage() %></p>
+		<%} else {%>
