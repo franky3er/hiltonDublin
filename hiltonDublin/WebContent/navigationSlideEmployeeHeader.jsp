@@ -104,14 +104,14 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 		<img src="${pageContext.request.contextPath}/resources/Pictures/hiltonLogo.png" alt="Hilton Logo" title="Hilton Logo" />
 		<div id="loginArea">
 			<%if(isLoggedIn()) { %>
-			<form action="logout" id="loginForm" accept-charset="UTF-8" method="post" >
+			<form action="<%=request.getContextPath() %>/logout" id="loginForm" accept-charset="UTF-8" method="post" >
 				<p><%=language.navigationSlideLoginLoggedInAs() %> <b><%=employee.getUsername() %></b></p>
 				<input type="hidden" name="username" value="<%=employee.getUsername() %>" />
 				<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>">
 				<input type="submit" class="loginLogoutButton" name="<%=language.navigationSlideLoginLogout() %>" value="<%=language.navigationSlideLoginLogout() %>" />
 			</form>
 			<%} else { %>
-			<form action="login" id="loginForm" accept-charset="UTF-8" method="post" >
+			<form action="<%=request.getContextPath() %>/login" id="loginForm" accept-charset="UTF-8" method="post" >
 				<input class="loginTextField" type="text" name="username" size="20" placeholder="<%=language.navigationSlideLoginUsername() %>"  /><br/>
 				<input class="loginTextField" type="password" name="password" size="20" placeholder="<%=language.navigationSlideLoginPassword() %>"  /><br/>
 				<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>">

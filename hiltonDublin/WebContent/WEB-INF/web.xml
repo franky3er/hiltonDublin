@@ -34,7 +34,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>loginServlet</servlet-name>
-    <url-pattern>/login</url-pattern>  <!-- This is the URL of the servlet. -->
+    <url-pattern>/login</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>logoutServlet</servlet-name>
@@ -42,6 +42,22 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>logoutServlet</servlet-name>
-    <url-pattern>/logout</url-pattern>  <!-- This is the URL of the servlet. -->
+    <url-pattern>/logout</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>checkout</servlet-name>
+    <jsp-file>/checkout.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>checkout</servlet-name>
+    <url-pattern>/Employee/Checkout</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>checkoutServlet</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.CheckoutServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>checkoutServlet</servlet-name>
+    <url-pattern>/Employee/Checkout-room</url-pattern>
   </servlet-mapping>
 </web-app>
