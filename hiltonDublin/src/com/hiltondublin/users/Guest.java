@@ -1,6 +1,5 @@
 package com.hiltondublin.users;
 
-
 public class Guest extends User {
 	private int guestID;
 	private String address;
@@ -28,3 +27,18 @@ public class Guest extends User {
 	}
 	
 }
+
+/*public class DBConnect {
+    public static void main(String[args] args) {
+        try{
+            String host = "";
+            String name = "";
+            String pass = "";
+        
+            Connection con = DriverManager.getConnection(host, name, pass);
+        }catch( SQLException err){
+        System.out.println(err.getMessage( ) );
+        }
+        
+    }
+}*/

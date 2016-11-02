@@ -29,4 +29,17 @@
   	<servlet-name>onlineReservation</servlet-name>
   	<url-pattern>/Guest/Online-Reservation</url-pattern>
   </servlet-mapping>
+  <form action="review.jsp">
+      <strong>Comment: </strong>
+      <select name="rate">
+          <c:forEach var="row" items="rating.rowssByIndex}">
+          <c:forEach var="column" items="${row}">
+              <option value="<c:out value="${column}" />"
+              <c:out value="${column}"/>
+              </option>
+          </c:forEach>
+          </c:forEach>
+      </select>
+      <input type="submit" value="submit" name="submit" />
+  </form>
 </web-app>
