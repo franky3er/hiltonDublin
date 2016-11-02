@@ -34,11 +34,11 @@ public abstract class Language {
 	}
 	
 	public String navigationSlideLoginWrongUsername(){
-		return "Wrong Username!";
+		return "Login failed!";
 	}
 	
 	public String navigationSlideLoginWrongPassword(){
-		return "Wrong Password!";
+		return "Login failed!";
 	}
 	
 	public String navigationSlideLoginUsername(){
@@ -60,11 +60,28 @@ public abstract class Language {
 	public String navigationSlideLoginLoggedInAs(){
 		return "Logged in as";
 	}
+
 	
 	
 	
 	//HOME
 	public String homeWelcome(){
 		return "Welcome to Hilton Dublin";
+	}
+	
+	//EMPLOYEE
+	public String employeeAreaHeading(){
+		return "Employee Area";
+	}
+	public String employeeLoginMessage(){
+		return "You need to be logged in as an employee to get access to the Employee Area!";
+	}
+	
+	//ADMINISTRATOR
+	public String administratorAreaHeading(){
+		return "Admin Area";
+	}
+	public String administratorLoginMessage(){
+		return "You need to be logged in as an administrator to get access to the Admin Area!";
 	}
 }

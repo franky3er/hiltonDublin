@@ -1,3 +1,4 @@
+<%@page import="com.hiltondublin.users.Administrator"%>
 <%@page import="com.hiltondublin.db.HiltonDublinDBConnection"%>
 <%@page import="com.hiltondublin.users.User" %>
 <%@page import="com.hiltondublin.users.Employee" %>
@@ -12,7 +13,7 @@ private static final String GERMAN = "german";
 private static final String KOREAN = "korean";
 
 private HiltonDublinDBConnection dbConnection = HiltonDublinDBConnection.getInstance(); 
-private User user = new Employee();
+private User user = new Administrator();
 private Language language;
 private boolean loggedIn;
 
@@ -67,12 +68,12 @@ language = user.getLanguage();
 
 //Check if logged in
 String loginError = null;
-Employee employee = null;
+Administrator admin = null;
 if(session.getAttribute("user") != null){
 	user = (User) session.getAttribute("user");
 	
-	if(user instanceof Employee){
-		employee = (Employee) user;
+	if(user instanceof Administrator){
+		admin = (Administrator) user;
 		setLoggedIn(true);
 	}
 	else{
@@ -105,8 +106,8 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 		<div id="loginArea">
 			<%if(isLoggedIn()) { %>
 			<form action="logout" id="loginForm" accept-charset="UTF-8" method="post" >
-				<p><%=language.navigationSlideLoginLoggedInAs() %> <b><%=employee.getUsername() %></b></p>
-				<input type="hidden" name="username" value="<%=employee.getUsername() %>" />
+				<p><%=language.navigationSlideLoginLoggedInAs() %> <b><%=admin.getUsername() %></b></p>
+				<input type="hidden" name="username" value="<%=admin.getUsername() %>" />
 				<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>">
 				<input type="submit" class="loginLogoutButton" name="<%=language.navigationSlideLoginLogout() %>" value="<%=language.navigationSlideLoginLogout() %>" />
 			</form>
@@ -137,26 +138,23 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 		<form action="employee.html" method="get">
 			<input class="navigationPage" type="submit" value="<%=language.navigationSlideEmployee() %>" />
 		</form>
-		<%if(loggedIn){ %>
-		<form action="employee.html" method="get">
-			<input class="navigationDetail" type="submit" value="Reservation" />
-		</form>
-		<form action="employee.html" method="get">
-			<input class="navigationDetail" type="submit" value="Cancellation" />
-		</form>
-		<form action="employee.html" method="get">
-			<input class="navigationDetail" type="submit" value="Checkin" />
-		</form>
-		<form action="employee.html" method="get">
-			<input class="navigationDetail" type="submit" value="Checkout" />
-		</form>
-		<form action="employee.html" method="get">
-			<input class="navigationDetail" type="submit" value="Charge Product" />
-		</form>
-		<%} %>
 		<form action="admin.html" method="get">
 			<input class="navigationPage" type="submit" value="<%=language.navigationSlideAdmin() %>" />
 		</form>
+		<%if(loggedIn){ %>
+		<form action="modifyRoom.html" method="get">
+			<input class="navigationDetail" type="submit" value="Modify Room" />
+		</form>
+		<form action="modifyReservation.html" method="get">
+			<input class="navigationDetail" type="submit" value="Modify Reservation" />
+		</form>
+		<form action="modifyProduct.html" method="get">
+			<input class="navigationDetail" type="submit" value="Modify Product" />
+		</form>
+		<form action="registerEmployee.html" method="get">
+			<input class="navigationDetail" type="submit" value="Register Employee" />
+		</form>
+		<%} %>
 	</div>
 	<div id="headline">
 			<div id="headLeft" class="head1_3"><p class="heading"><%=pageName %></p></div>
@@ -180,6 +178,6 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 	<div id="plain">
 		<div id="plaintext">
 		<%if(!isLoggedIn()){ %>
-		<h1><%=language.employeeAreaHeading() %></h1>
-		<p class="loginError"><%=language.employeeLoginMessage() %></p>
+		<h1><%=language.administratorAreaHeading() %></h1>
+		<p class="loginError"><%=language.administratorLoginMessage() %></p>
 		<%} else {%>
