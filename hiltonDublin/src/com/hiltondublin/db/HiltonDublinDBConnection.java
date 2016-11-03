@@ -21,7 +21,10 @@ import com.hiltondublin.classes.Room;
 import com.hiltondublin.classes.RoomType;
 import com.hiltondublin.classes.SpecialPrice;
 import com.hiltondublin.classes.WeekdayPrice;
+import com.hiltondublin.users.Administrator;
+import com.hiltondublin.users.Employee;
 import com.hiltondublin.users.Guest;
+import com.hiltondublin.users.User;
 
 public class HiltonDublinDBConnection {
 	//MySQL Date Format
@@ -114,6 +117,18 @@ public class HiltonDublinDBConnection {
 	public final static String GUEST_ADDRESS = GUEST + "." + "ADDRESS";
 	public final static String GUEST_PASSPORTNR = GUEST + "." + "PASSPORTNR";
 	public final static String []GUEST_COLUMNS = { GUEST_GUESTID, GUEST_FIRSTNAME, GUEST_LASTNAME, GUEST_PHONENUMBER, GUEST_EMAIL, GUEST_ADDRESS, GUEST_PASSPORTNR };
+	
+	//Employee Table
+	public final static String EMPLOYEE = "EMPLOYEE";
+	public final static String EMPLOYEE_USERNAME = EMPLOYEE + "." + "USERNAME";
+	public final static String EMPLOYEE_FIRSTNAME = EMPLOYEE + "." + "FIRSTNAME";
+	public final static String EMPLOYEE_LASTNAME = EMPLOYEE + "." + "LASTNAME";
+	public final static String EMPLOYEE_PASSWORD = EMPLOYEE + "." + "PASSWORD";
+	public final static String EMPLOYEE_ADMIN = EMPLOYEE + "." + "ADMIN";
+	public final static String EMPLOYEE_EMAIL = EMPLOYEE + "." + "EMAIL";
+	public final static String EMPLOYEE_PHONENUMBER = EMPLOYEE + "." + "PHONENUMBER";
+	public final static String EMPLOYEE_SESSIONID = EMPLOYEE + "." + "SESSIONID";
+	public final static String []EMPLOYEE_COLUMNS = { EMPLOYEE_USERNAME, EMPLOYEE_FIRSTNAME, EMPLOYEE_LASTNAME, EMPLOYEE_PASSWORD, EMPLOYEE_ADMIN, EMPLOYEE_EMAIL, EMPLOYEE_PHONENUMBER, EMPLOYEE_SESSIONID };
 	
 	
 	
@@ -478,8 +493,12 @@ public class HiltonDublinDBConnection {
 		
 	}
 	
-	
-	private ResultSet executeUpdate(String sqlStatement) {
+	/**
+	 * Execute Update and return ResultSet of effected Primary Keys
+	 * @param sqlStatement
+	 * @return ResultSet
+	 */
+	public ResultSet executeUpdateAndReturnPrimaryKeys(String sqlStatement) {
 		try {
 			Statement statement;
 			System.out.println("Execute Update: \"" + sqlStatement + "\"");
@@ -493,6 +512,26 @@ public class HiltonDublinDBConnection {
 			System.out.println("Execute Update failed: \"" + sqlStatement + "\"");
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	/**
+	 * Execute Update and return number of effected rows.
+	 * @param sqlStatement
+	 * @return int
+	 */
+	public int executeUpdateAndReturnNumberOfRows(String sqlStatement) {
+		try {
+			Statement statement;
+			System.out.println("Execute Update: \"" + sqlStatement + "\"");
+			statement = dbConnection.createStatement();
+			int numberOfRows = statement.executeUpdate(sqlStatement);
+			statement.close();
+			return numberOfRows;
+		} catch (SQLException e) {
+			System.out.println("Execute Update failed: \"" + sqlStatement + "\"");
+			e.printStackTrace();
+			return 0;
 		}
 	}
 	
@@ -560,6 +599,45 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	
 	/**
+	 * Returns the Delete Statement to delete all rooms specified by the given parameters.
+	 * If a parameter is null or empty it won't be recorded in the sql Statement.
+	 * @param roomNumber
+	 * @param typeID
+	 * @param smoking
+	 * @param occupied
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String deleteRoomsAsSQLStatement(String roomNumber, String typeID, String smoking, String occupied, String additionalSQLCondition){
+		//Converting
+		smoking = convertBooleanToTinyInt(smoking);
+		occupied = convertBooleanToTinyInt(occupied);
+					
+		//Write values and tables in arrays
+		String []values = {roomNumber, typeID, smoking, occupied};
+		String table = ROOM;
+						
+		//Get sql Statement
+		return createDeleteStatement(table, ROOM_COLUMNS, values, additionalSQLCondition);		
+			
+	}
+	
+	/**
+	 * 
+	 * @param roomNumber
+	 * @param typeID
+	 * @param smoking
+	 * @param occupied
+	 * @param additionalSQLCondition
+	 * @return int
+	 */
+	public int deleteRooms(String roomNumber, String typeID, String smoking, String occupied, String additionalSQLCondition){
+		String sqlStatement = deleteRoomsAsSQLStatement(roomNumber, typeID, smoking, occupied, additionalSQLCondition);
+		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
+	
+	/**
 	 * Returns the Select Statement to get all rooms specified by the given parameters.
 	 * If a parameter is null or empty it won't be recorded in the sql Statement.
 	 * @param roomNumber
@@ -584,6 +662,7 @@ public class HiltonDublinDBConnection {
 				
 		//Get sql Statement
 		return createSelectStatement(tables, selectedColumns, ROOM_COLUMNS, values, additionalSQLCondition);		
+	
 	}
 	
 	
@@ -667,7 +746,7 @@ public class HiltonDublinDBConnection {
 		String sqlStatement = createInsertStatement(ROOM, cells);
 		
 		//Execute update
-		return executeUpdate(sqlStatement);
+		return executeUpdateAndReturnPrimaryKeys(sqlStatement);
 		
 		
 	}
@@ -708,6 +787,43 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	//-----------------------------------------ROOMTYPE-----------------------------------------
 	//------------------------------------------------------------------------------------------
+	
+	/**
+	 * Returns the Delete Statement to delete all room types specified by the given parameters.
+	 * If a parameter is null or empty it won't be recorded in the sql Statement.
+	 * @param typeID
+	 * @param name
+	 * @param picture
+	 * @param standardprice
+	 * @param description
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String deleteRoomTypesAsSQLStatement(String typeID, String name, String picture, String standardprice, String description, String additionalSQLCondition){
+		//Write Values and Tables in Arrays
+		String []values = {typeID, name, picture, standardprice, description};
+		String table = ROOMTYPE;
+						
+		//Get SQL Statement
+		return createDeleteStatement(table, ROOMTYPE_COLUMNS, values, additionalSQLCondition);
+				
+	}
+	
+	/**
+	 * 
+	 * @param typeID
+	 * @param name
+	 * @param picture
+	 * @param standardprice
+	 * @param description
+	 * @param additionalSQLCondition
+	 * @return int
+	 */
+	public int deleteRoomTypes(String typeID, String name, String picture, String standardprice, String description, String additionalSQLCondition){
+		String sqlStatement = deleteRoomTypesAsSQLStatement(typeID, name, picture, standardprice, description, additionalSQLCondition);
+		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
 	
 	/**
 	 * Returns the Select Statement to get all room types specified by the given parameters.
@@ -808,7 +924,7 @@ public class HiltonDublinDBConnection {
 		String sqlStatement = createInsertStatement(ROOMTYPE, cells);
 		
 		//Execute update
-		return executeUpdate(sqlStatement);	
+		return executeUpdateAndReturnPrimaryKeys(sqlStatement);	
 	}
 	
 	
@@ -845,6 +961,43 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	//-----------------------------------------RATING-------------------------------------------
 	//------------------------------------------------------------------------------------------
+	
+	/**
+	 * Returns the Delete Statement to delete all ratings specified by the given parameters.
+	 * If a parameter is null or empty it won't be recorded in the sql Statement.
+	 * @param ratingID
+	 * @param roomTypeID
+	 * @param guestID
+	 * @param rating
+	 * @param comment
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String deleteRatingsAsSQLStatement(String ratingID, String roomTypeID, String guestID, String rating, String comment, String additionalSQLCondition){
+		//Write Values and Tables in Arrays
+		String []values = {ratingID, roomTypeID, guestID, rating, comment};
+		String table = RATING;
+								
+		//Get SQL Statement
+		return createDeleteStatement(table, RATING_COLUMNS, values, additionalSQLCondition);
+				
+	}
+	
+	/**
+	 * 
+	 * @param ratingID
+	 * @param roomTypeID
+	 * @param guestID
+	 * @param rating
+	 * @param comment
+	 * @param additionalSQLCondition
+	 * @return int
+	 */
+	public int deleteRatings(String ratingID, String roomTypeID, String guestID, String rating, String comment, String additionalSQLCondition){
+		String sqlStatement = deleteRatingsAsSQLStatement(ratingID, roomTypeID, guestID, rating, comment, additionalSQLCondition);
+		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
 	
 	/**
 	 * Returns the Select Statement to get all ratings specified by the given parameters.
@@ -948,7 +1101,7 @@ public class HiltonDublinDBConnection {
 		String sqlStatement = createInsertStatement(RATING, cells);
 				
 		//Execute update
-		return executeUpdate(sqlStatement);	
+		return executeUpdateAndReturnPrimaryKeys(sqlStatement);	
 		
 	}
 	
@@ -996,6 +1149,39 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	//-----------------------------------------CONSUMERPRODUCT----------------------------------
 	//------------------------------------------------------------------------------------------
+	
+	/**
+	 * Returns the Delete Statement to delete all consumer products specified by the given parameters.
+	 * If a parameter is null or empty it won't be recorded in the sql Statement.
+	 * @param consumerProductID
+	 * @param name
+	 * @param price
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String deleteConsumberProductsAsSQLStatement(String consumerProductID, String name, String price, String additionalSQLCondition){
+		//Write Values and Tables in Arrays
+		String []values = {consumerProductID, name, price};
+		String table = CONSUMERPRODUCT;
+					
+		//Get SQL Statement
+		return createDeleteStatement(table, CONSUMERPRODUCT_COLUMNS, values, additionalSQLCondition);
+				
+	}
+	
+	/**
+	 * 
+	 * @param consumerProductID
+	 * @param name
+	 * @param price
+	 * @param additionalSQLCondition
+	 * @return int
+	 */
+	public int deleteConsumerProducts(String consumerProductID, String name, String price, String additionalSQLCondition){
+		String sqlStatement = deleteConsumberProductsAsSQLStatement(consumerProductID, name, price, additionalSQLCondition);
+		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
 	
 	/**
 	 * Returns the Select Statement to get all consumer products specified by the given parameters.
@@ -1087,7 +1273,7 @@ public class HiltonDublinDBConnection {
 		String sqlStatement = createInsertStatement(CONSUMERPRODUCT, cells);
 				
 		//Execute update
-		return executeUpdate(sqlStatement);	
+		return executeUpdateAndReturnPrimaryKeys(sqlStatement);	
 	}
 	
 	/**
@@ -1120,6 +1306,70 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	//-----------------------------------------RESERVATION--------------------------------------
 	//------------------------------------------------------------------------------------------
+	
+	/**
+	 * Returns the Delete Statement to delete all reservations specified by the given parameters.
+	 * If a parameter is null or empty it won't be recorded in the sql Statement.
+	 * @param reservationID
+	 * @param guestID
+	 * @param arrivalDate
+	 * @param departureDate
+	 * @param paid
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String deleteReservationsAsSQLStatement(String reservationID, String guestID, String arrivalDate, String departureDate, String paid, String additionalSQLCondition){
+		// Check if Date is in right format
+		if(!isNullOrEmpty(arrivalDate)){
+			try {
+				if (!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(arrivalDate)))) {
+					System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+					return null;
+				}
+			} catch (ParseException e1) {
+				System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+				return null;
+			}
+		}
+		if(!isNullOrEmpty(departureDate)){
+			try {
+				if (!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(departureDate)))) {
+					System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+					return null;
+				}
+			} catch (ParseException e1) {
+				System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+				return null;
+			}
+		}
+
+		// convert boolean to tinyint
+		paid = convertBooleanToTinyInt(paid);
+
+		// Write Values and Tables in Arrays
+		String[] values = { reservationID, guestID, arrivalDate, departureDate, paid };
+		String table =  RESERVATION ;
+				
+		//Get SQL Statement
+		return createDeleteStatement(table, RESERVATION_COLUMNS, values, additionalSQLCondition);
+			
+	}
+	
+	/**
+	 * 
+	 * @param reservationID
+	 * @param guestID
+	 * @param arrivalDate
+	 * @param departureDate
+	 * @param paid
+	 * @param additionalSQLCondition
+	 * @return int
+	 */
+	public int deleteReservations(String reservationID, String guestID, String arrivalDate, String departureDate, String paid, String additionalSQLCondition){
+		String sqlStatement = deleteReservationsAsSQLStatement(reservationID, guestID, arrivalDate, departureDate, paid, additionalSQLCondition);
+		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
 	
 	/**
 	 * Returns the Select Statement to get all reservations specified by the given parameters.
@@ -1170,6 +1420,7 @@ public class HiltonDublinDBConnection {
 		
 		//Get SQL Statement
 		return createSelectStatement(tables, selectedColumns, RESERVATION_COLUMNS, values, additionalSQLCondition);
+	
 	}
 	
 	/**
@@ -1282,7 +1533,7 @@ public class HiltonDublinDBConnection {
 		String sqlStatement = createInsertStatement(RESERVATION, cells);
 				
 		//Execute update
-		return executeUpdate(sqlStatement);	
+		return executeUpdateAndReturnPrimaryKeys(sqlStatement);	
 		
 	}
 	
@@ -1324,6 +1575,55 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	//-----------------------------------------SPECIALPRICE-------------------------------------
 	//------------------------------------------------------------------------------------------
+	
+	/**
+	 * Returns the Delete Statement to delete all special prices specified by the given parameters.
+	 * If a parameter is null or empty it won't be recorded in the sql Statement.
+	 * @param roomTypeID
+	 * @param date
+	 * @param price
+	 * @param comment
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String deleteSpecialPricesAsSQLStatement(String roomTypeID, String date, String price, String comment, String additionalSQLCondition){
+		//Check if Date is in right format
+		if(!isNullOrEmpty(date)){
+			try {
+				if(!date.equals(mySQLDateFormat.format(mySQLDateFormat.parse(date)))){
+					System.out.println("date is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+					return null;
+				}
+			} catch (ParseException e1) {
+				System.out.println("date is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+				return null;
+			}
+		}
+				
+				
+		//Write Values and Tables in Arrays
+		String []values = {roomTypeID, date, price, comment};
+		String table = SPECIALPRICE;
+		
+		//Get SQL Statement
+		return createDeleteStatement(table, SPECIALPRICE_COLUMNS, values, additionalSQLCondition);
+				
+	}
+	
+	/**
+	 * 
+	 * @param roomTypeID
+	 * @param date
+	 * @param price
+	 * @param comment
+	 * @param additionalSQLCondition
+	 * @return int
+	 */
+	public int deleteSpecialPrices(String roomTypeID, String date, String price, String comment, String additionalSQLCondition){
+		String sqlStatement = deleteSpecialPricesAsSQLStatement(roomTypeID, date, price, comment, additionalSQLCondition);
+		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
 	
 	/**
 	 * Returns the Select Statement to get all special prices specified by the given parameters.
@@ -1446,7 +1746,7 @@ public class HiltonDublinDBConnection {
 		String sqlStatement = createInsertStatement(SPECIALPRICE, cells);
 
 		// Execute update
-		return executeUpdate(sqlStatement);
+		return executeUpdateAndReturnPrimaryKeys(sqlStatement);
 	}
 
 	/**
@@ -1479,6 +1779,40 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	//-----------------------------------------WEEKDAYPRICES------------------------------------
 	//------------------------------------------------------------------------------------------
+	
+	/**
+	 * Returns the Delete Statement to delete all weekday prices specified by the given parameters.
+	 * If a parameter is null or empty it won't be recorded in the sql Statement.
+	 * @param roomTypeID
+	 * @param price
+	 * @param weekday
+	 * @param additionalSQLCondition
+	 * @return
+	 */
+	public String deleteWeekdayPricesAsSQLStatement(String roomTypeID, String price, String weekday, String additionalSQLCondition){
+		//Write Values and Tables in Arrays
+		String []values = {roomTypeID, price, weekday};
+		String table = WEEKDAYPRICE;
+						
+		//Get SQL Statement
+		return createDeleteStatement(table, WEEKDAYPRICE_COLUMNS, values, additionalSQLCondition);
+				
+	}
+	
+	
+	/**
+	 * 
+	 * @param roomTypeID
+	 * @param price
+	 * @param weekday
+	 * @param additionalSQLCondition
+	 * @return int
+	 */
+	public int deleteWeekdayPrices(String roomTypeID, String price, String weekday, String additionalSQLCondition){
+		String sqlStatement = deleteWeekdayPricesAsSQLStatement(roomTypeID, price, weekday, additionalSQLCondition);
+		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
 	
 	/**
 	 * Returns the Select Statement to get all weekday prices specified by the given parameters.
@@ -1569,7 +1903,7 @@ public class HiltonDublinDBConnection {
 		String sqlStatement = createInsertStatement(WEEKDAYPRICE, cells);
 
 		// Execute update
-		return executeUpdate(sqlStatement);
+		return executeUpdateAndReturnPrimaryKeys(sqlStatement);
 		
 	}
 	
@@ -1610,6 +1944,36 @@ public class HiltonDublinDBConnection {
 	
 	/**
 	 * 
+	 * @param roomNumber
+	 * @param reservationID
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String deleteReserved_RoomsAsSQLStatement(String roomNumber, String reservationID, String additionalSQLCondition){
+		//Write Values and Tables in Arrays
+		String []values = {roomNumber, reservationID};
+		String table = RESERVED_ROOM;
+						
+		//Get SQL Statement
+		return createDeleteStatement(table, RESERVED_ROOM_COLUMNS, values, additionalSQLCondition);
+			
+	}
+	
+	/**
+	 * 
+	 * @param roomNumber
+	 * @param reservationID
+	 * @param additionalSQLCondition
+	 * @return int
+	 */
+	public int deleteReserved_Rooms(String roomNumber, String reservationID, String additionalSQLCondition){
+		String sqlStatement = deleteReserved_RoomsAsSQLStatement(roomNumber, reservationID, additionalSQLCondition);
+		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
+	
+	/**
+	 * 
 	 * @param []selectedColumns
 	 * @param roomNumber
 	 * @param reservationID
@@ -1627,6 +1991,7 @@ public class HiltonDublinDBConnection {
 						
 		//Get SQL Statement
 		return createSelectStatement(tables, selectedColumns, RESERVED_ROOM_COLUMNS, values, additionalSQLCondition);
+	
 	}
 	
 	/**
@@ -1665,7 +2030,7 @@ public class HiltonDublinDBConnection {
 		String sqlStatement = createInsertStatement(RESERVED_ROOM, cells);
 
 		// Execute update
-		return executeUpdate(sqlStatement);
+		return executeUpdateAndReturnPrimaryKeys(sqlStatement);
 				
 	}
 	
@@ -1685,7 +2050,37 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	//-----------------------------------------RESERVED_PRODUCTS--------------------------------
 	//------------------------------------------------------------------------------------------
+	
+	/**
+	 * 
+	 * @param productID
+	 * @param reservationID
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String deleteReserved_ProductsAsSQLStatement(String productID, String reservationID, String additionalSQLCondition){
+		//Write Values and Tables in Arrays
+		String []values = {productID, reservationID};
+		String table = RESERVED_ROOM;
+						
+		//Get SQL Statement
+		return createDeleteStatement(table, RESERVED_ROOM_COLUMNS, values, additionalSQLCondition);
+			
+	}
+	
+	/**
+	 * 
+	 * @param productID
+	 * @param reservationID
+	 * @param additionalSQLCondition
+	 * @return int
+	 */
+	public int deleteReserved_Products(String productID, String reservationID, String additionalSQLCondition){
+		String sqlStatement = deleteReserved_ProductsAsSQLStatement(productID, reservationID, additionalSQLCondition);
 		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
+	
 	/**
 	 * 
 	 * @param []selectedColumns
@@ -1705,6 +2100,7 @@ public class HiltonDublinDBConnection {
 						
 		//Get SQL Statement
 		return createSelectStatement(tables, selectedColumns, RESERVED_ROOM_COLUMNS, values, additionalSQLCondition);
+	
 	}
 		
 	/**
@@ -1741,7 +2137,7 @@ public class HiltonDublinDBConnection {
 		// Create insert SQL Statement
 		String sqlStatement = createInsertStatement(RESERVED_PRODUCT, cells);
 		// Execute update
-		return executeUpdate(sqlStatement);
+		return executeUpdateAndReturnPrimaryKeys(sqlStatement);
 				
 	}
 		
@@ -1760,6 +2156,46 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	//-----------------------------------------Guest--------------------------------------------
 	//------------------------------------------------------------------------------------------
+	
+	/**
+	 * 
+	 * @param guestID
+	 * @param firstName
+	 * @param lastName
+	 * @param phoneNumber
+	 * @param email
+	 * @param address
+	 * @param passportNr
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String deleteGuestsAsSQLStatement(String guestID, String firstName, String lastName, String phoneNumber, String email, String address, String passportNr, String additionalSQLCondition){
+		//Write Values and Tables in Arrays
+		String []values = {guestID, firstName, lastName, phoneNumber, email, address, passportNr};
+		String table = GUEST;
+										
+		//Get SQL Statement
+		return createDeleteStatement(table, GUEST_COLUMNS, values, additionalSQLCondition);
+			
+	}
+	
+	/**
+	 * 
+	 * @param guestID
+	 * @param firstName
+	 * @param lastName
+	 * @param phoneNumber
+	 * @param email
+	 * @param address
+	 * @param passportNr
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public int deleteGuests(String guestID, String firstName, String lastName, String phoneNumber, String email, String address, String passportNr, String additionalSQLCondition){
+		String sqlStatement = deleteGuestsAsSQLStatement(guestID, firstName, lastName, phoneNumber, email, address, passportNr, additionalSQLCondition);
+		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
 	
 	/**
 	 * 
@@ -1865,7 +2301,7 @@ public class HiltonDublinDBConnection {
 		String sqlStatement = createInsertStatement(GUEST, cells);
 						
 		//Execute update
-		return executeUpdate(sqlStatement);	
+		return executeUpdateAndReturnPrimaryKeys(sqlStatement);	
 	}
 	
 	/**
@@ -1895,6 +2331,105 @@ public class HiltonDublinDBConnection {
 		}
 		
 		return insertGuest(guestID, firstName, lastName, phoneNumber, email, address, passportNr);
+	}
+	
+	//------------------------------------------------------------------------------------------
+	//-------------------------------------EMPLOYEE---------------------------------------------
+	//------------------------------------------------------------------------------------------
+	
+	/**
+	 * Creates a Select Statement to get all Employees / Administrators specified by the parameters.
+	 * If a condition parameter is null it won't be recorded in the SQL statement.
+	 * @param selectedColumns
+	 * @param username
+	 * @param firstName
+	 * @param lastName
+	 * @param password
+	 * @param admin
+	 * @param email
+	 * @param phoneNumber
+	 * @param sessionID
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String getEmployeesAsSQLStatement(String []selectedColumns, String username, String firstName, String lastName, String password, String admin, String email, String phoneNumber, String sessionID, String additionalSQLCondition){
+		//Convert boolean to tinyint
+		convertBooleanToTinyInt(admin);
+		
+		//Write Values and Tables in Arrays
+		String []values = {username, firstName, lastName, password, admin, email, phoneNumber, sessionID};
+		String []tables = {EMPLOYEE};
+						
+		if(selectedColumns == null){
+			selectedColumns = EMPLOYEE_COLUMNS;
+		}
+										
+		//Get SQL Statement
+		return createSelectStatement(tables, selectedColumns, EMPLOYEE_COLUMNS, values, additionalSQLCondition);
+			
+	}
+	
+	/**
+	 * Returns all Employees / Administrators specified by the parameters as a List<User>.
+	 * If a condition parameter is null it won't be recorded in the SQL Statement.
+	 * @param username
+	 * @param firstName
+	 * @param lastName
+	 * @param password
+	 * @param admin
+	 * @param email
+	 * @param phoneNumber
+	 * @param sessionID
+	 * @param additionalSQLCondition
+	 * @return List<User>
+	 */
+	public List<User> getEmployees(String username, String firstName, String lastName, String password, String admin, String email, String phoneNumber, String sessionID, String additionalSQLCondition){
+		List<User> users = new ArrayList<User>();
+		
+		//Create Select SQL Statement
+		String sqlStatement = getEmployeesAsSQLStatement(EMPLOYEE_COLUMNS, username, firstName, lastName, password, admin, email, phoneNumber, sessionID, additionalSQLCondition);
+		
+		//Execute Query
+		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
+						
+		//Process Result Set
+		try{
+			while(rs.next()){
+				User user;
+				if(rs.getBoolean(EMPLOYEE_ADMIN)){
+					Administrator administrator = new Administrator();
+					administrator.setUsername(rs.getString(EMPLOYEE_USERNAME));
+					administrator.setFirstName(rs.getString(EMPLOYEE_FIRSTNAME));
+					administrator.setLastName(rs.getString(EMPLOYEE_LASTNAME));
+					administrator.setPassword(rs.getString(EMPLOYEE_PASSWORD));
+					administrator.setEmail(rs.getString(EMPLOYEE_EMAIL));
+					administrator.setPhoneNumber(rs.getString(EMPLOYEE_PHONENUMBER));
+					administrator.setSessionID(rs.getInt(EMPLOYEE_SESSIONID));
+					user = administrator;
+				}
+				else{
+					Employee employee = new Employee();
+					employee.setUsername(rs.getString(EMPLOYEE_USERNAME));
+					employee.setFirstName(rs.getString(EMPLOYEE_FIRSTNAME));
+					employee.setLastName(rs.getString(EMPLOYEE_LASTNAME));
+					employee.setPassword(rs.getString(EMPLOYEE_PASSWORD));
+					employee.setEmail(rs.getString(EMPLOYEE_EMAIL));
+					employee.setPhoneNumber(rs.getString(EMPLOYEE_PHONENUMBER));
+					employee.setSessionID(rs.getInt(EMPLOYEE_SESSIONID));
+					user = employee;
+				}
+				
+				users.add(user);
+				
+			}
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("Read ResultSet Failed.");
+			e.printStackTrace();
+			return null;
+		}
+		
+		return users;
 	}
 	
 	

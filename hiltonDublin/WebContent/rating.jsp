@@ -1,20 +1,56 @@
-<%@page import="com.hiltondublin.db.HiltonDublinDBConnection"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="com.mysql.jdbc.exceptions.MySQLDataException"%>
 <%@page import="com.hiltondublin.classes.Rating" %>
-<%@ page import = "java.util.*"%>
-<%@ page import = "java.lang.Integer"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     
-    
-<%@ include file="navigationSlideGuestHeader.jsp" %>	
+<%@ include file="navigationSlideGuestHeader.jsp" %>
 
-<form name="ratingform" action="rating.jsp" method="post">
+<% 
+			String ratingID = "6";				
+			//String guestID =  user.getGuestID();		
+			String typeid = request.getParameter("roomtype");
+			String comment = request.getParameter("comment");
+			String rating = request.getParameter("rating");
+				
+// 			Rating rate = new Rating();
+// 			rate.setRatingID(ratingID);
+// 			rate.setTypeID(Integer.parseInt(typeid));
+// 			rate.setGuestID(guestID);
+// 			rate.setRating(Integer.parseInt(rating));
+// 			rate.setComment(comment);
+ 			ResultSet result = dbConnection.insertRating(ratingID,typeid, null, rating,comment);
+			
+			%>	
+	 		
+<script language = "javascript">
+	var ratingSubmitted = document.getElementById('ratingSubmitted');
+	ratingSubmitted.hide();
+	
+	function insert(){
+		int ratingID = '6';
+		int guestID =  user.getGuestID();		
+		String typeid = request.getParameter("roomtype");
+		String comment = request.getParameter("comment");
+		String rating = request.getParameter("rating");
+		
+		ResultSet result = dbConnection.insertRating(ratingID, typeid, guestID, rating, comment);
+		System.out.println(result);
+		ratingform.submit();
+		ratingform.hide();
+		ratingSubmitted.show();
+		
+	}
+</script>
+
+<form id="ratingform" name="ratingform" action="ratingSubmitted.jsp" method="post">
 	<table>
 		<tr>
 			<th colspan="2">Your Review</th>
 		</tr>
 		<tr>
-			<td>
+			<td>Your room Type: </td>
+			<td>	
 				<select name="roomtype">
 					<option value="1">Single</option>
 					<option value="2">Double</option>
@@ -41,31 +77,9 @@
 			</td>
 		</tr>
 		<tr>
-			<td><input type="submit" onclick="submitRating()" value="submit" /></td>
+			<td><input type="submit" onclick="insert()" value="submit" /></td>
 		</tr>
 	</table>
 	</form>
-<%
-		int ratingID = null;
-		String comment = request.getParameter("comment");
-		int rating = Integer.parseInt(request.getParameter("rating"));
-		int typeID = Integer.parseInt(request.getParameter("roomtype"));
-		int guestID = '1';
-		
-		
-		Rating rate = new Rating();
-		rate.setRatingID(ratingID);
-		rate.setTypeID(typeID);
-		rate.setGuestID(guestID);
-		rate.setRating(rating);
-		rate.setComment(comment);
-		
-		String typeid = String.valueOf(typeID);
-		String ratingid = String.valueOf(ratingID);
-		String guestid = String.valueOf(guestID);
-		String rating = String.valueOf(rate);
-		
-		dbConnection.insertRating(rate);
-		
-%>	
+	
 	<%@ include file="navigationSlideGuestFooter.jsp" %>

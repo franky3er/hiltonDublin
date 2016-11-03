@@ -1,4 +1,3 @@
-<%@page import="com.hiltondublin.users.Guest"%>
 <%@page import="com.hiltondublin.users.Administrator"%>
 <%@page import="com.hiltondublin.db.HiltonDublinDBConnection"%>
 <%@page import="com.hiltondublin.users.User" %>
@@ -12,10 +11,12 @@
 private static final String ENGLISH = "english";
 private static final String GERMAN = "german";
 private static final String KOREAN = "korean";
+
 private HiltonDublinDBConnection dbConnection = HiltonDublinDBConnection.getInstance(); 
-private User user = new Guest();
+private User user = new Administrator();
 private Language language;
 private boolean loggedIn;
+
 public String selectedLanguage(String language, String selectedLanguage){
 	String selected = "selected";
 	if(language.equals(selectedLanguage)){
@@ -29,16 +30,18 @@ public String selectedLanguage(String language, String selectedLanguage){
 public static String getURLWithContextPath(HttpServletRequest request) {
    return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 }
+
 public String getCurrentURL(HttpServletRequest request){
 	return request.getRequestURL().toString();
 }
+
 public boolean isLoggedIn(){
 	return loggedIn;
 }
+
 public void setLoggedIn(boolean loggedIn){
 	this.loggedIn = loggedIn;
 }
-
 %>
 
 <%
@@ -60,7 +63,9 @@ if(selectedLanguage.equals(GERMAN)){
 if(selectedLanguage.equals(KOREAN)){
 	user.setLanguage(new Korean());
 }
+
 language = user.getLanguage();
+
 //Check if logged in
 String loginError = null;
 Administrator admin = null;
@@ -79,6 +84,7 @@ else{
 	setLoggedIn(false);
 	loginError = (String) request.getAttribute("loginError");
 }
+
 //Page Name
 String uri = request.getRequestURI();
 String pageName = uri.substring(uri.lastIndexOf("/")+1);
@@ -174,4 +180,4 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 		<%if(!isLoggedIn()){ %>
 		<h1><%=language.administratorAreaHeading() %></h1>
 		<p class="loginError"><%=language.administratorLoginMessage() %></p>
-		<%} else {}%>
+		<%} else {%>
