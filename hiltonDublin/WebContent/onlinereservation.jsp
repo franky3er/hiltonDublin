@@ -1,33 +1,15 @@
 <%@page import="com.hiltondublin.classes.Room" %>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList" %>
+<%@page import="java.lang.*" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     
 <%@ include file="navigationSlideGuestHeader.jsp" %>
 
-<script language = "javascript">
-
-//checking info is correct
-	function checkinfo()
-	{
-		String lastname = request.getParameter("lastname");
-		String firstname = request.getParameter("firstname");
-		String phonenr = request.getParameter("phonenr");
-		String email = request.getParameter("email");
-		String address = request.getParameter("address");
-		String passportnr = request.getParameter("passportnr");
-		
-		ResultSet Guestresult = dbConnection.insertGuest(null, firstname, lastname, phonenr, email, address, passportnr);
-		
-		check_guestinfo.submit();
-	}
-</script>
-
-
 <h1>Online Reservation</h1>
 
-<form id="check_guestinfo" action="onlinereservationsh.jsp" method="post">
+<form id="check_guestinfo" action="Reservation" method="post">
 	<fieldset>
 		<legend>Guest Info</legend>
 		<table>
@@ -83,10 +65,30 @@
 		</tr>
 		</table>
 	</fieldset>
-	<td colspan="2" align="center">
-		<input type="submit" value="Submit">
-		<input type="reset" value="Cancel">
-	</td>
+	<br>
+	<fieldset>
+		<legend>Number of Room</legend>
+		<table>
+		<tr>
+		<td>Type 1</td>
+		<td>Type 2</td>
+		<td>Type 3</td>
+		</tr>
+		<tr>
+		<td><input type="number" id="numtype1" name="numtype1" min="0" required></td>
+		<td><input type="number" id="numtype2" name="numtype2" min="0" required></td>
+		<td><input type="number" id="numtype3" name="numtype3" min="0" required></td>
+		</tr>
+		</table>
+	</fieldset>
+	<table>
+		<tr>
+			<td colspan="2" align="center">
+			<input type="submit" value="Submit">
+			<input type="reset" value="Cancel">
+			</td>
+		</tr>
+	</table>
 </form>
 
 <%@ include file="navigationSlideGuestFooter.jsp" %>

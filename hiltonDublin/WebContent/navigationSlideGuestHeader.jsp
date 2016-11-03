@@ -73,7 +73,7 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 		<form action="<%=getURLWithContextPath(request) %>/Guest" method="get">
 			<input class="navigationPage" type="submit" value="<%=language.navigationSlideGuest() %>" />
 		</form>
-		<form action="employee.html" method="get">
+		<form action="employee.jsp" method="get">
 			<input class="navigationPage" type="submit" value="<%=language.navigationSlideEmployee() %>" />
 		</form>
 		<form action="admin.html" method="get">

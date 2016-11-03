@@ -21,11 +21,11 @@
     <url-pattern>/Guest</url-pattern>
   </servlet-mapping>
   <servlet>
-    <servlet-name>onlineReservation</servlet-name>
-    <jsp-file>/onlinereservation.jsp</jsp-file>
+  	<servlet-name>ReservationServlet</servlet-name>
+  	<servlet-class>com.hiltondublin.servlets.ReservationServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>onlineReservation</servlet-name>
+    <servlet-name>ReservationServlet</servlet-name>
     <url-pattern>/Guest/Online-Reservation</url-pattern>
   </servlet-mapping>
   <servlet>
