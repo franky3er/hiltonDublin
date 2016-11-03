@@ -268,6 +268,7 @@ public class HiltonDublinDBConnection {
 	        mySQLDateFormat.parse(date);
 	        return true;
 	    } catch (ParseException e) {
+	    	System.out.println("'" + date + "' is not in right MySQL Format! Please refer to HiltonDublinDBConnection.mySQLDateFormat!");
 	        return false;
 	    }
 	}
