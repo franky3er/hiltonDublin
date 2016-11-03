@@ -638,6 +638,12 @@ public class HiltonDublinDBConnection {
 		return bool;
 	}
 	
+	private static String removeLastChar(String str) {
+		if(str == null){
+			return null;
+		}
+        return str.substring(0,str.length()-1);
+    }
 	
 	private boolean isNullOrEmpty(String obj){
 		if(obj == null){
@@ -2291,7 +2297,7 @@ public class HiltonDublinDBConnection {
 		}
 		
 		String [] subQuerySelectedColumns = { RESERVED_ROOM_ROOMNUMBER };
-		return getRooms(null, null, null, null, ROOM_NUMBER + " IN ( " + getReserved_RoomsAsSQLStatement(subQuerySelectedColumns, null, reservationID, null) + " )");
+		return getRooms(null, null, null, null, ROOM_NUMBER + " IN ( " + removeLastChar(getReserved_RoomsAsSQLStatement(subQuerySelectedColumns, null, reservationID, null)) + " )");
 	}
 	
 	/**
@@ -2378,14 +2384,14 @@ public class HiltonDublinDBConnection {
 	public String getReserved_ProductAsSQLStatement(String []selectedColumns, String productID, String reservationID, String additionalSQLCondition){
 		//Write Values and Tables in Arrays
 		String []values = {productID, reservationID};
-		String []tables = {RESERVED_ROOM};
+		String []tables = {RESERVED_PRODUCT};
 			
 		if(selectedColumns == null){
-			selectedColumns = RESERVED_ROOM_COLUMNS;
+			selectedColumns = RESERVED_PRODUCT_COLUMNS;
 		}
 						
 		//Get SQL Statement
-		return createSelectStatement(tables, selectedColumns, RESERVED_ROOM_COLUMNS, values, additionalSQLCondition);
+		return createSelectStatement(tables, selectedColumns, RESERVED_PRODUCT_COLUMNS, values, additionalSQLCondition);
 	
 	}
 		
@@ -2400,7 +2406,7 @@ public class HiltonDublinDBConnection {
 		}
 		
 		String [] subQuerySelectedColumns = { RESERVED_PRODUCT_PRODUCTID };
-		return getConsumerProducts(null, null, null, CONSUMERPRODUCT_PRODUCTID + " IN ( " + getReserved_ProductAsSQLStatement(subQuerySelectedColumns, null, reservationID, null) + " )");
+		return getConsumerProducts(null, null, null, CONSUMERPRODUCT_PRODUCTID + " IN ( " + removeLastChar(getReserved_ProductAsSQLStatement(subQuerySelectedColumns, null, reservationID, null)) + " )");
 	}
 	
 	/**
@@ -2507,7 +2513,7 @@ public class HiltonDublinDBConnection {
 		}
 								
 		//Get SQL Statement
-		return createSelectStatement(tables, selectedColumns, RATING_COLUMNS, values, additionalSQLCondition);
+		return createSelectStatement(tables, selectedColumns, GUEST_COLUMNS, values, additionalSQLCondition);
 	}
 	
 	/**
