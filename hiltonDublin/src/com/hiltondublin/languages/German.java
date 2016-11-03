@@ -50,6 +50,86 @@ public class German extends Language {
 		return "Eingeloggt als";
 	}
 	
+	//GUEST
+	public String guestRatingHeading(){
+		return "Bewertung";
+	}
+	public String guestRatingErrorMessageFirstName(){
+		return "Geben Sie bitte einen Vornamen ein!";
+	}
+	
+	public String guestRatingErrorMessageLastName(){
+		return "Geben Sie bitte einen Nachnamen ein!";
+	}
+	
+	public String guestRatingErrorMessageEmail(){
+		return "Geben Sie bitte eine Email Adresse ein!";
+	}
+	
+	public String guestRatingFirstName(){
+		return "Vorname:";
+	}
+	
+	public String guestRatingLastName(){
+		return "Nachname:";
+	}
+	
+	public String guestRatingEmail(){
+		return "Email:";
+	}
+	
+	public String guestRatingRoomType(){
+		return "Ihr Zimmertyp: ";
+	}
+	
+	public String guestRatingRating(){
+		return "Ihre Bewertung: ";
+	}
+	
+	public String guestRatingComment(){
+		return "Ihr Kommentar: ";
+	}
+	
+	public String guestRatingCommentDetail(){
+		return "Schreiben Sie ein paar Worte zu ihrem ausgewählten Zimmertyp...";
+	}
+	
+	public String guestRatingReview(){
+		return "Ihre Rezension";
+	}
+	
+	public String guestRatingRoomInformation(){
+		return "Rezension";
+	}
+	
+	public String guestRatingGuestInformation(){
+		return "Gast Informationen";
+	}
+	
+	public String guestRatingThanksForYourReview(){
+		return "Vielen Dank für Ihre Bewertung ";
+	}
+	
+	public String guestRatingThanksRoomType(){
+		return "Ihr Zimmertyp: ";
+	}
+	
+	public String guestRatingThanksRating(){
+		return "Ihre Bewertung: ";
+	}
+	
+	public String guestRatingThanksComment(){
+		return "Ihr Kommentar: ";
+	}
+	
+	public String guestRatingRatingBestGrade(){
+		return "* 5 -> Beste Note";
+	}
+	
+	public String guestRatingRatingWorstGrade(){
+		return "* 1 -> Schlechteste Note";
+	}
+	
 	//HOME
 	public String homeWelcome(){
 		return "Willkommen bei Hilton Dublin";

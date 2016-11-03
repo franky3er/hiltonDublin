@@ -60,17 +60,12 @@
     <servlet-name>checkoutServlet</servlet-name>
     <url-pattern>/Employee/Checkout-room</url-pattern>
   </servlet-mapping>
-  <!--  <form action="review.jsp">
-      <strong>Comment: </strong>
-      <select name="rate">
-          <c:forEach var="row" items="rating.rowssByIndex}">
-          <c:forEach var="column" items="${row}">
-              <option value="<c:out value="${column}" />"
-              <c:out value="${column}"/>
-              </option>
-          </c:forEach>
-          </c:forEach>
-      </select>
-      <input type="submit" value="submit" name="submit" />
-  </form>-->
+  <servlet>
+    <servlet-name>rating</servlet-name>
+    <jsp-file>/rating.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>rating</servlet-name>
+    <url-pattern>/Guest/Rating</url-pattern>
+  </servlet-mapping>
 </web-app>
