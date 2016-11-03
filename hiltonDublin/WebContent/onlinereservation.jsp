@@ -7,49 +7,9 @@
     
 <%@ include file="navigationSlideGuestHeader.jsp" %>
 
-<script language = "javascript">
-
-//checking info is correct
-	function checkinfo()
-	{
-		Guest guest = new Guest();
-
-		guest.setLastName(request.getParameter("lastname"));
-		guest.setFirstName(request.getParameter("firstname"));
-		guest.setPhoneNumber(request.getParameter("phonenr"));
-		guest.setEmail(request.getParameter("email"));
-		guest.setAddress(request.getParameter("address"));
-		guest.setPassportNr(request.getParameter("passportnr"));
-		
-		int roomtype1 = Integer.parseInt(request.getParameter("numtype1"));
-		int roomtype2 = Integer.parseInt(request.getParameter("numtype2"));
-		int roomtype3 = Integer.parseInt(request.getParameter("numtype3"));
-		
-		if(roomtype1 + roomtype2 + roomtype3 > 1)
-		{
-			ResultSet key = dbConnection.insertGuest(guest);
-			
-			int guestID = 0;
-			if(key.next()) {
-				guestID = key.getInt(1);
-				
-				session.setAttribute("guestID", Integer.toString(guestID));
-			}
-			
-			check_guestinfo.submit();
-		}
-		else
-		{
-			check_guestinfo.reset();
-		}
-		
-	}
-</script>
-
-
 <h1>Online Reservation</h1>
 
-<form id="check_guestinfo" action="onlinereservationsh.jsp" method="get">
+<form id="check_guestinfo" action="Reservation" method="post">
 	<fieldset>
 		<legend>Guest Info</legend>
 		<table>
@@ -121,10 +81,14 @@
 		</tr>
 		</table>
 	</fieldset>
-	<td colspan="2" align="center">
-		<input type="submit" value="Submit">
-		<input type="reset" value="Cancel">
-	</td>
+	<table>
+		<tr>
+			<td colspan="2" align="center">
+			<input type="submit" value="Submit">
+			<input type="reset" value="Cancel">
+			</td>
+		</tr>
+	</table>
 </form>
 
 <%@ include file="navigationSlideGuestFooter.jsp" %>
