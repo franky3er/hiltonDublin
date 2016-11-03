@@ -130,3 +130,7 @@ body {
 	font-size: 60%;
 	color: red;
 }
+
+textarea{
+	width: 100%;
+}

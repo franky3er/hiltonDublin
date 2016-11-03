@@ -29,6 +29,7 @@ import com.hiltondublin.users.User;
 public class HiltonDublinDBConnection {
 	//MySQL Date Format
 	public final static SimpleDateFormat mySQLDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	public final static SimpleDateFormat onlyDayDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	
 	//Database Properties constants
 	public final static String DB_PROPERTIES_FILENAME = "hiltonDublinDB.properties";
@@ -277,6 +278,77 @@ public class HiltonDublinDBConnection {
 			return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * Creates a update table SQL Statement specified by the given parameters
+	 * @param table
+	 * @param conditionCells
+	 * @param setCells
+	 * @param additionalSQLCondition
+	 * @return String
+	 */
+	public String createUpdateStatement(String table, List<Cell> conditionCells, List<Cell> setCells, String additionalSQLCondition){
+		if(table == null){
+			return null;
+		}
+		
+		String sqlStatement = "UPDATE " + table + " ";
+		sqlStatement += "SET ";
+		
+		boolean firstSetCell = true;
+		for(Cell cell : setCells){
+			if(firstSetCell){
+				firstSetCell = false;
+			}
+			else {
+				sqlStatement += ", ";
+			}
+			sqlStatement += cell.getColumn() + "='" + cell.getValue() + "'";
+		}
+		
+		boolean conditionsAvailable = false;
+		boolean conditionCellsAvailable = false;
+		boolean conditionAdditionalAvailable = false;
+		if(conditionCells!=null){
+			if(conditionCells.size()>0){
+				conditionsAvailable = true;
+				conditionCellsAvailable = true;
+			}
+		}
+		if(additionalSQLCondition != null){
+			if(additionalSQLCondition.isEmpty() == false && additionalSQLCondition.trim().equals("") == false){
+				conditionsAvailable = true;
+				conditionAdditionalAvailable = true;
+			}
+		}
+		
+		if(conditionsAvailable){
+			sqlStatement += " WHERE ";
+			if(conditionCellsAvailable){
+				boolean firstConditionCell = true;
+				for(Cell cell : conditionCells){
+					if(firstConditionCell){
+						firstConditionCell = false;
+					}
+					else{
+						sqlStatement += " AND ";
+					}
+					sqlStatement += cell.getColumn() + "='" + cell.getValue() + "'";
+				}
+			}
+			
+			if(conditionAdditionalAvailable){
+				if(conditionCellsAvailable){
+					sqlStatement += " AND ";
+				}
+				sqlStatement += additionalSQLCondition;
+			}
+		}
+			
+		sqlStatement += " ; ";
+		
+		return sqlStatement;
 	}
 	
 	/**
@@ -599,6 +671,47 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	
 	/**
+	 * Updates a given room in the database and returns the number of rows it effected
+	 * @param room
+	 * @return int
+	 */
+	public int updateRoom(Room room){
+		//Get values in String format
+		String roomNumber, typeID, smoking, occupied;
+		if(room.getRoomNumber() == -1){
+			roomNumber = null;
+		} else {
+			roomNumber = Integer.toString(room.getRoomNumber());
+		}
+		if(room.getTypeID() == -1){
+			typeID = null;
+		}
+		else {
+			typeID = Integer.toString(room.getTypeID());
+		}
+		smoking = Boolean.toString(room.isSmoking());
+		occupied = Boolean.toString(room.isOccupied());
+				
+		//Convert Booleans to tinyint
+		smoking = convertBooleanToTinyInt(smoking);
+		occupied = convertBooleanToTinyInt(occupied);
+		
+		//Set set cells
+		String []setColumns = {ROOM_TYPEID, ROOM_SMOKING, ROOM_OCCUPIED};
+		String []setValues = {typeID, smoking, occupied};
+		List<Cell> setCells = getCellList(setColumns, setValues);
+		
+		//Set condition cells
+		String []conditionColumns = {ROOM_NUMBER};
+		String []conditionValues = {roomNumber};
+		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+		
+		String sqlStatement = createUpdateStatement(ROOM, conditionCells, setCells, null);
+		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
+	
+	/**
 	 * Returns the Delete Statement to delete all rooms specified by the given parameters.
 	 * If a parameter is null or empty it won't be recorded in the sql Statement.
 	 * @param roomNumber
@@ -787,6 +900,41 @@ public class HiltonDublinDBConnection {
 	//------------------------------------------------------------------------------------------
 	//-----------------------------------------ROOMTYPE-----------------------------------------
 	//------------------------------------------------------------------------------------------
+	
+	public int updateRoomType(RoomType roomType){
+				
+		String typeID, name, picture, standardPrice, description;
+		
+		if(roomType.getRoomTypeID() == -1){
+			typeID = null;
+		}
+		else{
+			typeID = Integer.toString(roomType.getRoomTypeID());
+		}
+		name = roomType.getName();
+		picture = roomType.getPictureRessource();
+		if(roomType.getStandardPrice() == -1){
+			standardPrice = null;
+		}
+		else{
+			standardPrice = Double.toString(roomType.getStandardPrice());
+		}
+		description = roomType.getDescription();
+		
+		//Set set cells
+		String []setColumns = {ROOMTYPE_NAME, ROOMTYPE_PICTURE, ROOMTYPE_STANDARDPRICE, ROOMTYPE_DESCRIPTION};
+		String []setValues = {name, picture, standardPrice, description};
+		List<Cell> setCells = getCellList(setColumns, setValues);
+				
+		//Set condition cells
+		String []conditionColumns = {ROOMTYPE_TYPEID};
+		String []conditionValues = {typeID};
+		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+			
+		String sqlStatement = createUpdateStatement(ROOMTYPE, conditionCells, setCells, null);
+		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
 	
 	/**
 	 * Returns the Delete Statement to delete all room types specified by the given parameters.
@@ -1144,6 +1292,51 @@ public class HiltonDublinDBConnection {
 		
 	}
 	
+	public int updateRating(Rating ratingObj){
+		
+		String ratingID, roomTypeID, guestID, rating, comment;
+		
+		if(ratingObj.getRatingID() == -1){
+			ratingID = null;
+		}
+		else {
+			ratingID = Integer.toString(ratingObj.getRatingID());
+		}
+		if(ratingObj.getTypeID() == -1){
+			roomTypeID = null;
+		}
+		else {
+			roomTypeID = Integer.toString(ratingObj.getTypeID());
+		}
+		if(ratingObj.getGuestID() == -1){
+			guestID = null;
+		}
+		else{
+			guestID = Integer.toString(ratingObj.getGuestID());
+		}
+		if(ratingObj.getRating() == -1){
+			rating = null;
+		}
+		else {
+			rating = Integer.toString(ratingObj.getRating());
+		}
+		comment = ratingObj.getComment();
+		
+		//Set set cells
+		String []setColumns = {RATING_ROOMTYPEID, RATING_GUESTID, RATING_RATING, RATING_COMMENT};
+		String []setValues = {roomTypeID, guestID, rating, comment};
+		List<Cell> setCells = getCellList(setColumns, setValues);
+				
+		//Set condition cells
+		String []conditionColumns = {RATING_RATINGID};
+		String []conditionValues = {ratingID};
+		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+			
+		String sqlStatement = createUpdateStatement(RATING, conditionCells, setCells, null);
+		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
+	
 	
 	
 	//------------------------------------------------------------------------------------------
@@ -1300,13 +1493,44 @@ public class HiltonDublinDBConnection {
 		return insertConsumerProduct(consumerProductID, name, price);
 	}
 	
+	public int updateConsumerProduct(ConsumerProduct consumerProduct){
+		
+		String consumerProductID, name, price;
+		if(consumerProduct.getProductID() == -1){
+			consumerProductID = null;
+		}
+		else {
+			consumerProductID = Integer.toString(consumerProduct.getProductID());
+		}
+		name = consumerProduct.getName();
+		if(consumerProduct.getPrice() == -1){
+			price = null;
+		}
+		else {
+			price = Double.toString(consumerProduct.getPrice());
+		}
+		
+		//Set set cells
+		String []setColumns = {CONSUMERPRODUCT_NAME, CONSUMERPRODUCT_PRICE};
+		String []setValues = {name, price};
+		List<Cell> setCells = getCellList(setColumns, setValues);
+				
+		//Set condition cells
+		String []conditionColumns = {CONSUMERPRODUCT_PRODUCTID};
+		String []conditionValues = {consumerProductID};
+		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+			
+		String sqlStatement = createUpdateStatement(CONSUMERPRODUCT, conditionCells, setCells, null);
+		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
 	
 	
 	
 	//------------------------------------------------------------------------------------------
 	//-----------------------------------------RESERVATION--------------------------------------
 	//------------------------------------------------------------------------------------------
-	
+		
 	/**
 	 * Returns the Delete Statement to delete all reservations specified by the given parameters.
 	 * If a parameter is null or empty it won't be recorded in the sql Statement.
@@ -1569,6 +1793,50 @@ public class HiltonDublinDBConnection {
 		return insertReservation(reservationID, guestID, arrivalDate, departureDate, paid);
 	}
 	
+	public int updateReservation(Reservation reservation){
+		
+		String reservationID, guestID, arrivalDate, departureDate, paid;
+		
+		if(reservation.getBookingNumber() == -1){
+			reservationID = null;
+		}
+		else {
+			reservationID = Integer.toString(reservation.getBookingNumber());
+		}
+		if(reservation.getGuestID() == -1){
+			guestID = null;
+		}
+		else {
+			guestID = Integer.toString(reservation.getGuestID());
+		}
+		arrivalDate = mySQLDateFormat.format(reservation.getArrivalDate());
+		departureDate = mySQLDateFormat.format(reservation.getDepartureDate());
+		paid = Boolean.toString(reservation.isPaid());
+		
+		//Convert boolean to tinyint
+		paid = convertBooleanToTinyInt(paid);
+		
+		//Set set cells
+		String []setColumns = {RESERVATION_GUESTID, RESERVATION_ARRIVALDATE, RESERVATION_DEPARTUREDATE, RESERVATION_PAID};
+		String []setValues = {guestID, arrivalDate, departureDate, paid};
+		List<Cell> setCells = getCellList(setColumns, setValues);
+				
+		//Set condition cells
+		String []conditionColumns = {RESERVATION_RESERVATIONID};
+		String []conditionValues = {reservationID};
+		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+			
+		String sqlStatement = createUpdateStatement(RESERVATION, conditionCells, setCells, null);
+		
+		List<Room> rooms = reservation.getRooms();
+		for(Room room : rooms){updateRoom(room);}
+		
+		Guest guest = reservation.getGuest();
+		updateGuest(guest);
+		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
+	
 	
 	
 	
@@ -1775,6 +2043,40 @@ public class HiltonDublinDBConnection {
 		return insertSpecialPrice(roomTypeID, date, price, comment);
 	}
 	
+	public int updateSpecialPrice(SpecialPrice specialPrice){
+		
+		String roomTypeID, date, price, comment;
+		
+		if(specialPrice.getTypeID() == -1){
+			roomTypeID = null;
+		}
+		else{
+			roomTypeID = Integer.toString(specialPrice.getTypeID());
+		}
+		date = mySQLDateFormat.format(specialPrice.getDate());
+		if(specialPrice.getPrice() == -1){
+			price = null;
+		}
+		else {
+			price = Double.toString(specialPrice.getPrice());
+		}
+		comment = specialPrice.getComment();
+		
+		//Set set cells
+		String []setColumns = {SPECIALPRICE_PRICE, SPECIALPRICE_COMMENT};
+		String []setValues = {price, comment};
+		List<Cell> setCells = getCellList(setColumns, setValues);
+				
+		//Set condition cells
+		String []conditionColumns = {SPECIALPRICE_ROOMTYPEID, SPECIALPRICE_DATE};
+		String []conditionValues = {roomTypeID, date};
+		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+			
+		String sqlStatement = createUpdateStatement(SPECIALPRICE, conditionCells, setCells, null);
+		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
+	
 	
 	//------------------------------------------------------------------------------------------
 	//-----------------------------------------WEEKDAYPRICES------------------------------------
@@ -1936,6 +2238,44 @@ public class HiltonDublinDBConnection {
 		
 		return insertWeekdayPrice(roomTypeID, price, weekday);
 		
+	}
+	
+	public int updateWeekdayPrice(WeekdayPrice weekdayPrice){
+		
+		String roomTypeID, price, weekday;
+		
+		if(weekdayPrice.getRoomTypeID() == -1){
+			roomTypeID = null;
+		}
+		else {
+			roomTypeID = Integer.toString(weekdayPrice.getRoomTypeID());
+		}
+		if(weekdayPrice.getPrice() == -1){
+			price = null;
+		}
+		else {
+			price = Double.toString(weekdayPrice.getPrice());
+		}
+		if(weekdayPrice.getWeekday() == -1){
+			weekday = null;
+		}
+		else {
+			weekday = Integer.toString(weekdayPrice.getWeekday());
+		}
+		
+		//Set set cells
+		String []setColumns = {WEEKDAYPRICE_PRICE};
+		String []setValues = {price};
+		List<Cell> setCells = getCellList(setColumns, setValues);
+				
+		//Set condition cells
+		String []conditionColumns = {WEEKDAYPRICE_ROOMTYPEID, WEEKDAYPRICE_WEEKDAY};
+		String []conditionValues = {roomTypeID, weekday};
+		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+			
+		String sqlStatement = createUpdateStatement(WEEKDAYPRICE, conditionCells, setCells, null);
+		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
 	}
 	
 	//------------------------------------------------------------------------------------------
@@ -2333,6 +2673,43 @@ public class HiltonDublinDBConnection {
 		return insertGuest(guestID, firstName, lastName, phoneNumber, email, address, passportNr);
 	}
 	
+	public int updateGuest(Guest guest){
+		
+		String guestID, firstName, lastName, phoneNumber, email, address, passportNr;
+		
+		if(guest.getGuestID() == -1){
+			guestID = null;
+		}
+		else{
+			guestID = Integer.toString(guest.getGuestID());
+		}
+		firstName = guest.getFirstName();
+		lastName = guest.getLastName();
+		phoneNumber = guest.getPhoneNumber();
+		email = guest.getEmail();
+		address = guest.getAddress();
+		if(guest.getPassportNr() == -1){
+			passportNr = null;
+		}
+		else {
+			passportNr = Integer.toString(guest.getPassportNr());
+		}
+		
+		//Set set cells
+		String []setColumns = {GUEST_FIRSTNAME, GUEST_LASTNAME, GUEST_PHONENUMBER, GUEST_EMAIL, GUEST_ADDRESS, GUEST_PASSPORTNR};
+		String []setValues = {firstName, lastName, phoneNumber, email, address, passportNr};
+		List<Cell> setCells = getCellList(setColumns, setValues);
+				
+		//Set condition cells
+		String []conditionColumns = {GUEST_GUESTID};
+		String []conditionValues = {guestID};
+		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+			
+		String sqlStatement = createUpdateStatement(GUEST, conditionCells, setCells, null);
+		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
+	
 	//------------------------------------------------------------------------------------------
 	//-------------------------------------EMPLOYEE---------------------------------------------
 	//------------------------------------------------------------------------------------------
@@ -2432,6 +2809,39 @@ public class HiltonDublinDBConnection {
 		return users;
 	}
 	
+	public int updateEmployee_Administrator(User user){
+		String username, firstName, lastName, password, admin, email, phoneNumber, sessionID;
+		Employee employee = (Employee) user;
+		username = employee.getUsername();
+		firstName = employee.getFirstName();
+		lastName = employee.getLastName();
+		password = employee.getPassword();
+		admin = "0";
+		if(user instanceof Employee){
+			admin = "0";
+		}
+		else if(user instanceof Administrator){
+			admin = "1";
+		}
+		email = employee.getEmail();
+		phoneNumber = employee.getPhoneNumber();
+		sessionID = Integer.toString(employee.getSessionID());
+		
+		//Set set cells
+		String []setColumns = {EMPLOYEE_USERNAME, EMPLOYEE_FIRSTNAME, EMPLOYEE_LASTNAME, EMPLOYEE_PASSWORD, EMPLOYEE_ADMIN, EMPLOYEE_EMAIL, EMPLOYEE_PHONENUMBER, EMPLOYEE_SESSIONID};
+		String []setValues = {firstName, lastName, password, admin, email, phoneNumber, sessionID};
+		List<Cell> setCells = getCellList(setColumns, setValues);
+				
+		//Set condition cells
+		String []conditionColumns = {EMPLOYEE_USERNAME};
+		String []conditionValues = {username};
+		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+			
+		String sqlStatement = createUpdateStatement(EMPLOYEE, conditionCells, setCells, null);
+		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
+	
 	
 	
 	//------------------------------------------------------------------------------------------
@@ -2465,6 +2875,29 @@ public class HiltonDublinDBConnection {
 		}
 		
 		return rooms;
+	}
+
+	/**
+	 * Returns only the reservation where the given room is included during the current time.
+	 * @param roomNumber
+	 * @return Reservation
+	 */
+	public Reservation getReservationFromCheckedOurRoom(String roomNumber){
+		Date currentDate = new Date();
+		String curDate = onlyDayDateFormat.format(currentDate) + " 00:00:00";
+		String additionalSQL = RESERVATION_ARRIVALDATE + "<='" + curDate + "' AND " + RESERVATION_DEPARTUREDATE + ">='" + curDate + "' AND ";
+		additionalSQL += RESERVATION_RESERVATIONID + " IN ( SELECT " + RESERVED_ROOM_RESERVATIONID + " FROM " + RESERVED_ROOM + " WHERE " + RESERVED_ROOM_ROOMNUMBER + "='" + roomNumber + "')";
+		
+		List<Reservation> reservations = getReservations(null, null, null, null, null, additionalSQL);
+		if(reservations == null){
+			return null;
+		}
+		
+		if(reservations.size()==0){
+			return null;
+		}
+		
+		return reservations.get(0);
 	}
 
 }
