@@ -112,9 +112,9 @@ List<RoomType> roomTypes = dbConnection.getRoomTypes(null, null, null, null, nul
 			<td><%=language.guestRatingRoomType() %> </td>
 			<td>	
 				<select name="roomtype">
-					<%for(RoomType roomType : roomTypes){ %>
-					<option value="<%=roomType.getRoomTypeID() %>"><%=roomType.getName() %></option>
-					<%} %>
+					<%int i = 0; for(RoomType roomType : roomTypes){ %>
+					<option <%if(i==0){ %>selected<%} %> value="<%=roomType.getRoomTypeID() %>"><%=roomType.getName() %></option>
+					<%i++;} %>
 				</select>
 			</td>
 		</tr>
@@ -129,7 +129,7 @@ List<RoomType> roomTypes = dbConnection.getRoomTypes(null, null, null, null, nul
 					<option value="2">2</option>
 					<option value="3">3</option>
 					<option value="4">4</option>
-					<option value="5">5</option>
+					<option selected value="5">5</option>
 				</select>
 			</td>
 		</tr>
