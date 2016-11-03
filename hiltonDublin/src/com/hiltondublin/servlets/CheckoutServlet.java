@@ -9,12 +9,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.hiltondublin.classes.Reservation;
+import com.hiltondublin.db.HiltonDublinDBConnection;
+
 /**
  * Servlet implementation class checkout
  */
 @WebServlet("/checkoutRoom")
 public class CheckoutServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private HiltonDublinDBConnection dbConnection = HiltonDublinDBConnection.getInstance();
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -26,7 +30,17 @@ public class CheckoutServlet extends HttpServlet {
 			request.setAttribute("roomNumber", roomNumber);
 			if(!(roomNumber.isEmpty() || roomNumber.trim().equals(""))){
 				if(roomNumber.matches("\\d+")){
-					
+					Reservation reservation = dbConnection.getReservationFromCheckedOurRoom(roomNumber);
+					if (reservation == null){
+						System.out.println("No Reservation found for room number " + roomNumber);
+						request.setAttribute("checkoutError", "4");
+					} else {
+						//Set Room Free
+						//TODO update Room
+						
+						//Check if all rooms are checked out and create final bill
+						//TODO final bill
+					}
 				} else {
 					System.out.println(roomNumber + " is not a number!");
 					request.setAttribute("checkoutError", "1");

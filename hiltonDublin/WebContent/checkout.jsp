@@ -19,6 +19,8 @@ if(checkoutError == null){checkoutError = "0";}
 	<p class="loginError">Room number <%=roomNumber %> was not an Integer!</p>
 	<%} else if (checkoutError.equals("2")){%>
 	<p class="loginError">Room number null</p>
+	<%} else if (checkoutError.equals("4")){%>
+	<p class="loginError">No suitable reservation found for room number <%=roomNumber %></p>
 	<%} %>
 </form>
 
