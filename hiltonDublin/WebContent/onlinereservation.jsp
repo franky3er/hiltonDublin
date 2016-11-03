@@ -1,6 +1,7 @@
 <%@page import="com.hiltondublin.classes.Room" %>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList" %>
+<%@page import="java.lang.*" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     
@@ -11,23 +12,44 @@
 //checking info is correct
 	function checkinfo()
 	{
-		String lastname = request.getParameter("lastname");
-		String firstname = request.getParameter("firstname");
-		String phonenr = request.getParameter("phonenr");
-		String email = request.getParameter("email");
-		String address = request.getParameter("address");
-		String passportnr = request.getParameter("passportnr");
+		Guest guest = new Guest();
+
+		guest.setLastName(request.getParameter("lastname"));
+		guest.setFirstName(request.getParameter("firstname"));
+		guest.setPhoneNumber(request.getParameter("phonenr"));
+		guest.setEmail(request.getParameter("email"));
+		guest.setAddress(request.getParameter("address"));
+		guest.setPassportNr(request.getParameter("passportnr"));
 		
-		ResultSet Guestresult = dbConnection.insertGuest(null, firstname, lastname, phonenr, email, address, passportnr);
+		int roomtype1 = Integer.parseInt(request.getParameter("numtype1"));
+		int roomtype2 = Integer.parseInt(request.getParameter("numtype2"));
+		int roomtype3 = Integer.parseInt(request.getParameter("numtype3"));
 		
-		check_guestinfo.submit();
+		if(roomtype1 + roomtype2 + roomtype3 > 1)
+		{
+			ResultSet key = dbConnection.insertGuest(guest);
+			
+			int guestID = 0;
+			if(key.next()) {
+				guestID = key.getInt(1);
+				
+				session.setAttribute("guestID", Integer.toString(guestID));
+			}
+			
+			check_guestinfo.submit();
+		}
+		else
+		{
+			check_guestinfo.reset();
+		}
+		
 	}
 </script>
 
 
 <h1>Online Reservation</h1>
 
-<form id="check_guestinfo" action="onlinereservationsh.jsp" method="post">
+<form id="check_guestinfo" action="onlinereservationsh.jsp" method="get">
 	<fieldset>
 		<legend>Guest Info</legend>
 		<table>
@@ -80,6 +102,22 @@
 		<input id="smoking" type="radio" name="smoking" value="false" checked>
 		<label for="smoking">No</label>
 		</td>
+		</tr>
+		</table>
+	</fieldset>
+	<br>
+	<fieldset>
+		<legend>Number of Room</legend>
+		<table>
+		<tr>
+		<td>Type 1</td>
+		<td>Type 2</td>
+		<td>Type 3</td>
+		</tr>
+		<tr>
+		<td><input type="number" id="numtype1" name="numtype1" min="0" required></td>
+		<td><input type="number" id="numtype2" name="numtype2" min="0" required></td>
+		<td><input type="number" id="numtype3" name="numtype3" min="0" required></td>
 		</tr>
 		</table>
 	</fieldset>
