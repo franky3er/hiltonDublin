@@ -5,8 +5,7 @@
 <%@page import="com.hiltondublin.classes.Rating" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    
-<%@ include file="navigationSlideGuestHeader.jsp" %>
+<%@ include file="navigationSlideGuestHeader.jsp" %>    
 
 <%
 String firstName = request.getParameter("firstName");
@@ -140,7 +139,7 @@ List<RoomType> roomTypes = dbConnection.getRoomTypes(null, null, null, null, nul
 			</td>
 		</tr>
 		<tr>
-			<td><input type="submit" type="submit"/></td>
+			<td><input type="submit" value="submit"/></td>
 		</tr>
 	</table>
 </form>
