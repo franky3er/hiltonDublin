@@ -11,7 +11,7 @@
 		<form action="cancellation.html" method="get">
 			<input class="navigationPage" type="submit" value="Cancellation" />
 		</form>
-		<form action="rating.html" method="get">
+		<form action="<%=getURLWithContextPath(request) %>/Guest/Rating" method="get">
 			<input class="navigationPage" type="submit" value="Rating" />
 		</form>
 	</div>

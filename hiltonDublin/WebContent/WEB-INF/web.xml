@@ -60,4 +60,12 @@
     <servlet-name>checkoutServlet</servlet-name>
     <url-pattern>/Employee/Checkout-room</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>rating</servlet-name>
+    <jsp-file>/rating.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>rating</servlet-name>
+    <url-pattern>/Guest/Rating</url-pattern>
+  </servlet-mapping>
 </web-app>

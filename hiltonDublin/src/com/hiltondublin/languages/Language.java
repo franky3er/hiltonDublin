@@ -69,6 +69,83 @@ public abstract class Language {
 		return "Welcome to Hilton Dublin";
 	}
 	
+	//GUEST
+	public String guestRatingErrorMessageFirstName(){
+		return "Please type in a First Name!";
+	}
+	
+	public String guestRatingErrorMessageLastName(){
+		return "Please type in a Last Name!";
+	}
+	
+	public String guestRatingErrorMessageEmail(){
+		return "Please type in an Email Address!";
+	}
+	
+	public String guestRatingFirstName(){
+		return "First Name:";
+	}
+	
+	public String guestRatingLastName(){
+		return "Last Name:";
+	}
+	
+	public String guestRatingEmail(){
+		return "Email:";
+	}
+	
+	public String guestRatingRoomType(){
+		return "Your Room Type: ";
+	}
+	
+	public String guestRatingRating(){
+		return "Your Rating: ";
+	}
+	
+	public String guestRatingComment(){
+		return "Your Comment: ";
+	}
+	
+	public String guestRatingCommentDetail(){
+		return "Write a few Words to your selected room type...";
+	}
+	
+	public String guestRatingReview(){
+		return "Your Review";
+	}
+	
+	public String guestRatingRoomInformation(){
+		return "Rating";
+	}
+	
+	public String guestRatingGuestInformation(){
+		return "Guest Information";
+	}
+	
+	public String guestRatingThanksForYourReview(){
+		return "Thank you very much for you review ";
+	}
+	
+	public String guestRatingThanksRoomType(){
+		return "Your Room Type: ";
+	}
+	
+	public String guestRatingThanksRating(){
+		return "Your Rating: ";
+	}
+	
+	public String guestRatingThanksComment(){
+		return "Your Comment: ";
+	}
+	
+	public String guestRatingRatingBestGrade(){
+		return "* 5 -> Best Grade";
+	}
+	
+	public String guestRatingRatingWorstGrade(){
+		return "* 1 -> Worst Grade";
+	}
+	
 	//EMPLOYEE
 	public String employeeAreaHeading(){
 		return "Employee Area";

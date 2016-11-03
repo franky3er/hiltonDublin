@@ -10,11 +10,9 @@
 private static final String ENGLISH = "english";
 private static final String GERMAN = "german";
 private static final String KOREAN = "korean";
-
 private HiltonDublinDBConnection dbConnection = HiltonDublinDBConnection.getInstance(); 
 private User user = new Guest();
 private Language language;
-
 public String selectedLanguage(String language, String selectedLanguage){
 	String selected = "selected";
 	if(language.equals(selectedLanguage)){
@@ -24,7 +22,6 @@ public String selectedLanguage(String language, String selectedLanguage){
 		return "";
 	}
 }
-
 public static String getURLWithContextPath(HttpServletRequest request) {
    return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 }
@@ -49,9 +46,7 @@ if(selectedLanguage.equals(GERMAN)){
 if(selectedLanguage.equals(KOREAN)){
 	user.setLanguage(new Korean());
 }
-
 language = user.getLanguage();
-
 //Page Name
 String uri = request.getRequestURI();
 String pageName = uri.substring(uri.lastIndexOf("/")+1);

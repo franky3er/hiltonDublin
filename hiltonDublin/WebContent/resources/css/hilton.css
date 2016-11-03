@@ -121,3 +121,16 @@ body {
 	height: 8%;
 }
 
+.emptyTextField{
+	border: solid red;
+}
+
+.information{
+	margin: 0;
+	font-size: 60%;
+	color: red;
+}
+
+textarea{
+	width: 100%;
+}

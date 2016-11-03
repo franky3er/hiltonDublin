@@ -49,7 +49,7 @@
 	}
 %>
 
-<script language = "javascript">
+<script language="javascript">
 
 //checking info is correct
 	function reserve()
