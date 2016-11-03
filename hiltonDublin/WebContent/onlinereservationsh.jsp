@@ -1,21 +1,16 @@
 <%@page import="com.hiltondublin.classes.Room" %>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList" %>
+<%@page import="java.lang.*" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     
 <%@ include file="navigationSlideGuestHeader.jsp" %>
 
 <%
-	//guest info
-	String firstname = request.getParameter("firstname");
-	String lastname = request.getParameter("lastname");
-	String address = request.getParameter("address");
-	String email = request.getParameter("email");
-	String phonenr = request.getParameter("phonenr");
-	String passportnr = request.getParameter("passportnr");
-
-
+	//guestID
+	String guestID = (String)session.getAttribute("guestID");
+	
 	//room info
 	String checkin = request.getParameter("checkin");
 	String checkout = request.getParameter("checkout");
@@ -25,14 +20,30 @@
 	String roomNumber = null;
 	String typeID = null;
 	String occupied = "false";
-	//String additionalSQL = HiltonDublinDBConnection.ROOM_NUMBER + ">'200'";
+	
+	int roomtype1 = Integer.parseInt(request.getParameter("numtype1"));
+	int roomtype2 = Integer.parseInt(request.getParameter("numtype2"));
+	int roomtype3 = Integer.parseInt(request.getParameter("numtype3"));
+	
+	String additionalSQLCondition = null;
 	
 	List<String> roomsAsStrings = new ArrayList<String>();
 	List<String> roomNumbers = new ArrayList<String>();
-	List<Room> rooms = new ArrayList<Room>();
-	rooms = dbConnection.getRooms(roomNumber, typeID, smoking, occupied, null);
+	List<Room> roomtype1s = new ArrayList<Room>();
+	List<Room> roomtype2s = new ArrayList<Room>();
+	List<Room> roomtype3s = new ArrayList<Room>();
 	
-	for(Room room : rooms){
+	if(roomtype1 != 0) {
+		roomtype1s = dbConnection.getRooms(roomNumber, typeID, smoking, occupied, additionalSQLCondition);
+	}
+	if(roomtype2 != 0) {
+		roomtype2s = dbConnection.getRooms(roomNumber, typeID, smoking, occupied, additionalSQLCondition);
+	}
+	if(roomtype3 != 0) {
+		roomtype3s = dbConnection.getRooms(roomNumber, typeID, smoking, occupied, additionalSQLCondition);
+	}
+	
+	for(Room room : roomtype1s){
 		roomNumbers.add(String.valueOf(room.getRoomNumber()));
 		roomsAsStrings.add("RoomNumber: " + room.getRoomNumber() + "   typeID: " + room.getTypeID() + "   smoking: " + room.isSmoking());
 	}
@@ -45,7 +56,7 @@
 	{
 		//reservationID = roomNumber+name guestID = name+passportnr
 		roomNumber = request.getParameter("reserveroom");
-		boolean request = dbConnection.insertReservation(roomNumber+name, name+passportnr, checkin, checkout, "true");
+		boolean request = dbConnection.insertReservation(reservationID, guestID, checkin, checkout, smoking);
 		
 		if(request != "false")
 		{
@@ -62,7 +73,12 @@
 <h1>Online Reservation</h1>
 
 <form id="roomsh" action="payment.jsp" method="post">
-
+	
+	
+	<fieldset>
+		<legend>Type1</legend>
+	
+	</fieldset>
 	<%
 	for(String room : roomsAsStrings){
 	%>	
