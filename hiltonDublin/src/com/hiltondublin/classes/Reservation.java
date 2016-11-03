@@ -1,5 +1,6 @@
 package com.hiltondublin.classes;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -67,5 +68,53 @@ public class Reservation {
 	}
 	public void setPaid(boolean paid) {
 		this.paid = paid;
+	}
+	
+	/**
+	 * Adds the prices of all rooms and consumed products during the stay and returns it as a total price
+	 * @return double
+	 */
+	public double createBill(){
+		double totalPrice = 0;
+		
+		//Room Prices
+		for(Room room : rooms){
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(getArrivalDate());
+			while(!calendar.getTime().equals(getDepartureDate())){
+				//Standard Price
+				double localPrice = room.getType().getStandardPrice();
+				
+				//Weekday Price
+				List<WeekdayPrice> weekdayPrices = room.getType().getWeekdayPrices();
+				for(WeekdayPrice weekdayPrice : weekdayPrices){
+					if(calendar.get(Calendar.DAY_OF_WEEK) == weekdayPrice.getWeekday()){
+						localPrice = weekdayPrice.getPrice();
+						break;
+					}
+				}
+				
+				//Special Price
+				List<SpecialPrice> specialPrices = room.getType().getSpecialPrices();
+				for(SpecialPrice specialPrice : specialPrices){
+					if(calendar.getTime().equals(specialPrice.getDate())){
+						localPrice = specialPrice.getPrice();
+						break;
+					}
+				}
+				
+				totalPrice += localPrice;
+				
+				calendar.add(Calendar.DATE, 1); //Adds one day to the date
+			}
+		}
+		
+		//Consumed Products
+		List<ConsumerProduct> consumerProducts = getConsumerProducts();
+		for(ConsumerProduct product : consumerProducts){
+			totalPrice += product.getPrice();
+		}
+		
+		return totalPrice;
 	}
 }

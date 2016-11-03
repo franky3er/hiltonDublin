@@ -1,10 +1,19 @@
 
 <%@ include file="navigationSlideEmployeeHeader.jsp" %>
+<%@page import="com.hiltondublin.classes.Room"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
 
 <%
 String checkoutError = (String) request.getAttribute("checkoutError");
 String roomNumber = (String) request.getAttribute("roomNumber");
+String bill = (String) request.getAttribute("bill");
+List<Room> occupiedRooms = (ArrayList<Room>) request.getAttribute("occupiedRooms");
 if(checkoutError == null){checkoutError = "0";}
+
+if(bill!=null){
+	System.out.println("Total Price: " + bill);
+}
 %>
 
 <h1>Checkout</h1>
@@ -23,5 +32,7 @@ if(checkoutError == null){checkoutError = "0";}
 	<p class="loginError">No suitable reservation found for room number <%=roomNumber %></p>
 	<%} %>
 </form>
+
+
 
 <%@ include file="navigationSlideEmployeeFooter.jsp" %>

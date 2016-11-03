@@ -263,6 +263,15 @@ public class HiltonDublinDBConnection {
 		}
 	}
 	
+	public boolean isValidMySQLDate(String date) {
+	    try {
+	        mySQLDateFormat.parse(date);
+	        return true;
+	    } catch (ParseException e) {
+	        return false;
+	    }
+	}
+	
 	/**
 	 * Disconnect from the database
 	 * @return boolean
@@ -1545,24 +1554,12 @@ public class HiltonDublinDBConnection {
 	public String deleteReservationsAsSQLStatement(String reservationID, String guestID, String arrivalDate, String departureDate, String paid, String additionalSQLCondition){
 		// Check if Date is in right format
 		if(!isNullOrEmpty(arrivalDate)){
-			try {
-				if (!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(arrivalDate)))) {
-					System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-					return null;
-				}
-			} catch (ParseException e1) {
-				System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+			if(!isValidMySQLDate(arrivalDate)){
 				return null;
 			}
 		}
 		if(!isNullOrEmpty(departureDate)){
-			try {
-				if (!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(departureDate)))) {
-					System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-					return null;
-				}
-			} catch (ParseException e1) {
-				System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+			if(!isValidMySQLDate(departureDate)){
 				return null;
 			}
 		}
@@ -1609,24 +1606,12 @@ public class HiltonDublinDBConnection {
 	public String getReservationsAsSQLStatement(String []selectedColumns, String reservationID, String guestID, String arrivalDate, String departureDate, String paid, String additionalSQLCondition){
 		// Check if Date is in right format
 		if(!isNullOrEmpty(arrivalDate)){
-			try {
-				if (!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(arrivalDate)))) {
-					System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-					return null;
-				}
-			} catch (ParseException e1) {
-				System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+			if(!isValidMySQLDate(arrivalDate)){
 				return null;
 			}
 		}
 		if(!isNullOrEmpty(departureDate)){
-			try {
-				if (!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(departureDate)))) {
-					System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-					return null;
-				}
-			} catch (ParseException e1) {
-				System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+			if(!isValidMySQLDate(departureDate)){
 				return null;
 			}
 		}
@@ -1717,29 +1702,10 @@ public class HiltonDublinDBConnection {
 		
 		
 		//Check if Date is in right format
-		
-		try {
-			if(isNullOrEmpty(arrivalDate)){
-				System.out.println("arrivalDate is null or empty!");
-			}
-			if(!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(arrivalDate)))){
-				System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-				return null;
-			}
-		} catch (ParseException e1) {
-			System.out.println("arrivalDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+		if(!isValidMySQLDate(arrivalDate)){
 			return null;
 		}
-		try {
-			if(isNullOrEmpty(departureDate)){
-				System.out.println("departureDate is null or empty!");
-			}
-			if(!arrivalDate.equals(mySQLDateFormat.format(mySQLDateFormat.parse(departureDate)))){
-				System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-				return null;
-			}
-		} catch (ParseException e1) {
-			System.out.println("departureDate is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+		if(!isValidMySQLDate(departureDate)){
 			return null;
 		}
 		
@@ -1857,13 +1823,7 @@ public class HiltonDublinDBConnection {
 	public String deleteSpecialPricesAsSQLStatement(String roomTypeID, String date, String price, String comment, String additionalSQLCondition){
 		//Check if Date is in right format
 		if(!isNullOrEmpty(date)){
-			try {
-				if(!date.equals(mySQLDateFormat.format(mySQLDateFormat.parse(date)))){
-					System.out.println("date is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-					return null;
-				}
-			} catch (ParseException e1) {
-				System.out.println("date is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+			if(!isValidMySQLDate(date)){
 				return null;
 			}
 		}
@@ -1906,13 +1866,7 @@ public class HiltonDublinDBConnection {
 	public String getSpecialPricesAsSQLStatements(String []selectedColumns, String roomTypeID, String date, String price, String comment, String additionalSQLCondition){
 		//Check if Date is in right format
 		if(!isNullOrEmpty(date)){
-			try {
-				if(!date.equals(mySQLDateFormat.format(mySQLDateFormat.parse(date)))){
-					System.out.println("date is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-					return null;
-				}
-			} catch (ParseException e1) {
-				System.out.println("date is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+			if(!isValidMySQLDate(date)){
 				return null;
 			}
 		}
@@ -1991,16 +1945,7 @@ public class HiltonDublinDBConnection {
 		}
 		
 		// Check if Date is in right format
-		try {
-			if(isNullOrEmpty(date)){
-				System.out.println("date is null or empty!");
-			}
-			if (!date.equals(mySQLDateFormat.format(mySQLDateFormat.parse(date)))) {
-				System.out.println("date is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
-				return null;
-			}
-		} catch (ParseException e1) {
-			System.out.println("date is not in right format! Please refer to \"HiltonDublinDBConnection.mySQLDateFormat!\"");
+		if(!isValidMySQLDate(date)){
 			return null;
 		}
 
