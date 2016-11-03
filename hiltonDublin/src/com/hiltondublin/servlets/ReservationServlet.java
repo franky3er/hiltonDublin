@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.hiltondublin.service.ReservationService;
 import com.hiltondublin.users.Guest;
+import com.hiltondublin.users.GuestSingleton;
 
 /**
  * Servlet implementation class ReservationServlet
@@ -30,6 +31,7 @@ public class ReservationServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Guest guest = new Guest();
+		GuestSingleton guestinfo = GuestSingleton.getInstatnce();
 
 		guest.setLastName(request.getParameter("lastname"));
 		guest.setFirstName(request.getParameter("firstname"));
@@ -38,6 +40,21 @@ public class ReservationServlet extends HttpServlet {
 		guest.setAddress(request.getParameter("address"));
 		guest.setPassportNr(Integer.parseInt(request.getParameter("passportnr")));
 		
+		guestinfo.setLastName(request.getParameter("lastname"));
+		guestinfo.setFirstName(request.getParameter("firstname"));
+		guestinfo.setPhoneNumber(request.getParameter("phonenr"));
+		guestinfo.setEmail(request.getParameter("email"));
+		guestinfo.setAddress(request.getParameter("address"));
+		guestinfo.setPassportNr(Integer.parseInt(request.getParameter("passportnr")));
+		guestinfo.setSmoking(request.getParameter("smoking"));
+		guestinfo.setCheckin(request.getParameter("checkin"));
+		guestinfo.setCheckout(request.getParameter("checkout"));
+		guestinfo.setGuests(Integer.parseInt(request.getParameter("numberOfGuests")));
+		guestinfo.setType1(Integer.parseInt(request.getParameter("numtype1")));
+		guestinfo.setType2(Integer.parseInt(request.getParameter("numtype2")));
+		guestinfo.setType3(Integer.parseInt(request.getParameter("numtype3")));
+		
+		
 		int roomtype1 = Integer.parseInt(request.getParameter("numtype1"));
 		int roomtype2 = Integer.parseInt(request.getParameter("numtype2"));
 		int roomtype3 = Integer.parseInt(request.getParameter("numtype3"));
@@ -45,6 +62,8 @@ public class ReservationServlet extends HttpServlet {
 		ReservationService reserve = new ReservationService();
 		
 		guest = reserve.findGuestID(guest, roomtype1 + roomtype2 + roomtype3);
+		
+		guestinfo.setGuestID(guest.getGuestID());
 		
 		if(guest.getGuestID() == -1) {
 			response.sendRedirect("onlinereservation.jsp");
