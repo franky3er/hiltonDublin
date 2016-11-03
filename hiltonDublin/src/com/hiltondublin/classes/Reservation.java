@@ -2,7 +2,9 @@ package com.hiltondublin.classes;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.hiltondublin.users.Guest;
 
@@ -74,47 +76,69 @@ public class Reservation {
 	 * Adds the prices of all rooms and consumed products during the stay and returns it as a total price
 	 * @return double
 	 */
-	public double createBill(){
-		double totalPrice = 0;
+	public Map<String, Double> createBill(){
+		Map<String, Double> bill = new HashMap<String, Double>();
 		
 		//Room Prices
 		for(Room room : rooms){
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(getArrivalDate());
+			String productName = room.getType().getName() + " (Room Nr.: " + Integer.toString(room.getRoomNumber()) + ") x ";
+			double productPrice = 0;
+			int amountOfDays = 0;
 			while(!calendar.getTime().equals(getDepartureDate())){
-				//Standard Price
+				amountOfDays++;
 				double localPrice = room.getType().getStandardPrice();
 				
 				//Weekday Price
 				List<WeekdayPrice> weekdayPrices = room.getType().getWeekdayPrices();
-				for(WeekdayPrice weekdayPrice : weekdayPrices){
-					if(calendar.get(Calendar.DAY_OF_WEEK) == weekdayPrice.getWeekday()){
-						localPrice = weekdayPrice.getPrice();
-						break;
+				if(weekdayPrices!=null){
+					for(WeekdayPrice weekdayPrice : weekdayPrices){
+						if(calendar.get(Calendar.DAY_OF_WEEK) == weekdayPrice.getWeekday()){
+							localPrice = weekdayPrice.getPrice();
+							break;
+						}
 					}
 				}
 				
 				//Special Price
 				List<SpecialPrice> specialPrices = room.getType().getSpecialPrices();
-				for(SpecialPrice specialPrice : specialPrices){
-					if(calendar.getTime().equals(specialPrice.getDate())){
-						localPrice = specialPrice.getPrice();
-						break;
+				if(specialPrices!=null){
+					for(SpecialPrice specialPrice : specialPrices){
+						if(calendar.getTime().equals(specialPrice.getDate())){
+							localPrice = specialPrice.getPrice();
+							break;
+						}
 					}
 				}
 				
-				totalPrice += localPrice;
+				productPrice += localPrice;
 				
 				calendar.add(Calendar.DATE, 1); //Adds one day to the date
 			}
+			
+			bill.put(productName + Integer.toString(amountOfDays), new Double(productPrice));
 		}
 		
-		//Consumed Products
-		List<ConsumerProduct> consumerProducts = getConsumerProducts();
-		for(ConsumerProduct product : consumerProducts){
-			totalPrice += product.getPrice();
+		HashMap<ConsumerProduct, Integer> consumedProducts = new HashMap<ConsumerProduct, Integer>();
+		//Ammount of Consumed Products
+		if(consumerProducts != null){
+			for(ConsumerProduct product : consumerProducts){
+				if(consumedProducts.get(product) != null){
+					consumedProducts.put(product, new Integer(1));
+				}
+				else {
+					consumedProducts.put(product, consumedProducts.get(product) + 1);
+				}
+			}
 		}
 		
-		return totalPrice;
+		for(Map.Entry<ConsumerProduct, Integer> productEntry : consumedProducts.entrySet()){
+			ConsumerProduct product = productEntry.getKey();
+			int ammount = productEntry.getValue();
+			bill.put(product.getName() + " x " + ammount, product.getPrice() * ammount);
+		}
+		
+		return bill;
 	}
 }

@@ -3,17 +3,19 @@
 <%@page import="com.hiltondublin.classes.Room"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.Map.Entry" %>
+<%@page import="java.util.Iterator" %>
 
 <%
 String checkoutError = (String) request.getAttribute("checkoutError");
 String roomNumber = (String) request.getAttribute("roomNumber");
-String bill = (String) request.getAttribute("bill");
+String totalPrice = (String) request.getAttribute("totalPrice");
+Map<String, Double> bill = (Map<String, Double>) request.getAttribute("bill");
 List<Room> occupiedRooms = (ArrayList<Room>) request.getAttribute("occupiedRooms");
 if(checkoutError == null){checkoutError = "0";}
 
-if(bill!=null){
-	System.out.println("Total Price: " + bill);
-}
+System.out.println("Total price: " + totalPrice);
 %>
 
 <h1>Checkout</h1>
@@ -33,6 +35,27 @@ if(bill!=null){
 	<%} %>
 </form>
 
+<%if(totalPrice!=null){ %>
+<h4>Bill</h4>
 
+<table>
+	<%
+	Iterator entries = bill.entrySet().iterator();
+	while(entries.hasNext()){
+		Entry entry = (Entry) entries.next();
+		String product = (String) entry.getKey();
+		Double price = (Double) entry.getValue();
+	%>
+	<tr>
+		<td><%=product %></td>
+		<td><%=price %></td>
+	</tr>
+	<%} %>
+	<tr>
+		<td></td>
+		<td><%=totalPrice %></td>
+	</tr>
+</table>
+<%} %>
 
 <%@ include file="navigationSlideEmployeeFooter.jsp" %>
