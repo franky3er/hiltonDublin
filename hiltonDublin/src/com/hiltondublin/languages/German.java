@@ -51,6 +51,9 @@ public class German extends Language {
 	}
 	
 	//GUEST
+	public String guestWelcome(){
+		return "Willkommen zu Gast auf der Seite";
+	}
 	public String guestRatingHeading(){
 		return "Bewertung";
 	}
@@ -91,7 +94,7 @@ public class German extends Language {
 	}
 	
 	public String guestRatingCommentDetail(){
-		return "Schreiben Sie ein paar Worte zu ihrem ausgewählten Zimmertyp...";
+		return "Schreiben Sie ein paar Worte zu ihrem ausgewï¿½hlten Zimmertyp...";
 	}
 	
 	public String guestRatingReview(){
@@ -107,7 +110,7 @@ public class German extends Language {
 	}
 	
 	public String guestRatingThanksForYourReview(){
-		return "Vielen Dank für Ihre Bewertung ";
+		return "Vielen Dank fï¿½r Ihre Bewertung ";
 	}
 	
 	public String guestRatingThanksRoomType(){
@@ -140,7 +143,7 @@ public class German extends Language {
 		return "Arbeitskraft Bereich";
 	}
 	public String employeeLoginMessage(){
-		return "Sie müssen als Arbeitskraft eingeloggt sein um Zugang zum Arbeitskraft Bereich zu erhalten!";
+		return "Sie mï¿½ssen als Arbeitskraft eingeloggt sein um Zugang zum Arbeitskraft Bereich zu erhalten!";
 	}
 		
 	//ADMINISTRATOR
@@ -148,7 +151,7 @@ public class German extends Language {
 		return "Admin Bereich";
 	}
 	public String administratorLoginMessage(){
-		return "Sie müssen als Administrator eingeloggt sein um Zugang zum Admin Bereich zu erhalten!";
+		return "Sie mï¿½ssen als Administrator eingeloggt sein um Zugang zum Admin Bereich zu erhalten!";
 	}
 	
 }

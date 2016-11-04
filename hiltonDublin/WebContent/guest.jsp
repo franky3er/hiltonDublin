@@ -1,6 +1,6 @@
 <%@ include file="navigationSlideGuestHeader.jsp" %>
 <body>
-	<h1>Welcome to Guest Page</h1>
+	<h1><%=language.guestWelcome() %></h1>
 	<p>This is the main page for the Guests.<br>
 	Guests can make online reservations, cancel reservations, and check the ratings.
 	</p>
