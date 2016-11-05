@@ -25,7 +25,7 @@
 		<legend>Type1</legend>
 		<%
 		for(Room rooms : roomtype1) {%>
-		<input type="checkbox" id="type1" name=rooms.getRoomNumber() value=<%=rooms.getRoomNumber()%>>
+		<input type="checkbox" id=rooms.getRoomNumber() name="type1" value=<%=rooms.getRoomNumber()%>>
 		<label for=<%=rooms.getRoomNumber()%>><%=rooms.getRoomNumber()%></label><br>
 		<%} %>
 	</fieldset>
@@ -33,7 +33,7 @@
 		<legend>Type2</legend>
 		<%
 		for(Room rooms : roomtype2) {%>
-		<input type="checkbox" id="type2" name=rooms.getRoomNumber() value=<%=rooms.getRoomNumber()%>>
+		<input type="checkbox" id=rooms.getRoomNumber() name="type2" value=<%=rooms.getRoomNumber()%>>
 		<label for=<%=rooms.getRoomNumber()%>><%=rooms.getRoomNumber()%></label><br>
 		<%} %>
 	</fieldset>
@@ -41,7 +41,7 @@
 		<legend>Type3</legend>
 		<%
 		for(Room rooms : roomtype3) {%>
-		<input type="checkbox" id="type3" name=rooms.getRoomNumber() value=<%=rooms.getRoomNumber()%>>
+		<input type="checkbox" id=rooms.getRoomNumber() name="type3" value=<%=rooms.getRoomNumber()%>>
 		<label for=<%=rooms.getRoomNumber()%>><%=rooms.getRoomNumber()%></label><br>
 		<%} %>
 	</fieldset>
