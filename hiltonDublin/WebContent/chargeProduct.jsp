@@ -11,7 +11,6 @@
 	String conPrice = request.getParameter("price");
 	String productID = request.getParameter("consumerproducts");
 	String reservationid = request.getParameter("reservationid");
-	
 
 	List<ConsumerProduct> consumerProducts = dbConnection.getConsumerProducts(null,null,null, null);
 	if(reservationid != null){
@@ -25,13 +24,6 @@
 <%if(!isSubmitted){ %>
 <form id="productForm" name="productForm" action="<%=request.getRequestURI()%>" method="post">
 	<table>
-<!-- 	<tr name="reserve" style="display: none;"> -->
-<!-- 	//% for(Reservation res: reservations){ %> -->
-<!-- 		//td> -->
-<!-- 			//%=res.getBookingNumber() %> -->
-<!-- 		///td> -->
-<!-- 	//% } %> -->
-<!-- 	</tr> -->
 		<tr>
 		<td>Your reservation id: </td>
 		<td><input type="text" name="reservationid"/></td>
