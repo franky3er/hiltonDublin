@@ -1,27 +1,58 @@
+<%@page import="com.hiltondublin.classes.Reservation"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.util.List"%>
-<%@page import="com.hiltondublin.classes.Reservation"%>
 <%@page import="com.hiltondublin.classes.ConsumerProduct"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ include file="navigationSlideGuestHeader.jsp" %>
 <%@page import="com.hiltondublin.db.HiltonDublinDBConnection"%>
 
-<%@ include file="navigationSlideGuestHeader.jsp" %>
-
 <%
-String productID = "1";
-String reservationID = "1";
-dbConnection.assignProductToReservation(productID, reservationID);
+	boolean isSubmitted = false;
+	String conProductname = request.getParameter("consumerproducts");
+	String conPrice = request.getParameter("price");
+	String productID = request.getParameter("consumerproducts");
+	String reservationid = request.getParameter("reservationid");
+	
 
+	List<ConsumerProduct> consumerProducts = dbConnection.getConsumerProducts(null,null,null, null);
+	if(reservationid != null){
+		dbConnection.assignProductToReservation(productID, reservationid);	
+		isSubmitted = true;
+		
+	}
+// 	List<Reservation> reservations = dbConnection.getReservations(null, null, null, null, null, null);
+	
 %>
+<%if(!isSubmitted){ %>
+<form id="productForm" name="productForm" action="<%=request.getRequestURI()%>" method="post">
+	<table>
+<!-- 	<tr name="reserve" style="display: none;"> -->
+<!-- 	//% for(Reservation res: reservations){ %> -->
+<!-- 		//td> -->
+<!-- 			//%=res.getBookingNumber() %> -->
+<!-- 		///td> -->
+<!-- 	//% } %> -->
+<!-- 	</tr> -->
+		<tr>
+		<td>Your reservation id: </td>
+		<td><input type="text" name="reservationid"/></td>
+		</tr>
+		<tr>
+		<td>Choose: </td>
+		<td>
+			<select name="consumerproducts">
+				<%for(ConsumerProduct conProducts: consumerProducts){ %>
+				<option value="<%=conProducts.getProductID()%>"><%=conProducts.getName()%></option>
+				<%} %>
+			</select>
+		</td>
+		</tr>
+		<tr>
+			<td><input type="submit" value="submit" /></td>
+		</tr>
+		<tr></tr>
+		<tr></tr>
+	</table>
+</form>
+<%isSubmitted= true;} %>
 
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
-</head>
-<body>
-
-</body>
-</html>
+<%@ include file="navigationSlideGuestFooter.jsp" %>
