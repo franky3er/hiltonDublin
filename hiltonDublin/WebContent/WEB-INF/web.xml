@@ -45,6 +45,14 @@
     <url-pattern>/logout</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>employee</servlet-name>
+    <jsp-file>/employee.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>employee</servlet-name>
+    <url-pattern>/Employee</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>checkout</servlet-name>
     <jsp-file>/checkout.jsp</jsp-file>
   </servlet>

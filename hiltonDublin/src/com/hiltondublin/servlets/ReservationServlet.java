@@ -40,6 +40,8 @@ public class ReservationServlet extends HttpServlet {
 		guest.setAddress(request.getParameter("address"));
 		guest.setPassportNr(Integer.parseInt(request.getParameter("passportnr")));
 		
+		
+		//Singleton
 		guestinfo.setLastName(request.getParameter("lastname"));
 		guestinfo.setFirstName(request.getParameter("firstname"));
 		guestinfo.setPhoneNumber(request.getParameter("phonenr"));

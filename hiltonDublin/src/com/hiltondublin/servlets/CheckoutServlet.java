@@ -37,7 +37,7 @@ public class CheckoutServlet extends HttpServlet {
 			request.setAttribute("roomNumber", roomNumber);
 			if(!(roomNumber.isEmpty() || roomNumber.trim().equals(""))){
 				if(roomNumber.matches("\\d+")){
-					Reservation reservation = dbConnection.getReservationFromCheckedOurRoom(roomNumber);
+					Reservation reservation = dbConnection.getReservationFromRoomNumber(roomNumber);
 					if (reservation == null){
 						System.out.println("No Reservation found for room number " + roomNumber);
 						request.setAttribute("checkoutError", "4");
@@ -47,7 +47,15 @@ public class CheckoutServlet extends HttpServlet {
 						List<Room> occupiedRooms = new ArrayList<Room>();
 						for(Room room : rooms){
 							if(room.getRoomNumber() == Integer.parseInt(roomNumber)){
-								room.setOccupied(false);
+								if(room.isOccupied()==true){
+									room.setOccupied(false);
+									
+									request.setAttribute("checkoutInfo", "1");
+									
+								} else {
+									System.out.println("Room allready checked out");
+									request.setAttribute("checkoutError", "5");
+								}
 							}
 							if(room.isOccupied()){
 								occupiedRooms.add(room);
