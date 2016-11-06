@@ -136,27 +136,27 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 		<form action="<%=getURLWithContextPath(request) %>/Guest" method="get">
 			<input class="navigationPage" type="submit" value="<%=language.navigationSlideGuest() %>" />
 		</form>
-		<form action="employee.jsp" method="get">
+		<form action="<%=getURLWithContextPath(request) %>/Employee" method="get">
 			<input class="navigationPage" type="submit" value="<%=language.navigationSlideEmployee() %>" />
 		</form>
 		<%if(loggedIn){ %>
-		<form action="employee.html" method="get">
+		<form action="<%=getURLWithContextPath(request) %>/Employee/Reservation" method="get">
 			<input class="navigationDetail" type="submit" value="Reservation" />
 		</form>
-		<form action="employee.html" method="get">
+		<form action="<%=getURLWithContextPath(request) %>/Employee/Cancellation" method="get">
 			<input class="navigationDetail" type="submit" value="Cancellation" />
 		</form>
-		<form action="employee.html" method="get">
+		<form action="<%=getURLWithContextPath(request) %>/Employee/Checkin" method="get">
 			<input class="navigationDetail" type="submit" value="Checkin" />
 		</form>
-		<form action="employee.html" method="get">
+		<form action="<%=getURLWithContextPath(request) %>/Employee/Checkout" method="get">
 			<input class="navigationDetail" type="submit" value="Checkout" />
 		</form>
-		<form action="employee.html" method="get">
+		<form action="<%=getURLWithContextPath(request) %>/Employee/Chargeproduct" method="get">
 			<input class="navigationDetail" type="submit" value="Charge Product" />
 		</form>
 		<%} %>
-		<form action="admin.html" method="get">
+		<form action="<%=getURLWithContextPath(request) %>/Admin" method="get">
 			<input class="navigationPage" type="submit" value="<%=language.navigationSlideAdmin() %>" />
 		</form>
 	</div>
