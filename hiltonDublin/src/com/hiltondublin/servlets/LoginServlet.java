@@ -31,7 +31,7 @@ public class LoginServlet extends HttpServlet {
 		String url = request.getParameter("url");
 		
 		//verify login
-		List<User> users = dbConnection.getEmployees(username, null, null, null, null, null, null, null, null);
+		List<User> users = dbConnection.getEmployees(username, null, null, null, null, null, null, null);
 		if(username.isEmpty() || users == null || users.size()==0){
 			String loginError = "1";
 			request.setAttribute("loginError", loginError);
