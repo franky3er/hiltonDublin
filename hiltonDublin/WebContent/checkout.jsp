@@ -36,9 +36,10 @@ System.out.println("Total price: " + totalPrice);
 </form>
 
 <%if(totalPrice!=null){ %>
-<h4>Bill</h4>
+<br/><br/>
+<h4 style="margin:0;">Bill</h4>
 
-<table>
+<table style="border:1px solid black;border-collapse:collapse;">
 	<%
 	Iterator entries = bill.entrySet().iterator();
 	while(entries.hasNext()){
@@ -47,15 +48,16 @@ System.out.println("Total price: " + totalPrice);
 		Double price = (Double) entry.getValue();
 	%>
 	<tr>
-		<td><%=product %></td>
-		<td><%=price %></td>
+		<td style="border:1px solid black;"><%=product %></td>
+		<td align="right" style="border:1px solid black;">  <%=price %></td>
 	</tr>
 	<%} %>
 	<tr>
-		<td></td>
-		<td><%=totalPrice %></td>
+		<td style="border:1px solid black;"><b>Total</b></td>
+		<td align="right" style="border:1px solid black;">  <b><%=totalPrice %></b></td>
 	</tr>
 </table>
+
 <%} %>
 
 <%@ include file="navigationSlideEmployeeFooter.jsp" %>

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hiltondublin.db.HiltonDublinDBConnection;
 import com.hiltondublin.users.Guest;
 
 public class Reservation {
@@ -77,6 +78,8 @@ public class Reservation {
 	 * @return double
 	 */
 	public Map<String, Double> createBill(){
+		HiltonDublinDBConnection dbConnection = HiltonDublinDBConnection.getInstance();
+		
 		Map<String, Double> bill = new HashMap<String, Double>();
 		
 		//Room Prices
@@ -124,7 +127,7 @@ public class Reservation {
 		//Ammount of Consumed Products
 		if(consumerProducts != null){
 			for(ConsumerProduct product : consumerProducts){
-				if(consumedProducts.get(product) != null){
+				if(!consumedProducts.containsKey(product)){
 					consumedProducts.put(product, new Integer(1));
 				}
 				else {
