@@ -1,5 +1,9 @@
 package com.hiltondublin.languages;
 
+import java.util.List;
+
+import com.hiltondublin.classes.Room;
+
 public abstract class Language {
 	private String name = null;
 	
@@ -155,6 +159,55 @@ public abstract class Language {
 	}
 	public String employeeLoginMessage(){
 		return "You need to be logged in as an employee to get access to the Employee Area!";
+	}
+	public String employeeCheckoutButton(){
+		return "checkout";
+	}
+	public String employeeCheckoutRoomNumber(){
+		return "Room Number: ";
+	}
+	public String employeeCheckoutErrorRoomNumberNotInteger(String roomNumber){
+		return "Room number '" + roomNumber + "' was not a number! It must be from type integer!";
+	}
+	public String employeeCheckoutErrorRoomNumberNull(){
+		return "Room number can't be null!";
+	}
+	public String employeeCheckoutErrorRoomNumberEmpty(){
+		return "No room number typed in!";
+	}
+	public String employeeCheckoutErrorNoSuitableReservation(String roomNumber){
+		return "No suitable reservation found for room number '" + roomNumber + "'!";
+	}
+	public String employeeCheckoutErrorAllreadyCheckedOut(String roomNumber){
+		return "Room number '" + roomNumber + "' allready checked out!";
+	}
+	public String employeeCheckoutSuccessfullyCheckedOut(String roomNumber){
+		return "Room number '" + roomNumber + "' successfully checked out!";
+	}
+	public String employeeCheckoutAllRoomsCheckedOut(){
+		return "All rooms for this reservation checked out!";
+	}
+	public String employeeCheckoutOccupiedRooms(List<Room> occupiedRooms){
+		String message = "Room number ";
+		boolean firstOccupiedRoom = true;
+		for(Room occupiedRoom : occupiedRooms){
+			if(firstOccupiedRoom){
+				firstOccupiedRoom = false;
+			}
+			else {
+				message += ", ";
+			}
+			message += "'" + occupiedRoom.getRoomNumber() + "'";
+		}
+		message += " still needs to be checked out for this reservation!";
+		
+		return message;
+	}
+	public String employeeCheckoutBillHeadline(){
+		return "Bill";
+	}
+	public String employeeCheckoutBillTotal(){
+		return "Total";
 	}
 	
 	//ADMINISTRATOR

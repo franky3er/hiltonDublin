@@ -1,5 +1,9 @@
 package com.hiltondublin.languages;
 
+import java.util.List;
+
+import com.hiltondublin.classes.Room;
+
 public class German extends Language {
 	public German(){
 		setName("German");
@@ -94,7 +98,7 @@ public class German extends Language {
 	}
 	
 	public String guestRatingCommentDetail(){
-		return "Schreiben Sie ein paar Worte zu ihrem ausgewï¿½hlten Zimmertyp...";
+		return "Schreiben Sie ein paar Worte zu ihrem ausgewählten Zimmertyp...";
 	}
 	
 	public String guestRatingReview(){
@@ -110,7 +114,7 @@ public class German extends Language {
 	}
 	
 	public String guestRatingThanksForYourReview(){
-		return "Vielen Dank fï¿½r Ihre Bewertung ";
+		return "Vielen Dank für Ihre Bewertung ";
 	}
 	
 	public String guestRatingThanksRoomType(){
@@ -143,7 +147,56 @@ public class German extends Language {
 		return "Arbeitskraft Bereich";
 	}
 	public String employeeLoginMessage(){
-		return "Sie mï¿½ssen als Arbeitskraft eingeloggt sein um Zugang zum Arbeitskraft Bereich zu erhalten!";
+		return "Sie müssen als Arbeitskraft eingeloggt sein um Zugang zum Arbeitskraft Bereich zu erhalten!";
+	}
+	public String employeeCheckoutButton(){
+		return "checkout";
+	}
+	public String employeeCheckoutRoomNumber(){
+		return "Zimmernummer: ";
+	}
+	public String employeeCheckoutErrorRoomNumberNotInteger(String roomNumber){
+		return "Zimmernummer '" + roomNumber + "' ist keine Nummer! Sie muss vom Typ Integer sein!";
+	}
+	public String employeeCheckoutErrorRoomNumberNull(){
+		return "Zimmernummer kann nicht vom Typ null sein!";
+	}
+	public String employeeCheckoutErrorRoomNumberEmpty(){
+		return "Keine Zimmernummer eingegeben!";
+	}
+	public String employeeCheckoutErrorNoSuitableReservation(String roomNumber){
+		return "Keine passende Reservierung gefunden für Zimmernummer '" + roomNumber + "'!";
+	}
+	public String employeeCheckoutErrorAllreadyCheckedOut(String roomNumber){
+		return "Zimmernummer '" + roomNumber + "' bereits ausgecheckt!";
+	}
+	public String employeeCheckoutSuccessfullyCheckedOut(String roomNumber){
+		return "Zimmernummer '" + roomNumber + "' erfolgreich ausgecheckt!";
+	}
+	public String employeeCheckoutAllRoomsCheckedOut(){
+		return "Alle Zimmer für diese Reservierung ausgecheckt!";
+	}
+	public String employeeCheckoutOccupiedRooms(List<Room> occupiedRooms){
+		String message = "Zimmernummer ";
+		boolean firstOccupiedRoom = true;
+		for(Room occupiedRoom : occupiedRooms){
+			if(firstOccupiedRoom){
+				firstOccupiedRoom = false;
+			}
+			else {
+				message += ", ";
+			}
+			message += "'" + occupiedRoom.getRoomNumber() + "'";
+		}
+		message += " muss / müssen für diese Reservierung noch ausgecheckt werden!";
+		
+		return message;
+	}
+	public String employeeCheckoutBillHeadline(){
+		return "Rechnung";
+	}
+	public String employeeCheckoutBillTotal(){
+		return "Total";
 	}
 		
 	//ADMINISTRATOR

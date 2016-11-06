@@ -104,9 +104,10 @@ public class HiltonDublinDBConnection {
 	
 	//Reserved_Products Table
 	public final static String RESERVED_PRODUCT = "RESERVED_PRODUCT";
+	public final static String RESERVED_PRODUCT_ORDERID = RESERVED_PRODUCT + "." + "ORDERID";
 	public final static String RESERVED_PRODUCT_PRODUCTID = RESERVED_PRODUCT + "." + "PRODUCTID";
 	public final static String RESERVED_PRODUCT_RESERVATIONID = RESERVED_PRODUCT + "." + "RESERVATIONID";
-	public final static String []RESERVED_PRODUCT_COLUMNS = {RESERVED_PRODUCT_PRODUCTID, RESERVED_PRODUCT_RESERVATIONID};
+	public final static String []RESERVED_PRODUCT_COLUMNS = {RESERVED_PRODUCT_ORDERID, RESERVED_PRODUCT_PRODUCTID, RESERVED_PRODUCT_RESERVATIONID};
 	
 	//Guest Table
 	public final static String GUEST = "GUEST";
@@ -128,8 +129,7 @@ public class HiltonDublinDBConnection {
 	public final static String EMPLOYEE_ADMIN = EMPLOYEE + "." + "ADMIN";
 	public final static String EMPLOYEE_EMAIL = EMPLOYEE + "." + "EMAIL";
 	public final static String EMPLOYEE_PHONENUMBER = EMPLOYEE + "." + "PHONENUMBER";
-	public final static String EMPLOYEE_SESSIONID = EMPLOYEE + "." + "SESSIONID";
-	public final static String []EMPLOYEE_COLUMNS = { EMPLOYEE_USERNAME, EMPLOYEE_FIRSTNAME, EMPLOYEE_LASTNAME, EMPLOYEE_PASSWORD, EMPLOYEE_ADMIN, EMPLOYEE_EMAIL, EMPLOYEE_PHONENUMBER, EMPLOYEE_SESSIONID };
+	public final static String []EMPLOYEE_COLUMNS = { EMPLOYEE_USERNAME, EMPLOYEE_FIRSTNAME, EMPLOYEE_LASTNAME, EMPLOYEE_PASSWORD, EMPLOYEE_ADMIN, EMPLOYEE_EMAIL, EMPLOYEE_PHONENUMBER};
 	
 	
 	
@@ -2350,9 +2350,9 @@ public class HiltonDublinDBConnection {
 	 * @param additionalSQLCondition
 	 * @return String
 	 */
-	public String deleteReserved_ProductsAsSQLStatement(String productID, String reservationID, String additionalSQLCondition){
+	public String deleteReserved_ProductsAsSQLStatement(String orderID, String productID, String reservationID, String additionalSQLCondition){
 		//Write Values and Tables in Arrays
-		String []values = {productID, reservationID};
+		String []values = {orderID, productID, reservationID};
 		String table = RESERVED_ROOM;
 						
 		//Get SQL Statement
@@ -2367,8 +2367,8 @@ public class HiltonDublinDBConnection {
 	 * @param additionalSQLCondition
 	 * @return int
 	 */
-	public int deleteReserved_Products(String productID, String reservationID, String additionalSQLCondition){
-		String sqlStatement = deleteReserved_ProductsAsSQLStatement(productID, reservationID, additionalSQLCondition);
+	public int deleteReserved_Products(String orderID, String productID, String reservationID, String additionalSQLCondition){
+		String sqlStatement = deleteReserved_ProductsAsSQLStatement(orderID, productID, reservationID, additionalSQLCondition);
 		
 		return executeUpdateAndReturnNumberOfRows(sqlStatement);
 	}
@@ -2381,9 +2381,9 @@ public class HiltonDublinDBConnection {
 	 * @param additionalSQLCondition
 	 * @return String
 	 */
-	public String getReserved_ProductAsSQLStatement(String []selectedColumns, String productID, String reservationID, String additionalSQLCondition){
+	public String getReserved_ProductAsSQLStatement(String []selectedColumns, String orderID, String productID, String reservationID, String additionalSQLCondition){
 		//Write Values and Tables in Arrays
-		String []values = {productID, reservationID};
+		String []values = {orderID, productID, reservationID};
 		String []tables = {RESERVED_PRODUCT};
 			
 		if(selectedColumns == null){
@@ -2404,9 +2404,41 @@ public class HiltonDublinDBConnection {
 		if(!isConnected()){
 			return null;
 		}
+		List<ConsumerProduct> consumerProducts = new ArrayList<ConsumerProduct>();
 		
-		String [] subQuerySelectedColumns = { RESERVED_PRODUCT_PRODUCTID };
-		return getConsumerProducts(null, null, null, CONSUMERPRODUCT_PRODUCTID + " IN ( " + removeLastChar(getReserved_ProductAsSQLStatement(subQuerySelectedColumns, null, reservationID, null)) + " )");
+		String sqlStatement = "SELECT ";
+		boolean firstSelect = true;
+		for(String selectItem : CONSUMERPRODUCT_COLUMNS){
+			if(firstSelect){
+				firstSelect = false;
+			}
+			else{
+				sqlStatement += ", ";
+			}
+			sqlStatement += selectItem;
+		}
+		sqlStatement += " FROM " + CONSUMERPRODUCT + " INNER JOIN " + RESERVED_PRODUCT + " ON " + CONSUMERPRODUCT_PRODUCTID + "=" + RESERVED_PRODUCT_PRODUCTID;
+		sqlStatement += " WHERE " + RESERVED_PRODUCT_RESERVATIONID + "='" + reservationID + "' ;";
+		
+		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
+		
+		try {
+			while(rs.next()){
+				ConsumerProduct consumerProduct = new ConsumerProduct();
+				
+				consumerProduct.setProductID(rs.getInt(CONSUMERPRODUCT_PRODUCTID));
+				consumerProduct.setName(rs.getString(CONSUMERPRODUCT_NAME));
+				consumerProduct.setPrice(rs.getDouble(CONSUMERPRODUCT_PRICE));
+				
+				consumerProducts.add(consumerProduct);
+			}
+		} catch (SQLException e) {
+			System.out.println("Read ResultSet failed");
+			e.printStackTrace();
+			return null;
+		}
+		
+		return consumerProducts;
 	}
 	
 	/**
@@ -2677,16 +2709,15 @@ public class HiltonDublinDBConnection {
 	 * @param admin
 	 * @param email
 	 * @param phoneNumber
-	 * @param sessionID
 	 * @param additionalSQLCondition
 	 * @return String
 	 */
-	public String getEmployeesAsSQLStatement(String []selectedColumns, String username, String firstName, String lastName, String password, String admin, String email, String phoneNumber, String sessionID, String additionalSQLCondition){
+	public String getEmployeesAsSQLStatement(String []selectedColumns, String username, String firstName, String lastName, String password, String admin, String email, String phoneNumber, String additionalSQLCondition){
 		//Convert boolean to tinyint
 		convertBooleanToTinyInt(admin);
 		
 		//Write Values and Tables in Arrays
-		String []values = {username, firstName, lastName, password, admin, email, phoneNumber, sessionID};
+		String []values = {username, firstName, lastName, password, admin, email, phoneNumber};
 		String []tables = {EMPLOYEE};
 						
 		if(selectedColumns == null){
@@ -2712,11 +2743,11 @@ public class HiltonDublinDBConnection {
 	 * @param additionalSQLCondition
 	 * @return List<User>
 	 */
-	public List<User> getEmployees(String username, String firstName, String lastName, String password, String admin, String email, String phoneNumber, String sessionID, String additionalSQLCondition){
+	public List<User> getEmployees(String username, String firstName, String lastName, String password, String admin, String email, String phoneNumber, String additionalSQLCondition){
 		List<User> users = new ArrayList<User>();
 		
 		//Create Select SQL Statement
-		String sqlStatement = getEmployeesAsSQLStatement(EMPLOYEE_COLUMNS, username, firstName, lastName, password, admin, email, phoneNumber, sessionID, additionalSQLCondition);
+		String sqlStatement = getEmployeesAsSQLStatement(EMPLOYEE_COLUMNS, username, firstName, lastName, password, admin, email, phoneNumber, additionalSQLCondition);
 		
 		//Execute Query
 		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
@@ -2733,7 +2764,6 @@ public class HiltonDublinDBConnection {
 					administrator.setPassword(rs.getString(EMPLOYEE_PASSWORD));
 					administrator.setEmail(rs.getString(EMPLOYEE_EMAIL));
 					administrator.setPhoneNumber(rs.getString(EMPLOYEE_PHONENUMBER));
-					administrator.setSessionID(rs.getInt(EMPLOYEE_SESSIONID));
 					user = administrator;
 				}
 				else{
@@ -2744,7 +2774,6 @@ public class HiltonDublinDBConnection {
 					employee.setPassword(rs.getString(EMPLOYEE_PASSWORD));
 					employee.setEmail(rs.getString(EMPLOYEE_EMAIL));
 					employee.setPhoneNumber(rs.getString(EMPLOYEE_PHONENUMBER));
-					employee.setSessionID(rs.getInt(EMPLOYEE_SESSIONID));
 					user = employee;
 				}
 				
@@ -2762,7 +2791,7 @@ public class HiltonDublinDBConnection {
 	}
 	
 	public int updateEmployee_Administrator(User user){
-		String username, firstName, lastName, password, admin, email, phoneNumber, sessionID;
+		String username, firstName, lastName, password, admin, email, phoneNumber;
 		Employee employee = (Employee) user;
 		username = employee.getUsername();
 		firstName = employee.getFirstName();
@@ -2777,11 +2806,10 @@ public class HiltonDublinDBConnection {
 		}
 		email = employee.getEmail();
 		phoneNumber = employee.getPhoneNumber();
-		sessionID = Integer.toString(employee.getSessionID());
 		
 		//Set set cells
-		String []setColumns = {EMPLOYEE_USERNAME, EMPLOYEE_FIRSTNAME, EMPLOYEE_LASTNAME, EMPLOYEE_PASSWORD, EMPLOYEE_ADMIN, EMPLOYEE_EMAIL, EMPLOYEE_PHONENUMBER, EMPLOYEE_SESSIONID};
-		String []setValues = {firstName, lastName, password, admin, email, phoneNumber, sessionID};
+		String []setColumns = {EMPLOYEE_USERNAME, EMPLOYEE_FIRSTNAME, EMPLOYEE_LASTNAME, EMPLOYEE_PASSWORD, EMPLOYEE_ADMIN, EMPLOYEE_EMAIL, EMPLOYEE_PHONENUMBER};
+		String []setValues = {firstName, lastName, password, admin, email, phoneNumber};
 		List<Cell> setCells = getCellList(setColumns, setValues);
 				
 		//Set condition cells
@@ -2834,7 +2862,7 @@ public class HiltonDublinDBConnection {
 	 * @param roomNumber
 	 * @return Reservation
 	 */
-	public Reservation getReservationFromCheckedOurRoom(String roomNumber){
+	public Reservation getReservationFromRoomNumber(String roomNumber){
 		Date currentDate = new Date();
 		String curDate = onlyDayDateFormat.format(currentDate) + " 00:00:00";
 		String additionalSQL = RESERVATION_ARRIVALDATE + "<='" + curDate + "' AND " + RESERVATION_DEPARTUREDATE + ">='" + curDate + "' AND ";

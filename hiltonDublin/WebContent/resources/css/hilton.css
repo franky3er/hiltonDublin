@@ -131,6 +131,17 @@ body {
 	color: red;
 }
 
+.informational{
+	color: green;
+	font-weight: bold;
+}
+
+.error {
+	color: red;
+	margin-top: 0;
+	font-weight: bold;
+}
+
 textarea{
 	width: 100%;
 }

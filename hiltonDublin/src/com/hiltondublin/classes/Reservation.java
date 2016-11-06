@@ -123,23 +123,28 @@ public class Reservation {
 			bill.put(productName + Integer.toString(amountOfDays), new Double(productPrice));
 		}
 		
-		HashMap<ConsumerProduct, Integer> consumedProducts = new HashMap<ConsumerProduct, Integer>();
+		HashMap<String, Integer> consumedProducts = new HashMap<String, Integer>();
 		//Ammount of Consumed Products
 		if(consumerProducts != null){
 			for(ConsumerProduct product : consumerProducts){
-				if(!consumedProducts.containsKey(product)){
-					consumedProducts.put(product, new Integer(1));
+				if(!consumedProducts.containsKey(Integer.toString(product.getProductID()))){
+					consumedProducts.put(Integer.toString(product.getProductID()), new Integer(1));
 				}
 				else {
-					consumedProducts.put(product, consumedProducts.get(product) + 1);
+					if(consumedProducts.get(Integer.toString(product.getProductID())) != null){
+						int ammount = (int) consumedProducts.get(Integer.toString(product.getProductID()));
+						ammount++;
+						consumedProducts.put(Integer.toString(product.getProductID()), new Integer(ammount));
+					}
 				}
 			}
 		}
 		
-		for(Map.Entry<ConsumerProduct, Integer> productEntry : consumedProducts.entrySet()){
-			ConsumerProduct product = productEntry.getKey();
+		for(Map.Entry<String, Integer> productEntry : consumedProducts.entrySet()){
+			String productID = productEntry.getKey();
 			int ammount = productEntry.getValue();
-			bill.put(product.getName() + " x " + ammount, product.getPrice() * ammount);
+			ConsumerProduct product = dbConnection.getConsumerProducts(productID, null, null, null).get(0);
+			bill.put(product.getName() + " x " + Integer.toString(ammount), product.getPrice() * ammount);
 		}
 		
 		return bill;
