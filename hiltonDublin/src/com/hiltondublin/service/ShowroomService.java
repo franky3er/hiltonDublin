@@ -35,9 +35,8 @@ public class ShowroomService {
 		
 		
 		//
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		reservation.setArrivalDate(format.parse(guestinfo.checkin));
-		reservation.setDepartureDate(format.parse(guestinfo.checkout));
+		reservation.setArrivalDate(dbConnection.mySQLDateFormat.parse(guestinfo.checkin));
+		reservation.setDepartureDate(dbConnection.mySQLDateFormat.parse(guestinfo.checkout));
 		
 		ResultSet key = dbConnection.insertReservation(reservation);
 		

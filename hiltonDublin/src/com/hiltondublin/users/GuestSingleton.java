@@ -14,6 +14,8 @@ public class GuestSingleton {
 	public String phoneNumber;
 	public String email;
 	
+	private int reservationID;
+	
 	public int type1;
 	public int type2;
 	public int type3;
@@ -144,5 +146,13 @@ public class GuestSingleton {
 
 	public void setGuests(int guests) {
 		this.guests = guests;
+	}
+
+	public int getReservationID() {
+		return reservationID;
+	}
+
+	public void setReservationID(int reservationID) {
+		this.reservationID = reservationID;
 	}
 }
