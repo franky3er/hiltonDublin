@@ -2,8 +2,6 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList" %>
 <%@page import="java.lang.*" %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
     
 <%@ include file="navigationSlideGuestHeader.jsp" %>
 
@@ -70,9 +68,9 @@
 		<legend>Number of Room</legend>
 		<table>
 		<tr>
-		<td>Type 1</td>
-		<td>Type 2</td>
-		<td>Type 3</td>
+		<td>Single</td>
+		<td>Double</td>
+		<td>Triple</td>
 		</tr>
 		<tr>
 		<td><input type="number" id="numtype1" name="numtype1" min="0" required></td>

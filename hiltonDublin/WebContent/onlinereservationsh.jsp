@@ -3,8 +3,6 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList" %>
 <%@page import="java.lang.*" %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
     
 <%@ include file="navigationSlideGuestHeader.jsp" %>
 
@@ -22,7 +20,7 @@
 		roomtype3 = dbConnection.getRooms(null, "3", guestinfo.getSmoking(), null, null);
 	%>
 	<fieldset>
-		<legend>Type1</legend>
+		<legend>Single</legend>
 		<%
 		for(Room rooms : roomtype1) {%>
 		<input type="checkbox" id=rooms.getRoomNumber() name="type1" value=<%=rooms.getRoomNumber()%>>
@@ -30,7 +28,7 @@
 		<%} %>
 	</fieldset>
 	<fieldset>
-		<legend>Type2</legend>
+		<legend>Double</legend>
 		<%
 		for(Room rooms : roomtype2) {%>
 		<input type="checkbox" id=rooms.getRoomNumber() name="type2" value=<%=rooms.getRoomNumber()%>>
@@ -38,7 +36,7 @@
 		<%} %>
 	</fieldset>
 	<fieldset>
-		<legend>Type3</legend>
+		<legend>Triple</legend>
 		<%
 		for(Room rooms : roomtype3) {%>
 		<input type="checkbox" id=rooms.getRoomNumber() name="type3" value=<%=rooms.getRoomNumber()%>>
