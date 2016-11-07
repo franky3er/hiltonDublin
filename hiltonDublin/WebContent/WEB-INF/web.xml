@@ -76,4 +76,12 @@
     <servlet-name>rating</servlet-name>
     <url-pattern>/Guest/Rating</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>chargeProduct</servlet-name>
+    <jsp-file>/chargeProduct.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>chargeProduct</servlet-name>
+    <url-pattern>/Employee/Charge-Product</url-pattern>
+  </servlet-mapping>
 </web-app>

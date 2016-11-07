@@ -198,6 +198,18 @@ public class German extends Language {
 	public String employeeCheckoutBillTotal(){
 		return "Total";
 	}
+	public String employeeChargeProductSuccessfully(){
+		return "Produkt erfolgreich auf Reservation verbucht!";
+	}
+	public String employeeChargeProductHeading(){
+		return "Produkt Verrechnung";
+	}
+	public String employeeChargeProductProduct(){
+		return "Produkt: ";
+	}
+	public String employeeChargeProductCharge(){
+		return "verrechnen";
+	}
 		
 	//ADMINISTRATOR
 	public String administratorAreaHeading(){

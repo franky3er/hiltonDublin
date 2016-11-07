@@ -210,6 +210,19 @@ public abstract class Language {
 		return "Total";
 	}
 	
+	public String employeeChargeProductSuccessfully(){
+		return "Successfully charged product to reservation!";
+	}
+	public String employeeChargeProductHeading(){
+		return "Charge Product";
+	}
+	public String employeeChargeProductProduct(){
+		return "Product: ";
+	}
+	public String employeeChargeProductCharge(){
+		return "charge";
+	}
+	
 	//ADMINISTRATOR
 	public String administratorAreaHeading(){
 		return "Admin Area";
