@@ -10,23 +10,25 @@
 	String conProductname = request.getParameter("consumerproducts");
 	String conPrice = request.getParameter("price");
 	String productID = request.getParameter("consumerproducts");
-	String reservationid = request.getParameter("reservationid");
+	String roomno = request.getParameter("roomno");
 
 	List<ConsumerProduct> consumerProducts = dbConnection.getConsumerProducts(null,null,null, null);
-	if(reservationid != null){
-		dbConnection.assignProductToReservation(productID, reservationid);	
-		isSubmitted = true;
+	
+		Reservation reservation = dbConnection.getReservationFromRoomNumber(roomno);
+		int reservationid = reservation.getBookingNumber();	
 		
-	}
-// 	List<Reservation> reservations = dbConnection.getReservations(null, null, null, null, null, null);
+		dbConnection.assignProductToReservation(productID, Integer.toString(reservationid));	
+		isSubmitted = true;
 	
 %>
 <%if(!isSubmitted){ %>
 <form id="productForm" name="productForm" action="<%=request.getRequestURI()%>" method="post">
 	<table>
 		<tr>
-		<td>Your reservation id: </td>
-		<td><input type="text" name="reservationid"/></td>
+		<td>Room No: </td>
+		<td>
+		<input type="text" name="roomno" placeholder="Max" size="20" <%if(roomno != null){ %>value="<%=roomno %>"/<%} %>>
+		</td>
 		</tr>
 		<tr>
 		<td>Choose: </td>
