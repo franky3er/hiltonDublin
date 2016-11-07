@@ -2,23 +2,91 @@
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.lang.*" %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
     
 <%@ include file="navigationSlideEmployeeHeader.jsp" %>
     
+<h1>Reservation</h1>
     
-    
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<title>Insert title here</title>
-</head>
-<body>
-
-</body>
-</html>
-
+<form id="reservation_info" action="Reservation" method="post">
+	<fieldset>
+		<legend>Guest Info</legend>
+		<table>
+			<tr>
+				<td><label for="firstname">FIRST NAME</label></td>
+				<td><input type="text" id="firstname" name="firstname" placeholder="Insert First Name" required></td>
+			</tr>
+			<tr>
+				<td><label for="lastname">LAST NAME</label></td>
+				<td><input type="text" id="lastname" name="lastname" placeholder="Insert Last Name" required></td>
+			</tr>
+			<tr>
+				<td><label for="address">ADDRESS</label></td>
+				<td><input type="text" id="address" name="address" placeholder="Insert Address" required></td>
+			</tr>
+			<tr>
+				<td><label for="email">EMAIL</label></td>
+				<td><input type="email" id="email" name="email" placeholder="ex) example@example.com" required></td>
+			</tr>
+			<tr>
+				<td><label for="phonenr">PHONE NR.</label></td>
+				<td><input type="tel" id="phonenr" name="phonenr" placeholder="Input just number" required></td>
+			</tr>
+			<tr>
+				<td><label for="passportnr">PASSPORT NR.</label></td>
+				<td><input type="text" id="passportnr" name="passportnr" placeholder="Insert PassportNumber" required></td>
+			</tr>
+			<tr>
+				<td></td>
+			</tr>
+		</table>
+	</fieldset>
+	<br>
+	<fieldset>
+		<legend>Booking Details</legend>
+		<table>
+		<tr>
+		<td>Check In</td>
+		<td>Check Out</td>
+		<td>Person</td>
+		<td>Smoking</td>
+		</tr>
+		<tr>
+		<td><input type="date" id="checkin" name="checkin" min="2016-11-01" required></td>
+		<td><input type="date" id="checkout" name="checkout" min="2016-11-02" required></td>
+		<td><input type="number" id="numberOfGuests" name="numberOfGuests" min="1" max="6" required></td>
+		<td>
+		<input id="smoking" type="radio" name="smoking" value="true" checked>
+		<label for="smoking">Yes</label>
+		<input id="smoking" type="radio" name="smoking" value="false" checked>
+		<label for="smoking">No</label>
+		</td>
+		</tr>
+		</table>
+	</fieldset>
+	<br>
+	<fieldset>
+		<legend>Number of Room</legend>
+		<table>
+		<tr>
+		<td>Single</td>
+		<td>Double</td>
+		<td>Triple</td>
+		</tr>
+		<tr>
+		<td><input type="number" id="numtype1" name="numtype1" min="0" required></td>
+		<td><input type="number" id="numtype2" name="numtype2" min="0" required></td>
+		<td><input type="number" id="numtype3" name="numtype3" min="0" required></td>
+		</tr>
+		</table>
+	</fieldset>
+	<table>
+		<tr>
+			<td colspan="2" align="center">
+			<input type="submit" value="Submit">
+			<input type="reset" value="Cancel">
+			</td>
+		</tr>
+	</table>
+</form>
 
 <%@ include file="navigationSlideEmployeeFooter.jsp" %>
