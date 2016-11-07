@@ -201,6 +201,9 @@ public class German extends Language {
 	public String employeeChargeProductSuccessfully(){
 		return "Produkt erfolgreich auf Reservation verbucht!";
 	}
+	public String employeeCheckoutHeading(){
+		return "Auschecken";
+	}
 	public String employeeChargeProductHeading(){
 		return "Produkt Verrechnung";
 	}

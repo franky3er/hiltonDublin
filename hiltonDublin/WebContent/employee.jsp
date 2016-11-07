@@ -14,11 +14,11 @@
 		<form action="checkin.jsp" method="get">
 			<input class="navigationPage" type="submit" value="Check-in" />
 		</form>
-		<form action="checkout.jsp" method="get">
-			<input class="navigationPage" type="submit" value="Check-out" />
+		<form action="<%=getURLWithContextPath(request) %>/Employee/Checkout" method="get">
+			<input class="navigationPage" type="submit" value="<%=language.employeeCheckoutHeading() %>" />
 		</form>
-		<form action="chargeproduct.jspl" method="get">
-			<input class="navigationPage" type="submit" value="Charge Prodruct" />
+		<form action="<%=getURLWithContextPath(request) %>/Employee/Charge-Product" method="get">
+			<input class="navigationPage" type="submit" value="<%=language.employeeChargeProductHeading() %>" />
 		</form>
 	</div>
 </body>

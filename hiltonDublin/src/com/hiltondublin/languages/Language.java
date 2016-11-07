@@ -209,6 +209,9 @@ public abstract class Language {
 	public String employeeCheckoutBillTotal(){
 		return "Total";
 	}
+	public String employeeCheckoutHeading(){
+		return "Checkout";
+	}
 	
 	public String employeeChargeProductSuccessfully(){
 		return "Successfully charged product to reservation!";

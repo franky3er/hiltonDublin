@@ -150,10 +150,10 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 			<input class="navigationDetail" type="submit" value="Checkin" />
 		</form>
 		<form action="<%=getURLWithContextPath(request) %>/Employee/Checkout" method="get">
-			<input class="navigationDetail" type="submit" value="Checkout" />
+			<input class="navigationDetail" type="submit" value="<%=language.employeeCheckoutHeading() %>" />
 		</form>
-		<form action="<%=getURLWithContextPath(request) %>/Employee/Chargeproduct" method="get">
-			<input class="navigationDetail" type="submit" value="Charge Product" />
+		<form action="<%=getURLWithContextPath(request) %>/Employee/Charge-Product" method="get">
+			<input class="navigationDetail" type="submit" value="<%=language.employeeChargeProductHeading() %>" />
 		</form>
 		<%} %>
 		<form action="<%=getURLWithContextPath(request) %>/Admin" method="get">
