@@ -21,8 +21,8 @@
     <url-pattern>/Guest</url-pattern>
   </servlet-mapping>
   <servlet>
-  	<servlet-name>ReservationServlet</servlet-name>
-  	<servlet-class>com.hiltondublin.servlets.ReservationServlet</servlet-class>
+    <servlet-name>ReservationServlet</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.ReservationServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ReservationServlet</servlet-name>
