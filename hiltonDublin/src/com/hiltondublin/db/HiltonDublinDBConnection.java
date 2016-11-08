@@ -2879,5 +2879,32 @@ public class HiltonDublinDBConnection {
 		
 		return reservations.get(0);
 	}
+	
+	/**
+	 * Returns only the reservations where the guest name in the given parameters is the customer of the reservation
+	 * @param firstName
+	 * @param lastName
+	 * @return List<Reservation>
+	 */
+	public List<Reservation> getReservationsFromGuestName(String firstName, String lastName){
+		List<Reservation> reservations = new ArrayList<Reservation>();
+		
+		Date currentDate = new Date();
+		
+		String curDate = onlyDayDateFormat.format(currentDate) + " 00:00:00";
+		String additionalSQL = RESERVATION_ARRIVALDATE + "<='" + curDate + "' AND " + RESERVATION_DEPARTUREDATE + ">='" + curDate + "' AND ";
+		additionalSQL += RESERVATION_GUESTID + " IN ( SELECT " + GUEST_GUESTID + " FROM " + GUEST + " WHERE " + GUEST_FIRSTNAME + "='" + firstName + "' AND " + GUEST_LASTNAME + "='" + lastName + "' )";
+		
+		reservations = getReservations(null, null, null, null, null, additionalSQL);
+		if(reservations == null){
+			return null;
+		}
+		
+		if(reservations.size()==0){
+			return null;
+		}
+		
+		return reservations;
+	}
 
 }
