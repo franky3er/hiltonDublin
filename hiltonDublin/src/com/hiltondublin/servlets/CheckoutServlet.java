@@ -44,33 +44,16 @@ public class CheckoutServlet extends HttpServlet {
 					} else {
 						//Set Room Free
 						List<Room> rooms = reservation.getRooms();
-						List<Room> occupiedRooms = new ArrayList<Room>();
 						for(Room room : rooms){
 							if(room.getRoomNumber() == Integer.parseInt(roomNumber)){
 								if(room.isOccupied()==true){
-									room.setOccupied(false);
-									
-									request.setAttribute("checkoutInfo", "1");
-									
+									request.setAttribute("reservation", reservation);
+									request.setAttribute("roomNumber", roomNumber);
 								} else {
 									System.out.println("Room allready checked out");
 									request.setAttribute("checkoutError", "5");
 								}
 							}
-							if(room.isOccupied()){
-								occupiedRooms.add(room);
-							}
-						}
-						dbConnection.updateReservation(reservation);
-						
-						//Check if all rooms are checked out and create final bill
-						if(occupiedRooms.isEmpty()){
-							Map<String, Double> bill = reservation.createBill();
-							request.setAttribute("bill", bill);
-							double totalPrice = determineTotalPrice(bill);
-							request.setAttribute("totalPrice", Double.toString(totalPrice));
-						} else {
-							request.setAttribute("occupiedRooms", occupiedRooms);
 						}
 					}
 				} else {
@@ -91,17 +74,6 @@ public class CheckoutServlet extends HttpServlet {
 		
 	}
 
-	private double determineTotalPrice(Map bill) {
-		double totalPrice = 0;
-		
-		Iterator entries = bill.entrySet().iterator();
-		while(entries.hasNext()){
-			Entry entry = (Entry) entries.next();
-			double productPrice = (double) entry.getValue();
-			totalPrice += productPrice;
-		}
-		
-		return totalPrice;
-	}
+	
 
 }
