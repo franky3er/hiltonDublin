@@ -29,7 +29,7 @@
 					chargeProductError = 3; //No reservation found for room number
 				} else {
 					reservationid = reservation.getBookingNumber();
-					dbConnection.assignProductToReservation(productID, Integer.toString(reservationid));	
+					dbConnection.assignProductToReservation(null, productID, Integer.toString(reservationid));	
 					isSubmitted = true;
 				}
 			}

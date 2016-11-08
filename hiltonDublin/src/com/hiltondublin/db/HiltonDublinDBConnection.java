@@ -522,6 +522,10 @@ public class HiltonDublinDBConnection {
 	 */
 	public String createInsertStatement(String table, List<Cell> cells){
 		
+		if(cells == null){
+			return null;
+		}
+		
 		String sqlStatement = "INSERT INTO " + table + "( ";
 		boolean firstColumn = true;
 		for(Cell cell : cells){
@@ -2448,13 +2452,13 @@ public class HiltonDublinDBConnection {
 	 * @param reservationID
 	 * @return ResultSet
 	 */
-	public ResultSet assignProductToReservation(String productID, String reservationID){
+	public ResultSet assignProductToReservation(String orderID, String productID, String reservationID){
 		if(!isConnected()){
 			return null;
 		}
 		
 		// Create value array
-		String[] values = { productID, reservationID };
+		String[] values = { orderID, productID, reservationID };
 		// Return cell List with contained values
 		List<Cell> cells = getCellList(RESERVED_PRODUCT_COLUMNS, values);
 
