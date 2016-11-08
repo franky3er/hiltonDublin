@@ -16,7 +16,6 @@
 	
 		Reservation reservation = dbConnection.getReservationFromRoomNumber(roomno);
 		int reservationid = reservation.getBookingNumber();	
-		
 		dbConnection.assignProductToReservation(productID, Integer.toString(reservationid));	
 		isSubmitted = true;
 	
