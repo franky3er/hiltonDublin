@@ -9,6 +9,14 @@ public class German extends Language {
 		setName("German");
 	}
 	
+	//GENERAL
+	public String yes(){
+		return "Ja";
+	}
+	public String no(){
+		return "Nein";
+	}
+	
 	//Navigation Slide
 	public String navigationSlideGuest(){
 		return "Gast";
@@ -206,6 +214,12 @@ public class German extends Language {
 	}
 	public String employeeChargeProductHeading(){
 		return "Produkt Verrechnung";
+	}
+	public String employeeCheckoutVerificationHeading(){
+		return "Verifizierung";
+	}
+	public String employeeCheckoutVerificationQuestion(String firstName, String lastName){
+		return "Ist der Name vom Gast '" + firstName + " " + lastName + "'?  ";
 	}
 	public String employeeChargeProductProduct(){
 		return "Produkt: ";

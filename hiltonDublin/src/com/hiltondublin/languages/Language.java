@@ -10,6 +10,14 @@ public abstract class Language {
 	public String getName() {
 		return name;
 	}
+	
+	//GENERAL
+	public String yes(){
+		return "yes";
+	}
+	public String no(){
+		return "no";
+	}
 
 	
 	//NAVIGATIONSLIDE
@@ -211,6 +219,12 @@ public abstract class Language {
 	}
 	public String employeeCheckoutHeading(){
 		return "Checkout";
+	}
+	public String employeeCheckoutVerificationHeading(){
+		return "Verification";
+	}
+	public String employeeCheckoutVerificationQuestion(String firstName, String lastName){
+		return "Is the name of the guest '" + firstName + " " + lastName + "'?  ";
 	}
 	
 	public String employeeChargeProductSuccessfully(){

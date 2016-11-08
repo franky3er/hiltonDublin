@@ -69,6 +69,14 @@
     <url-pattern>/Employee/Checkout-room</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>checkoutServletVerified</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.CheckoutVerifiedServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>checkoutServletVerified</servlet-name>
+    <url-pattern>/Employee/Checkout-room-verified</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>rating</servlet-name>
     <jsp-file>/rating.jsp</jsp-file>
   </servlet>
