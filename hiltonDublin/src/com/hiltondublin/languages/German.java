@@ -235,5 +235,26 @@ public class German extends Language {
 	public String administratorLoginMessage(){
 		return "Sie m�ssen als Administrator eingeloggt sein um Zugang zum Admin Bereich zu erhalten!";
 	}
+	public String administratorModifyReservationHeading(){
+		return "Reservierung modifizieren";
+	}
+	public String administratorModifyReservationBookingNummber(){
+		return "Buchungsnummer";
+	}
+	public String administratorModifyReservationGuestFirstName(){
+		return "Gast Vorname: ";
+	}
+	public String administratorModifyReservationGuestLastName(){
+		return "Gast Nachname: ";
+	}
+	public String administratorModifyReservationArrivalDate(){
+		return "Ankunftsdatum: ";
+	}
+	public String administratorModifyReservationDepartureDate(){
+		return "Abreisedatum: ";
+	}
+	public String administratorModifyReservationSearchReservation(){
+		return "suchen";
+	}
 	
 }

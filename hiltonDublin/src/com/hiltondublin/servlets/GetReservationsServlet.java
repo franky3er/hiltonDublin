@@ -29,6 +29,8 @@ public class GetReservationsServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String url = request.getParameter("url");
+		
 		String bookingNumber = request.getParameter("bookingNumber");
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
@@ -67,10 +69,12 @@ public class GetReservationsServlet extends HttpServlet {
 					reservations.addAll(dbConnection.getReservations(bookingNumber, Integer.toString(guest.getGuestID()), arrivalDate, departureDate, null, null));
 				}
 			}
-			request.setAttribute("reservations", reservations);
+			if(!reservations.isEmpty()){
+				request.setAttribute("reservations", reservations);
+			}
 		}
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher(null);
+		RequestDispatcher dispatcher = request.getRequestDispatcher(url);
 		dispatcher.forward(request, response);
 	}
 

@@ -92,4 +92,20 @@
     <servlet-name>chargeProduct</servlet-name>
     <url-pattern>/Employee/Charge-Product</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>admin</servlet-name>
+    <jsp-file>/admin.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>admin</servlet-name>
+    <url-pattern>/Admin</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyReservation</servlet-name>
+    <jsp-file>/modifyReservation.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyReservation</servlet-name>
+    <url-pattern>/Admin/Modify-Reservation</url-pattern>
+  </servlet-mapping>
 </web-app>

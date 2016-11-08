@@ -247,4 +247,25 @@ public abstract class Language {
 	public String administratorLoginMessage(){
 		return "You need to be logged in as an administrator to get access to the Admin Area!";
 	}
+	public String administratorModifyReservationHeading(){
+		return "Modify Reservation";
+	}
+	public String administratorModifyReservationBookingNummber(){
+		return "Booking Number";
+	}
+	public String administratorModifyReservationGuestFirstName(){
+		return "Guest First Name: ";
+	}
+	public String administratorModifyReservationGuestLastName(){
+		return "Guest Last Name: ";
+	}
+	public String administratorModifyReservationArrivalDate(){
+		return "Arrival Date: ";
+	}
+	public String administratorModifyReservationDepartureDate(){
+		return "Departure Date: ";
+	}
+	public String administratorModifyReservationSearchReservation(){
+		return "search";
+	}
 }
