@@ -253,8 +253,23 @@ public class German extends Language {
 	public String administratorModifyReservationDepartureDate(){
 		return "Abreisedatum: ";
 	}
+	public String administratorModifyReservationRooms(){
+		return "Reservierte Zimmer: ";
+	}
+	public String administratorModifyReservationConsumerProducts(){
+		return "Konsumierte Produkte: ";
+	}
 	public String administratorModifyReservationSearchReservation(){
 		return "suchen";
+	}
+	public String administratorModifyReservationErrorNoReservationFound(){
+		return "Keine Reservierung gefunden";
+	}
+	public String administratorModifyReservationErrorBookingNumber(){
+		return "Buchungsnummer muss vom Typ Integer sein";
+	}
+	public String administratorModifyReservationModifyButton(){
+		return "modifizieren";
 	}
 	
 }

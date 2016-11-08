@@ -265,7 +265,22 @@ public abstract class Language {
 	public String administratorModifyReservationDepartureDate(){
 		return "Departure Date: ";
 	}
+	public String administratorModifyReservationRooms(){
+		return "Reserved Rooms: ";
+	}
+	public String administratorModifyReservationConsumerProducts(){
+		return "Consumed Products: ";
+	}
 	public String administratorModifyReservationSearchReservation(){
 		return "search";
+	}
+	public String administratorModifyReservationErrorNoReservationFound(){
+		return "No Reservation found";
+	}
+	public String administratorModifyReservationErrorBookingNumber(){
+		return "Booking Number must correspond to type Integer";
+	}
+	public String administratorModifyReservationModifyButton(){
+		return "modify";
 	}
 }

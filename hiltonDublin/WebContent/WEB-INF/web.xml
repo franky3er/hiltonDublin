@@ -108,4 +108,12 @@
     <servlet-name>modifyReservation</servlet-name>
     <url-pattern>/Admin/Modify-Reservation</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyReservationsGetReservations</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.GetReservationsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyReservationsGetReservations</servlet-name>
+    <url-pattern>/Admin/Modify-Reservation-get-reservations</url-pattern>
+  </servlet-mapping>
 </web-app>

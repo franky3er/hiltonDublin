@@ -6,6 +6,16 @@
 
 <%
 List<Reservation> reservations = (ArrayList<Reservation>) request.getAttribute("reservations");
+String error = (String) request.getAttribute("error");
+String showContent = (String) request.getAttribute("showContent");
+
+
+if(error==null){
+	error = "0";
+}
+if(showContent==null){
+	showContent="reservationSelection";
+}
 
 
 Calendar currentDate = Calendar.getInstance();
@@ -20,8 +30,8 @@ tomorrowDate.add(Calendar.DAY_OF_MONTH, 1);
 
 <h1><%=language.administratorModifyReservationHeading() %></h1>
 
-
-<form action="" method="get">
+<%if(showContent.equals("reservationSelection")){ %>
+<form action="<%=request.getContextPath() %>/Admin/Modify-Reservation-get-reservations" method="get" novalidate>
 	<table>
 		<tr>
 			<td><%=language.administratorModifyReservationBookingNummber() %></td>
@@ -41,7 +51,7 @@ tomorrowDate.add(Calendar.DAY_OF_MONTH, 1);
 		</tr>
 		<tr>
 			<td><%=language.administratorModifyReservationDepartureDate() %></td>
-			<td><input type="date"  name="departureDate" min="<%=dbConnection.onlyDayDateFormat.format(tomorrowDate.getTime()) %>" required> </td>
+			<td><input type="date" name="departureDate" min="<%=dbConnection.onlyDayDateFormat.format(tomorrowDate.getTime()) %>" required> </td>
 		</tr>
 		<tr>
 			<td><input type="submit" value="<%=language.administratorModifyReservationSearchReservation() %>"/> </td>
@@ -49,6 +59,42 @@ tomorrowDate.add(Calendar.DAY_OF_MONTH, 1);
 		</tr>
 	</table>
 	<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+	<%if(error.equals("1")){ %>
+	<p class="error"><%=language.administratorModifyReservationErrorBookingNumber() %></p>
+	<%} else if(error.equals("2")){ %>
+	<p class="error"><%=language.administratorModifyReservationErrorNoReservationFound() %></p>
+	<%} %>
 </form>
+
+<%} else if(showContent.equals("showReservations")){ %>
+<table>
+  <tr>
+    <th><%=language.administratorModifyReservationBookingNummber() %></th>
+    <th><%=language.administratorModifyReservationGuestFirstName() %></th>
+    <th><%=language.administratorModifyReservationGuestLastName() %></th>
+    <th><%=language.administratorModifyReservationArrivalDate() %></th>
+    <th><%=language.administratorModifyReservationDepartureDate() %></th>
+    <th><%=language.administratorModifyReservationRooms() %></th>
+    <th><%=language.administratorModifyReservationConsumerProducts() %></th>
+    <th></th>
+  </tr>
+  <%for(Reservation reservation : reservations){ %>
+  <form action="" method="get" >
+  <input type="hidden" name="bookingNumber" value="<%=Integer.toString(reservation.getBookingNumber()) %>"/>
+  <tr>
+    <td><%=reservation.getBookingNumber() %></td>
+    <td><%=reservation.getGuest().getFirstName() %></td>
+    <td><%=reservation.getGuest().getLastName() %></td>
+    <td><%=dbConnection.onlyDayDateFormat.format(reservation.getArrivalDate()) %></td>
+    <td><%=dbConnection.onlyDayDateFormat.format(reservation.getDepartureDate()) %></td>
+    <td></td>
+    <td></td>
+    <td><input type="submit" value="<%=language.administratorModifyReservationModifyButton() %>"/></td>
+  </tr>
+  </form>
+  <%} %>
+</table>
+
+<%} %>
 
 <%@ include file="navigationSlideAdminFooter.jsp" %>

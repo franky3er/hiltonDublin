@@ -37,13 +37,31 @@ public class GetReservationsServlet extends HttpServlet {
 		String arrivalDate = request.getParameter("arrivalDate");
 		String departureDate = request.getParameter("departureDate");
 		
+		if(bookingNumber.trim().equals("")){
+			bookingNumber = null;
+		}
+		if(firstName.trim().equals("")){
+			firstName = null;
+		}
+		if(lastName.trim().equals("")){
+			lastName = null;
+		}
+		if(arrivalDate.trim().equals("")){
+			arrivalDate = null;
+		}
+		if(departureDate.trim().equals("")){
+			departureDate = null;
+		}
+		
+		System.out.println("Arrival Date: " + arrivalDate);
+		
 		List<Guest> guests = null;
 		
 		boolean searchForRooms = true;
 		
 		if(bookingNumber != null){
 			if(!bookingNumber.matches("\\d+")){
-				request.setAttribute("bookingNumberError", "1");
+				request.setAttribute("error", "1");
 				searchForRooms = false;
 			}
 		} 
@@ -71,6 +89,9 @@ public class GetReservationsServlet extends HttpServlet {
 			}
 			if(!reservations.isEmpty()){
 				request.setAttribute("reservations", reservations);
+				request.setAttribute("showContent", "showReservations");
+			} else {
+				request.setAttribute("error", "2");
 			}
 		}
 		
