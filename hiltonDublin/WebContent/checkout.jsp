@@ -59,7 +59,7 @@ System.out.println("Total price: " + totalPrice);
 		<tr>
 			<td><%=language.employeeCheckoutVerificationQuestion(reservation.getGuest().getFirstName(), reservation.getGuest().getLastName()) %></td>
 			<td><input type="submit" value="<%=language.yes() %>"/></td>
-			<td><input type="button" value="<%=language.no() %>"/></td>
+			<td><a href="<%=getURLWithContextPath(request) %>/Employee/Checkout"><input type="button" value="<%=language.no() %>"/></a></td>
 		</tr>
 	</table>
 	<input type="hidden" name="reservationID" value="<%=Integer.toString(reservation.getBookingNumber()) %>"/>
