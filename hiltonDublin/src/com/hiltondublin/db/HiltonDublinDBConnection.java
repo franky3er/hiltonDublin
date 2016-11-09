@@ -2841,9 +2841,11 @@ public class HiltonDublinDBConnection {
 	 * @param departureDate
 	 * @return List<Room>
 	 */
-	public List<Room> getAvailableRooms(RoomType roomType, int ammountOfRooms, Date arrivalDate, Date departureDate){
+	public List<Room> getAvailableRooms(int roomTypeID, int ammountOfRooms, Date arrivalDate, Date departureDate, boolean smoking){
 		String arrDate = mySQLDateFormat.format(arrivalDate);
 		String depDate = mySQLDateFormat.format(departureDate);
+		String isSmoking = Boolean.toString(smoking);
+		isSmoking = convertBooleanToTinyInt(isSmoking);
 		String additionalSQLCondition = ROOM_NUMBER + " IN ( SELECT " + RESERVED_ROOM_ROOMNUMBER + " FROM " + RESERVED_ROOM;
 		additionalSQLCondition += " WHERE " + RESERVED_ROOM_RESERVATIONID + " NOT IN ("; 
 		additionalSQLCondition += " SELECT " + RESERVATION_RESERVATIONID + " FROM " + RESERVATION;
@@ -2851,7 +2853,7 @@ public class HiltonDublinDBConnection {
 		additionalSQLCondition += " OR " + RESERVATION_DEPARTUREDATE + " BETWEEN " + arrDate + "' AND '" + depDate + "' )) ";
 		additionalSQLCondition += " OR " + ROOM_NUMBER + " NOT IN ( SELECT " + RESERVED_ROOM_ROOMNUMBER + " FROM " + RESERVED_ROOM + ")";
 		
-		List<Room> rooms = getRooms(null, null, null, null, additionalSQLCondition);
+		List<Room> rooms = getRooms(null, Integer.toString(roomTypeID), isSmoking, null, additionalSQLCondition);
 		
 		if (rooms.size() < ammountOfRooms){
 			System.out.println("Not enough rooms available at the moment!");
