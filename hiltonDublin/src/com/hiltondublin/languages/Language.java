@@ -251,7 +251,7 @@ public abstract class Language {
 		return "Modify Reservation";
 	}
 	public String administratorModifyReservationBookingNummber(){
-		return "Booking Number";
+		return "Booking Number:";
 	}
 	public String administratorModifyReservationGuestFirstName(){
 		return "Guest First Name: ";
@@ -282,5 +282,29 @@ public abstract class Language {
 	}
 	public String administratorModifyReservationModifyButton(){
 		return "modify";
+	}
+	public String administratorModifyReservationReservationDetailsHeading(){
+		return "Reservation Details";
+	}
+	public String administratorModifyReservationGuestDetailsHeading(){
+		return "Guest Details";
+	}
+	public String administratorModifyReservationDetailsSuccessful(){
+		return "Modify Reservation Details successful";
+	}
+	public String administratorModifyReservationNumberOfReservationsFound(int number){
+		return "Found " + number + " Reservations";
+	}
+	public String administratorModifyReservationGuestPhoneNumber(){
+		return "Phone Number: ";
+	}
+	public String administratorModifyReservationGuestEmail(){
+		return "Email: ";
+	}
+	public String administratorModifyReservationGuestAddress(){
+		return "Address: ";
+	}
+	public String administratorModifyReservationGuestPassportNr(){
+		return "Passport Number: ";
 	}
 }

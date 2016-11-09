@@ -239,7 +239,7 @@ public class German extends Language {
 		return "Reservierung modifizieren";
 	}
 	public String administratorModifyReservationBookingNummber(){
-		return "Buchungsnummer";
+		return "Buchungsnummer: ";
 	}
 	public String administratorModifyReservationGuestFirstName(){
 		return "Gast Vorname: ";
@@ -270,6 +270,27 @@ public class German extends Language {
 	}
 	public String administratorModifyReservationModifyButton(){
 		return "modifizieren";
+	}
+	public String administratorModifyReservationReservationDetailsHeading(){
+		return "Reservierung Details";
+	}
+	public String administratorModifyReservationGuestDetailsHeading(){
+		return "Guest Details";
+	}
+	public String administratorModifyReservationDetailsSuccessful(){
+		return "Reservierungs Details erfolgreich modifiziert";
+	}
+	public String administratorModifyReservationNumberOfReservationsFound(int number){
+		return number + " Reservierungen gefunden";
+	}
+	public String administratorModifyReservationGuestPhoneNumber(){
+		return "Telefonummer: ";
+	}
+	public String administratorModifyReservationGuestAddress(){
+		return "Adresse: ";
+	}
+	public String administratorModifyReservationGuestPassportNr(){
+		return "Reisepass Nummer: ";
 	}
 	
 }

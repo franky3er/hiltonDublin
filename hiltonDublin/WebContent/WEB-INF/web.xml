@@ -116,4 +116,28 @@
     <servlet-name>modifyReservationsGetReservations</servlet-name>
     <url-pattern>/Admin/Modify-Reservation-get-reservations</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyReservationsGetReservation</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.GetReservationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyReservationsGetReservation</servlet-name>
+    <url-pattern>/Admin/Modify-Reservation-get-reservation</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyReservationsDetails</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.ModifyReservationDetailsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyReservationsDetails</servlet-name>
+    <url-pattern>/Admin/Modify-Reservation-details</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyGuestDetails</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.ModifyGuestDetailsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyGuestDetails</servlet-name>
+    <url-pattern>/Admin/Modify-Guest-details</url-pattern>
+  </servlet-mapping>
 </web-app>
