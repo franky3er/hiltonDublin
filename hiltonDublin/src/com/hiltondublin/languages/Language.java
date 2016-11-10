@@ -18,6 +18,12 @@ public abstract class Language {
 	public String no(){
 		return "no";
 	}
+	public String delete(){
+		return "delete";
+	}
+	public String add(){
+		return "add";
+	}
 
 	
 	//NAVIGATIONSLIDE
@@ -307,4 +313,53 @@ public abstract class Language {
 	public String administratorModifyReservationGuestPassportNr(){
 		return "Passport Number: ";
 	}
+	public String administratorModifyGuestErrorFirstNameEmpty(){
+		return "'Guest First Name' is not allowed to be empty";
+	}
+	public String administratorModifyGuestErrorLastNameEmpty(){
+		return "'Guest Last Name' is not allowed to be empty";
+	}
+	public String administratorModifyGuestErrorEmailNotInRightFormat(){
+		return "'Email' is not in right format";
+	}
+	public String administratorModifyGuestErrorPassportNrEmpty(){
+		return "'Passport Number' is not allowed to be empty";
+	}
+	public String administratorModifyGuestErrorPassportNrNotInRightFormat(){
+		return "'Passport Number' is not in right format. It must be from type Integer.";
+	}
+	public String administratorModifyGuestDetailsSuccessful(){
+		return "Modify Guest Details successful";
+	}
+	public String administratorModifyRoomDetailsHeading(){
+		return "Room Details";
+	}
+	public String administratorModifyRoomDetailsRoomNumber(){
+		return "Room Number: ";
+	}
+	public String administratorModifyRoomDetailsType(){
+		return "Room Type: ";
+	}
+	public String administratorModifyRoomDetailsSmoking(){
+		return "Smoking: ";
+	}
+	public String administratorModifyRoomDetailsOccupied(){
+		return "Occupied: ";
+	}
+	public String administratorDeleteRoomSuccessful(){
+		return "Delete Room successful";
+	}
+	public String administratorDeleteRoomError(){
+		return "Delete Room failed";
+	}
+	public String administratorAddRoomToReservationErrorNoAvailableRoom(){
+		return "No available room found";
+	}
+	public String administratorAddRoomToReservationErrorFailed(){
+		return "Add room to reservatoin failed";
+	}
+	public String administratorAddRoomToReservationSuccessful(){
+		return "Add room to reservation successful";
+	}
+	
 }

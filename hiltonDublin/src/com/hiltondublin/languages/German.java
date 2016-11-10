@@ -16,6 +16,12 @@ public class German extends Language {
 	public String no(){
 		return "Nein";
 	}
+	public String delete(){
+		return "löschen";
+	}
+	public String add(){
+		return "add";
+	}
 	
 	//Navigation Slide
 	public String navigationSlideGuest(){
@@ -292,5 +298,52 @@ public class German extends Language {
 	public String administratorModifyReservationGuestPassportNr(){
 		return "Reisepass Nummer: ";
 	}
-	
+	public String administratorModifyGuestErrorFirstNameEmpty(){
+		return "Das Feld 'Gast Vorname' darf nicht leer sein";
+	}
+	public String administratorModifyGuestErrorLastNameEmpty(){
+		return "Das Feld 'Gast Nachname' darf nicht leer sein";
+	}
+	public String administratorModifyGuestErrorEmailNotInRightFormat(){
+		return "Das Feld 'Email' ist nicht im richtigen Format";
+	}
+	public String administratorModifyGuestErrorPassportNrEmpty(){
+		return "Das Feld 'Passnummer' darf nicht leer sein";
+	}
+	public String administratorModifyGuestErrorPassportNrNotInRightFormat(){
+		return "'Passnummer' ist nicht im richtigen Format. Sie muss vom Typ Integer sein.";
+	}
+	public String administratorModifyGuestDetailsSuccessful(){
+		return "Erfolgreich Gast Details modifiziert";
+	}
+	public String administratorModifyRoomDetailsHeading(){
+		return "Zimmer Details";
+	}
+	public String administratorModifyRoomDetailsRoomNumber(){
+		return "Zimmernummer: ";
+	}
+	public String administratorModifyRoomDetailsType(){
+		return "Zimmertyp: ";
+	}
+	public String administratorModifyRoomDetailsSmoking(){
+		return "Rauchen: ";
+	}
+	public String administratorModifyRoomDetailsOccupied(){
+		return "Besetzt: ";
+	}
+	public String administratorDeleteRoomSuccessful(){
+		return "Zimmer erfolgreich von der Reservierung gelöscht";
+	}
+	public String administratorDeleteRoomError(){
+		return "Zimmer nicht erfolgreich von der Reservierung gelöscht";
+	}
+	public String administratorAddRoomToReservationErrorNoAvailableRoom(){
+		return "Keine verfügbaren Zimmer dieses Zimmertyps gefunden";
+	}
+	public String administratorAddRoomToReservationErrorFailed(){
+		return "Zuordnung des Zimmers zu dieser Reservierung fehlgeschlagen";
+	}
+	public String administratorAddRoomToReservationSuccessful(){
+		return "Zuordnung des Zimmers zu dieser Reservierung erfolgreich";
+	}
 }

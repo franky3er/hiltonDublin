@@ -140,4 +140,20 @@
     <servlet-name>modifyGuestDetails</servlet-name>
     <url-pattern>/Admin/Modify-Guest-details</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>deleteRoomFromReservation</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.DeleteRoomFromReservationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>deleteRoomFromReservation</servlet-name>
+    <url-pattern>/Admin/Modify-Reservation-delete-room</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>addRoomToReservation</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.AddRoomToReservationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>addRoomToReservation</servlet-name>
+    <url-pattern>/Admin/Modify-Reservation-add-room</url-pattern>
+  </servlet-mapping>
 </web-app>

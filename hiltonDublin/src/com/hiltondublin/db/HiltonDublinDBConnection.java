@@ -21,15 +21,17 @@ import com.hiltondublin.classes.Room;
 import com.hiltondublin.classes.RoomType;
 import com.hiltondublin.classes.SpecialPrice;
 import com.hiltondublin.classes.WeekdayPrice;
+import com.hiltondublin.helper.Helper;
 import com.hiltondublin.users.Administrator;
 import com.hiltondublin.users.Employee;
 import com.hiltondublin.users.Guest;
 import com.hiltondublin.users.User;
 
-public class HiltonDublinDBConnection {
+public class HiltonDublinDBConnection extends Helper {
 	//MySQL Date Format
 	public final static SimpleDateFormat mySQLDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	public final static SimpleDateFormat onlyDayDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	
 	
 	//Database Properties constants
 	public final static String DB_PROPERTIES_FILENAME = "hiltonDublinDB.properties";
@@ -622,70 +624,6 @@ public class HiltonDublinDBConnection {
 	}
 	
 	
-	
-	/**
-	 * converts the boolean (true/false) to a tiny int (1/0)
-	 * @param bool
-	 * @return String
-	 */
-	private String convertBooleanToTinyInt(String bool) {
-		if(bool!=null){
-			if(!bool.isEmpty()){
-				if(bool == "true"){
-					bool = "1";
-				} else if (bool == "false"){
-					bool = "0";
-				}
-			}
-		}
-		
-		return bool;
-	}
-	
-	private static String removeLastChar(String str) {
-		if(str == null){
-			return null;
-		}
-        return str.substring(0,str.length()-1);
-    }
-	
-	private boolean isNullOrEmpty(String obj){
-		if(obj == null){
-			return true;
-		}
-		if(obj.isEmpty()){
-			return true;
-		}
-		return false;
-	}
-	
-	/**
-	 * Return a List of cells which contain column-value pairs. Returns only pairs where the value is not null or empty.
-	 * @param columns
-	 * @param values
-	 * @return List<Cell>
-	 */
-	private List<Cell> getCellList(String[] columns, String[] values) {
-		if(values.length != columns.length){
-			return null;
-		}
-		
-		List<Cell> cells = new ArrayList<Cell>();
-		int i = 0;
-		for(String value : values){
-			if(!isNullOrEmpty(value)){
-				Cell cell = new Cell();
-				cell.setColumn(columns[i]);
-				cell.setValue(value);
-				cells.add(cell);
-			}
-			i++;
-		}
-		
-		return cells;
-	}
-	
-	
 	//------------------------------------------------------------------------------------------
 	//-----------------------------------------ROOM---------------------------------------------
 	//------------------------------------------------------------------------------------------
@@ -719,7 +657,7 @@ public class HiltonDublinDBConnection {
 		//Set set cells
 		String []setColumns = {ROOM_TYPEID, ROOM_SMOKING, ROOM_OCCUPIED};
 		String []setValues = {typeID, smoking, occupied};
-		List<Cell> setCells = getCellList(setColumns, setValues);
+		List<Cell> setCells = getCellListWithNullValues(setColumns, setValues);
 		
 		//Set condition cells
 		String []conditionColumns = {ROOM_NUMBER};
@@ -944,7 +882,7 @@ public class HiltonDublinDBConnection {
 		//Set set cells
 		String []setColumns = {ROOMTYPE_NAME, ROOMTYPE_PICTURE, ROOMTYPE_STANDARDPRICE, ROOMTYPE_DESCRIPTION};
 		String []setValues = {name, picture, standardPrice, description};
-		List<Cell> setCells = getCellList(setColumns, setValues);
+		List<Cell> setCells = getCellListWithNullValues(setColumns, setValues);
 				
 		//Set condition cells
 		String []conditionColumns = {ROOMTYPE_TYPEID};
@@ -1345,7 +1283,7 @@ public class HiltonDublinDBConnection {
 		//Set set cells
 		String []setColumns = {RATING_ROOMTYPEID, RATING_GUESTID, RATING_RATING, RATING_COMMENT};
 		String []setValues = {roomTypeID, guestID, rating, comment};
-		List<Cell> setCells = getCellList(setColumns, setValues);
+		List<Cell> setCells = getCellListWithNullValues(setColumns, setValues);
 				
 		//Set condition cells
 		String []conditionColumns = {RATING_RATINGID};
@@ -1538,7 +1476,7 @@ public class HiltonDublinDBConnection {
 		//Set condition cells
 		String []conditionColumns = {CONSUMERPRODUCT_PRODUCTID};
 		String []conditionValues = {consumerProductID};
-		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+		List<Cell> conditionCells = getCellListWithNullValues(conditionColumns, conditionValues);
 			
 		String sqlStatement = createUpdateStatement(CONSUMERPRODUCT, conditionCells, setCells, null);
 		
@@ -1801,7 +1739,7 @@ public class HiltonDublinDBConnection {
 		//Set condition cells
 		String []conditionColumns = {RESERVATION_RESERVATIONID};
 		String []conditionValues = {reservationID};
-		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+		List<Cell> conditionCells = getCellListWithNullValues(conditionColumns, conditionValues);
 			
 		String sqlStatement = createUpdateStatement(RESERVATION, conditionCells, setCells, null);
 		
@@ -2227,7 +2165,7 @@ public class HiltonDublinDBConnection {
 		//Set condition cells
 		String []conditionColumns = {WEEKDAYPRICE_ROOMTYPEID, WEEKDAYPRICE_WEEKDAY};
 		String []conditionValues = {roomTypeID, weekday};
-		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+		List<Cell> conditionCells = getCellListWithNullValues(conditionColumns, conditionValues);
 			
 		String sqlStatement = createUpdateStatement(WEEKDAYPRICE, conditionCells, setCells, null);
 		
@@ -2691,7 +2629,7 @@ public class HiltonDublinDBConnection {
 		//Set condition cells
 		String []conditionColumns = {GUEST_GUESTID};
 		String []conditionValues = {guestID};
-		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+		List<Cell> conditionCells = getCellListWithNullValues(conditionColumns, conditionValues);
 			
 		String sqlStatement = createUpdateStatement(GUEST, conditionCells, setCells, null);
 		
@@ -2819,7 +2757,7 @@ public class HiltonDublinDBConnection {
 		//Set condition cells
 		String []conditionColumns = {EMPLOYEE_USERNAME};
 		String []conditionValues = {username};
-		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+		List<Cell> conditionCells = getCellListWithNullValues(conditionColumns, conditionValues);
 			
 		String sqlStatement = createUpdateStatement(EMPLOYEE, conditionCells, setCells, null);
 		
@@ -2850,7 +2788,7 @@ public class HiltonDublinDBConnection {
 		additionalSQLCondition += " WHERE " + RESERVED_ROOM_RESERVATIONID + " NOT IN ("; 
 		additionalSQLCondition += " SELECT " + RESERVATION_RESERVATIONID + " FROM " + RESERVATION;
 		additionalSQLCondition += " WHERE " + RESERVATION_ARRIVALDATE + " BETWEEN '" + arrDate + "' AND '" + depDate + "' ";
-		additionalSQLCondition += " OR " + RESERVATION_DEPARTUREDATE + " BETWEEN " + arrDate + "' AND '" + depDate + "' )) ";
+		additionalSQLCondition += " OR " + RESERVATION_DEPARTUREDATE + " BETWEEN '" + arrDate + "' AND '" + depDate + "' )) ";
 		additionalSQLCondition += " OR " + ROOM_NUMBER + " NOT IN ( SELECT " + RESERVED_ROOM_ROOMNUMBER + " FROM " + RESERVED_ROOM + ")";
 		
 		List<Room> rooms = getRooms(null, Integer.toString(roomTypeID), isSmoking, null, additionalSQLCondition);
