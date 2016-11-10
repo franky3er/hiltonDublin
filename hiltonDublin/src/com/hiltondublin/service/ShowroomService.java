@@ -10,7 +10,7 @@ import com.hiltondublin.classes.Room;
 import com.hiltondublin.db.*;
 
 public class ShowroomService {
-	public void reserveroom(List<Room> rooms, Reservation reservation) throws ParseException {
+	public Reservation reserveroom(List<Room> rooms, Reservation reservation) throws ParseException {
 		HiltonDublinDBConnection dbConnection = HiltonDublinDBConnection.getInstance(); 
 		
 		reservation.setRooms(rooms);
@@ -28,7 +28,9 @@ public class ShowroomService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
-		return ;
+		
+		reservation.setBookingNumber(reservationID);
+		
+		return reservation;
 	}
 }

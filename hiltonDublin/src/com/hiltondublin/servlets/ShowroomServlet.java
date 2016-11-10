@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -122,13 +123,17 @@ public class ShowroomServlet extends HttpServlet {
 			ShowroomService shroom = new ShowroomService();
 			try
 			{
-				shroom.reserveroom(roomforGuest, reservation);
+				reservation = shroom.reserveroom(roomforGuest, reservation);
 			} catch (ParseException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			response.sendRedirect("paid.jsp");
+			
+			request.setAttribute("reservation", reservation);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("paid.jsp");
+			dispatcher.forward(request, response);
+			
 			return ;
 		}
 		else
