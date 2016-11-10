@@ -10,6 +10,23 @@ public abstract class Language {
 	public String getName() {
 		return name;
 	}
+	
+	//GENERAL
+	public String yes(){
+		return "yes";
+	}
+	public String no(){
+		return "no";
+	}
+	public String delete(){
+		return "delete";
+	}
+	public String add(){
+		return "add";
+	}
+	public String search(){
+		return "search";
+	}
 
 	
 	//NAVIGATIONSLIDE
@@ -212,6 +229,12 @@ public abstract class Language {
 	public String employeeCheckoutHeading(){
 		return "Checkout";
 	}
+	public String employeeCheckoutVerificationHeading(){
+		return "Verification";
+	}
+	public String employeeCheckoutVerificationQuestion(String firstName, String lastName){
+		return "Is the name of the guest '" + firstName + " " + lastName + "'?  ";
+	}
 	
 	public String employeeChargeProductSuccessfully(){
 		return "Successfully charged product to reservation!";
@@ -233,4 +256,134 @@ public abstract class Language {
 	public String administratorLoginMessage(){
 		return "You need to be logged in as an administrator to get access to the Admin Area!";
 	}
+	public String administratorModifyReservationHeading(){
+		return "Modify Reservation";
+	}
+	public String administratorModifyReservationBookingNummber(){
+		return "Booking Number:";
+	}
+	public String administratorModifyReservationGuestFirstName(){
+		return "Guest First Name: ";
+	}
+	public String administratorModifyReservationGuestLastName(){
+		return "Guest Last Name: ";
+	}
+	public String administratorModifyReservationArrivalDate(){
+		return "Arrival Date: ";
+	}
+	public String administratorModifyReservationDepartureDate(){
+		return "Departure Date: ";
+	}
+	public String administratorModifyReservationRooms(){
+		return "Reserved Rooms: ";
+	}
+	public String administratorModifyReservationConsumerProducts(){
+		return "Consumed Products: ";
+	}
+	public String administratorModifyReservationSearchReservation(){
+		return "search";
+	}
+	public String administratorModifyReservationErrorNoReservationFound(){
+		return "No Reservation found";
+	}
+	public String administratorModifyReservationErrorBookingNumber(){
+		return "Booking Number must correspond to type Integer";
+	}
+	public String administratorModifyReservationModifyButton(){
+		return "modify";
+	}
+	public String administratorModifyReservationReservationDetailsHeading(){
+		return "Reservation Details";
+	}
+	public String administratorModifyReservationGuestDetailsHeading(){
+		return "Guest Details";
+	}
+	public String administratorModifyReservationDetailsSuccessful(){
+		return "Modify Reservation Details successful";
+	}
+	public String administratorModifyReservationNumberOfReservationsFound(int number){
+		return "Found " + number + " Reservations";
+	}
+	public String administratorModifyReservationGuestPhoneNumber(){
+		return "Phone Number: ";
+	}
+	public String administratorModifyReservationGuestEmail(){
+		return "Email: ";
+	}
+	public String administratorModifyReservationGuestAddress(){
+		return "Address: ";
+	}
+	public String administratorModifyReservationGuestPassportNr(){
+		return "Passport Number: ";
+	}
+	public String administratorModifyGuestErrorFirstNameEmpty(){
+		return "'Guest First Name' is not allowed to be empty";
+	}
+	public String administratorModifyGuestErrorLastNameEmpty(){
+		return "'Guest Last Name' is not allowed to be empty";
+	}
+	public String administratorModifyGuestErrorEmailNotInRightFormat(){
+		return "'Email' is not in right format";
+	}
+	public String administratorModifyGuestErrorPassportNrEmpty(){
+		return "'Passport Number' is not allowed to be empty";
+	}
+	public String administratorModifyGuestErrorPassportNrNotInRightFormat(){
+		return "'Passport Number' is not in right format. It must be from type Integer.";
+	}
+	public String administratorModifyGuestDetailsSuccessful(){
+		return "Modify Guest Details successful";
+	}
+	public String administratorModifyRoomDetailsHeading(){
+		return "Room Details";
+	}
+	public String administratorModifyRoomDetailsRoomNumber(){
+		return "Room Number: ";
+	}
+	public String administratorModifyRoomDetailsType(){
+		return "Room Type: ";
+	}
+	public String administratorModifyRoomDetailsSmoking(){
+		return "Smoking: ";
+	}
+	public String administratorModifyRoomDetailsOccupied(){
+		return "Occupied: ";
+	}
+	public String administratorDeleteRoomFromReservationSuccessful(){
+		return "Delete Room successful";
+	}
+	public String administratorDeleteRoomFromReservationError(){
+		return "Delete Room failed";
+	}
+	public String administratorAddRoomToReservationErrorNoAvailableRoom(){
+		return "No available room found";
+	}
+	public String administratorAddRoomToReservationErrorFailed(){
+		return "Add room to reservatoin failed";
+	}
+	public String administratorAddRoomToReservationSuccessful(){
+		return "Add room to reservation successful";
+	}
+	public String administratorModifyProductHeading(){
+		return "Product Details";
+	}
+	public String administratorModifyProductProductName(){
+		return "Product Name: ";
+	}
+	public String administratorModifyProductPrice(){
+		return "Price: ";
+	}
+	public String administratorModifyProductSuccessfulyDeletedFromReservation(){
+		return "Successfully deleted product from reservation";
+	}
+	public String administratorModifyProductErrorDeleteFromReservation(){
+		return "Delete product from reservation failed. Found no product to delete.";
+	}
+	public String administratorModifyProductSuccessfulAddProductToReservation(){
+		return "Successfully add product to reservation";
+	}
+	public String administratorModifyRoomHeading(){
+		return "Modify Room";
+	}
+	
 }

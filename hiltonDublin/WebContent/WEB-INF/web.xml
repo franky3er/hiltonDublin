@@ -21,8 +21,8 @@
     <url-pattern>/Guest</url-pattern>
   </servlet-mapping>
   <servlet>
-  	<servlet-name>ReservationServlet</servlet-name>
-  	<servlet-class>com.hiltondublin.servlets.ReservationServlet</servlet-class>
+    <servlet-name>ReservationServlet</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.ReservationServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ReservationServlet</servlet-name>
@@ -69,6 +69,14 @@
     <url-pattern>/Employee/Checkout-room</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>checkoutServletVerified</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.CheckoutVerifiedServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>checkoutServletVerified</servlet-name>
+    <url-pattern>/Employee/Checkout-room-verified</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>rating</servlet-name>
     <jsp-file>/rating.jsp</jsp-file>
   </servlet>
@@ -83,5 +91,85 @@
   <servlet-mapping>
     <servlet-name>chargeProduct</servlet-name>
     <url-pattern>/Employee/Charge-Product</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>admin</servlet-name>
+    <jsp-file>/admin.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>admin</servlet-name>
+    <url-pattern>/Admin</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyReservation</servlet-name>
+    <jsp-file>/modifyReservation.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyReservation</servlet-name>
+    <url-pattern>/Admin/Modify-Reservation</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyReservationsGetReservations</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.GetReservationsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyReservationsGetReservations</servlet-name>
+    <url-pattern>/Admin/Modify-Reservation-get-reservations</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyReservationsGetReservation</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.GetReservationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyReservationsGetReservation</servlet-name>
+    <url-pattern>/Admin/Modify-Reservation-get-reservation</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyReservationsDetails</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.ModifyReservationDetailsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyReservationsDetails</servlet-name>
+    <url-pattern>/Admin/Modify-Reservation-details</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyGuestDetails</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.ModifyGuestDetailsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyGuestDetails</servlet-name>
+    <url-pattern>/Admin/Modify-Guest-details</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>deleteRoomFromReservation</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.DeleteRoomFromReservationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>deleteRoomFromReservation</servlet-name>
+    <url-pattern>/Admin/Modify-Reservation-delete-room</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>addRoomToReservation</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.AddRoomToReservationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>addRoomToReservation</servlet-name>
+    <url-pattern>/Admin/Modify-Reservation-add-room</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>deleteProductFromReservation</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.DeleteProductFromReservationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>deleteProductFromReservation</servlet-name>
+    <url-pattern>/Admin/Modify-Reservation-delete-product</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>addProductToReservation</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.AddProductToReservationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>addProductToReservation</servlet-name>
+    <url-pattern>/Admin/Modify-Reservation-add-product</url-pattern>
   </servlet-mapping>
 </web-app>

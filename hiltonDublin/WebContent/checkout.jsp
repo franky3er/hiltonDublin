@@ -1,6 +1,7 @@
 
 <%@ include file="navigationSlideEmployeeHeader.jsp" %>
 <%@page import="com.hiltondublin.classes.Room"%>
+<%@page import="com.hiltondublin.classes.Reservation" %>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Map"%>
@@ -8,6 +9,7 @@
 <%@page import="java.util.Iterator" %>
 
 <%
+Reservation reservation = (Reservation) request.getAttribute("reservation");
 String checkoutInfo = (String) request.getAttribute("checkoutInfo");
 String checkoutError = (String) request.getAttribute("checkoutError");
 String roomNumber = (String) request.getAttribute("roomNumber");
@@ -21,6 +23,8 @@ System.out.println("Total price: " + totalPrice);
 %>
 
 <h1><%=language.employeeCheckoutHeading() %></h1>
+
+<%if(reservation==null){ %>
 <form id="checkoutForm" action="<%=request.getContextPath() %>/Employee/Checkout-room" method="post">
 	<label><%=language.employeeCheckoutRoomNumber() %>
 		<input type="text" name="roomNumber" placeholder="Number" maxlength="3" size="3"/>
@@ -47,6 +51,22 @@ System.out.println("Total price: " + totalPrice);
 		<%} %>
 	<%} %>
 </form>
+
+<%} else { %>
+<h3><%=language.employeeCheckoutVerificationHeading() %></h3>
+<form action="<%=request.getContextPath() %>/Employee/Checkout-room-verified" method="post">
+	<table>
+		<tr>
+			<td><%=language.employeeCheckoutVerificationQuestion(reservation.getGuest().getFirstName(), reservation.getGuest().getLastName()) %></td>
+			<td><input type="submit" value="<%=language.yes() %>"/></td>
+			<td><a href="<%=getURLWithContextPath(request) %>/Employee/Checkout"><input type="button" value="<%=language.no() %>"/></a></td>
+		</tr>
+	</table>
+	<input type="hidden" name="reservationID" value="<%=Integer.toString(reservation.getBookingNumber()) %>"/>
+	<input type="hidden" name="roomNumber" value="<%=roomNumber %>"/> 
+	<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+</form>
+<%} %>
 
 <%if(totalPrice!=null){ %>
 <br/><br/>

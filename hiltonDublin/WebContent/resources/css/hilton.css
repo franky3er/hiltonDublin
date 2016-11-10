@@ -145,3 +145,12 @@ body {
 textarea{
 	width: 100%;
 }
+
+.showValues {
+  border-collapse: separate;
+  border-spacing: 20px 0;
+}
+
+.showValues tr td {
+  padding: 5px 0;
+}

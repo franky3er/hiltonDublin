@@ -21,15 +21,17 @@ import com.hiltondublin.classes.Room;
 import com.hiltondublin.classes.RoomType;
 import com.hiltondublin.classes.SpecialPrice;
 import com.hiltondublin.classes.WeekdayPrice;
+import com.hiltondublin.helper.Helper;
 import com.hiltondublin.users.Administrator;
 import com.hiltondublin.users.Employee;
 import com.hiltondublin.users.Guest;
 import com.hiltondublin.users.User;
 
-public class HiltonDublinDBConnection {
+public class HiltonDublinDBConnection extends Helper {
 	//MySQL Date Format
 	public final static SimpleDateFormat mySQLDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	public final static SimpleDateFormat onlyDayDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	
 	
 	//Database Properties constants
 	public final static String DB_PROPERTIES_FILENAME = "hiltonDublinDB.properties";
@@ -522,6 +524,10 @@ public class HiltonDublinDBConnection {
 	 */
 	public String createInsertStatement(String table, List<Cell> cells){
 		
+		if(cells == null){
+			return null;
+		}
+		
 		String sqlStatement = "INSERT INTO " + table + "( ";
 		boolean firstColumn = true;
 		for(Cell cell : cells){
@@ -618,70 +624,6 @@ public class HiltonDublinDBConnection {
 	}
 	
 	
-	
-	/**
-	 * converts the boolean (true/false) to a tiny int (1/0)
-	 * @param bool
-	 * @return String
-	 */
-	private String convertBooleanToTinyInt(String bool) {
-		if(bool!=null){
-			if(!bool.isEmpty()){
-				if(bool == "true"){
-					bool = "1";
-				} else if (bool == "false"){
-					bool = "0";
-				}
-			}
-		}
-		
-		return bool;
-	}
-	
-	private static String removeLastChar(String str) {
-		if(str == null){
-			return null;
-		}
-        return str.substring(0,str.length()-1);
-    }
-	
-	private boolean isNullOrEmpty(String obj){
-		if(obj == null){
-			return true;
-		}
-		if(obj.isEmpty()){
-			return true;
-		}
-		return false;
-	}
-	
-	/**
-	 * Return a List of cells which contain column-value pairs. Returns only pairs where the value is not null or empty.
-	 * @param columns
-	 * @param values
-	 * @return List<Cell>
-	 */
-	private List<Cell> getCellList(String[] columns, String[] values) {
-		if(values.length != columns.length){
-			return null;
-		}
-		
-		List<Cell> cells = new ArrayList<Cell>();
-		int i = 0;
-		for(String value : values){
-			if(!isNullOrEmpty(value)){
-				Cell cell = new Cell();
-				cell.setColumn(columns[i]);
-				cell.setValue(value);
-				cells.add(cell);
-			}
-			i++;
-		}
-		
-		return cells;
-	}
-	
-	
 	//------------------------------------------------------------------------------------------
 	//-----------------------------------------ROOM---------------------------------------------
 	//------------------------------------------------------------------------------------------
@@ -715,7 +657,7 @@ public class HiltonDublinDBConnection {
 		//Set set cells
 		String []setColumns = {ROOM_TYPEID, ROOM_SMOKING, ROOM_OCCUPIED};
 		String []setValues = {typeID, smoking, occupied};
-		List<Cell> setCells = getCellList(setColumns, setValues);
+		List<Cell> setCells = getCellListWithNullValues(setColumns, setValues);
 		
 		//Set condition cells
 		String []conditionColumns = {ROOM_NUMBER};
@@ -940,7 +882,7 @@ public class HiltonDublinDBConnection {
 		//Set set cells
 		String []setColumns = {ROOMTYPE_NAME, ROOMTYPE_PICTURE, ROOMTYPE_STANDARDPRICE, ROOMTYPE_DESCRIPTION};
 		String []setValues = {name, picture, standardPrice, description};
-		List<Cell> setCells = getCellList(setColumns, setValues);
+		List<Cell> setCells = getCellListWithNullValues(setColumns, setValues);
 				
 		//Set condition cells
 		String []conditionColumns = {ROOMTYPE_TYPEID};
@@ -1341,7 +1283,7 @@ public class HiltonDublinDBConnection {
 		//Set set cells
 		String []setColumns = {RATING_ROOMTYPEID, RATING_GUESTID, RATING_RATING, RATING_COMMENT};
 		String []setValues = {roomTypeID, guestID, rating, comment};
-		List<Cell> setCells = getCellList(setColumns, setValues);
+		List<Cell> setCells = getCellListWithNullValues(setColumns, setValues);
 				
 		//Set condition cells
 		String []conditionColumns = {RATING_RATINGID};
@@ -1534,7 +1476,7 @@ public class HiltonDublinDBConnection {
 		//Set condition cells
 		String []conditionColumns = {CONSUMERPRODUCT_PRODUCTID};
 		String []conditionValues = {consumerProductID};
-		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+		List<Cell> conditionCells = getCellListWithNullValues(conditionColumns, conditionValues);
 			
 		String sqlStatement = createUpdateStatement(CONSUMERPRODUCT, conditionCells, setCells, null);
 		
@@ -1797,7 +1739,7 @@ public class HiltonDublinDBConnection {
 		//Set condition cells
 		String []conditionColumns = {RESERVATION_RESERVATIONID};
 		String []conditionValues = {reservationID};
-		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+		List<Cell> conditionCells = getCellListWithNullValues(conditionColumns, conditionValues);
 			
 		String sqlStatement = createUpdateStatement(RESERVATION, conditionCells, setCells, null);
 		
@@ -2223,7 +2165,7 @@ public class HiltonDublinDBConnection {
 		//Set condition cells
 		String []conditionColumns = {WEEKDAYPRICE_ROOMTYPEID, WEEKDAYPRICE_WEEKDAY};
 		String []conditionValues = {roomTypeID, weekday};
-		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+		List<Cell> conditionCells = getCellListWithNullValues(conditionColumns, conditionValues);
 			
 		String sqlStatement = createUpdateStatement(WEEKDAYPRICE, conditionCells, setCells, null);
 		
@@ -2353,10 +2295,10 @@ public class HiltonDublinDBConnection {
 	public String deleteReserved_ProductsAsSQLStatement(String orderID, String productID, String reservationID, String additionalSQLCondition){
 		//Write Values and Tables in Arrays
 		String []values = {orderID, productID, reservationID};
-		String table = RESERVED_ROOM;
+		String table = RESERVED_PRODUCT;
 						
 		//Get SQL Statement
-		return createDeleteStatement(table, RESERVED_ROOM_COLUMNS, values, additionalSQLCondition);
+		return createDeleteStatement(table, RESERVED_PRODUCT_COLUMNS, values, additionalSQLCondition);
 			
 	}
 	
@@ -2418,7 +2360,7 @@ public class HiltonDublinDBConnection {
 			sqlStatement += selectItem;
 		}
 		sqlStatement += " FROM " + CONSUMERPRODUCT + " INNER JOIN " + RESERVED_PRODUCT + " ON " + CONSUMERPRODUCT_PRODUCTID + "=" + RESERVED_PRODUCT_PRODUCTID;
-		sqlStatement += " WHERE " + RESERVED_PRODUCT_RESERVATIONID + "='" + reservationID + "' ;";
+		sqlStatement += " WHERE " + RESERVED_PRODUCT_RESERVATIONID + "='" + reservationID + "' ORDER BY " + CONSUMERPRODUCT_NAME + " ASC ;";
 		
 		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
 		
@@ -2448,13 +2390,13 @@ public class HiltonDublinDBConnection {
 	 * @param reservationID
 	 * @return ResultSet
 	 */
-	public ResultSet assignProductToReservation(String productID, String reservationID){
+	public ResultSet assignProductToReservation(String orderID, String productID, String reservationID){
 		if(!isConnected()){
 			return null;
 		}
 		
 		// Create value array
-		String[] values = { productID, reservationID };
+		String[] values = { orderID, productID, reservationID };
 		// Return cell List with contained values
 		List<Cell> cells = getCellList(RESERVED_PRODUCT_COLUMNS, values);
 
@@ -2687,7 +2629,7 @@ public class HiltonDublinDBConnection {
 		//Set condition cells
 		String []conditionColumns = {GUEST_GUESTID};
 		String []conditionValues = {guestID};
-		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+		List<Cell> conditionCells = getCellListWithNullValues(conditionColumns, conditionValues);
 			
 		String sqlStatement = createUpdateStatement(GUEST, conditionCells, setCells, null);
 		
@@ -2815,7 +2757,7 @@ public class HiltonDublinDBConnection {
 		//Set condition cells
 		String []conditionColumns = {EMPLOYEE_USERNAME};
 		String []conditionValues = {username};
-		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+		List<Cell> conditionCells = getCellListWithNullValues(conditionColumns, conditionValues);
 			
 		String sqlStatement = createUpdateStatement(EMPLOYEE, conditionCells, setCells, null);
 		
@@ -2837,17 +2779,19 @@ public class HiltonDublinDBConnection {
 	 * @param departureDate
 	 * @return List<Room>
 	 */
-	public List<Room> getAvailableRooms(RoomType roomType, int ammountOfRooms, Date arrivalDate, Date departureDate){
+	public List<Room> getAvailableRooms(int roomTypeID, int ammountOfRooms, Date arrivalDate, Date departureDate, boolean smoking){
 		String arrDate = mySQLDateFormat.format(arrivalDate);
 		String depDate = mySQLDateFormat.format(departureDate);
+		String isSmoking = Boolean.toString(smoking);
+		isSmoking = convertBooleanToTinyInt(isSmoking);
 		String additionalSQLCondition = ROOM_NUMBER + " IN ( SELECT " + RESERVED_ROOM_ROOMNUMBER + " FROM " + RESERVED_ROOM;
 		additionalSQLCondition += " WHERE " + RESERVED_ROOM_RESERVATIONID + " NOT IN ("; 
 		additionalSQLCondition += " SELECT " + RESERVATION_RESERVATIONID + " FROM " + RESERVATION;
 		additionalSQLCondition += " WHERE " + RESERVATION_ARRIVALDATE + " BETWEEN '" + arrDate + "' AND '" + depDate + "' ";
-		additionalSQLCondition += " OR " + RESERVATION_DEPARTUREDATE + " BETWEEN " + arrDate + "' AND '" + depDate + "' )) ";
+		additionalSQLCondition += " OR " + RESERVATION_DEPARTUREDATE + " BETWEEN '" + arrDate + "' AND '" + depDate + "' )) ";
 		additionalSQLCondition += " OR " + ROOM_NUMBER + " NOT IN ( SELECT " + RESERVED_ROOM_ROOMNUMBER + " FROM " + RESERVED_ROOM + ")";
 		
-		List<Room> rooms = getRooms(null, null, null, null, additionalSQLCondition);
+		List<Room> rooms = getRooms(null, Integer.toString(roomTypeID), isSmoking, null, additionalSQLCondition);
 		
 		if (rooms.size() < ammountOfRooms){
 			System.out.println("Not enough rooms available at the moment!");
@@ -2878,6 +2822,33 @@ public class HiltonDublinDBConnection {
 		}
 		
 		return reservations.get(0);
+	}
+	
+	/**
+	 * Returns only the reservations where the guest name in the given parameters is the customer of the reservation
+	 * @param firstName
+	 * @param lastName
+	 * @return List<Reservation>
+	 */
+	public List<Reservation> getReservationsFromGuestName(String firstName, String lastName){
+		List<Reservation> reservations = new ArrayList<Reservation>();
+		
+		Date currentDate = new Date();
+		
+		String curDate = onlyDayDateFormat.format(currentDate) + " 00:00:00";
+		String additionalSQL = RESERVATION_ARRIVALDATE + "<='" + curDate + "' AND " + RESERVATION_DEPARTUREDATE + ">='" + curDate + "' AND ";
+		additionalSQL += RESERVATION_GUESTID + " IN ( SELECT " + GUEST_GUESTID + " FROM " + GUEST + " WHERE " + GUEST_FIRSTNAME + "='" + firstName + "' AND " + GUEST_LASTNAME + "='" + lastName + "' )";
+		
+		reservations = getReservations(null, null, null, null, null, additionalSQL);
+		if(reservations == null){
+			return null;
+		}
+		
+		if(reservations.size()==0){
+			return null;
+		}
+		
+		return reservations;
 	}
 
 }
