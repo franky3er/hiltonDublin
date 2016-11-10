@@ -15,15 +15,13 @@
 	int chargeProductError = 0;
 
 	List<ConsumerProduct> consumerProducts = dbConnection.getConsumerProducts(null,null,null, null);
-<<<<<<< HEAD
+
 	
 		Reservation reservation = dbConnection.getReservationFromRoomNumber(roomno);
 		int reservationid = reservation.getBookingNumber();	
-		dbConnection.assignProductToReservation(productID, Integer.toString(reservationid));	
+		dbConnection.assignProductToReservation(productID, Integer.toString(reservationid), null);	
 		isSubmitted = true;
-=======
-	Reservation reservation = null;
-	int reservationid;
+		
 	if(roomno != null ){
 		if(roomno.isEmpty() || roomno.trim().equals("")){
 			chargeProductError = 1; //No room number typed in
@@ -42,7 +40,6 @@
 			}
 		}
 	}
->>>>>>> 1dcee091bc6308a9d4b2ff7502274569838de059
 	
 %>
 <h1><%=language.employeeChargeProductHeading() %></h1>
@@ -51,7 +48,7 @@
 		<tr>
 		<td><%=language.employeeCheckoutRoomNumber() %> </td>
 		<td>
-		<input type="text" name="roomno" size="3" maxlength="3" <%if(roomno != null){ %>value="<%=roomno %>"/<%} %>>
+		<input type="text" name="roomno" size="3" maxlength="3" <%if(roomno != null){ %>value="<%=roomno %>"<%} %>>
 		</td>
 		</tr>
 		<tr>

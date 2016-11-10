@@ -21,11 +21,11 @@ import com.hiltondublin.classes.Room;
 import com.hiltondublin.classes.RoomType;
 import com.hiltondublin.classes.SpecialPrice;
 import com.hiltondublin.classes.WeekdayPrice;
-import com.hiltondublin.helper.Helper;
 import com.hiltondublin.users.Administrator;
 import com.hiltondublin.users.Employee;
 import com.hiltondublin.users.Guest;
 import com.hiltondublin.users.User;
+import com.mysql.jdbc.SocketMetadata.Helper;
 
 public class HiltonDublinDBConnection extends Helper {
 	//MySQL Date Format
@@ -201,7 +201,7 @@ public class HiltonDublinDBConnection extends Helper {
 	}
 
 	/**
-	 * Connects to the database with the properties from the propertie file
+	 * Connects to the database with the properties from the properties file
 	 * @return boolean
 	 * true if connection was successful
 	 * false if connection failed
@@ -516,7 +516,7 @@ public class HiltonDublinDBConnection extends Helper {
 	
 	
 	/**
-	 * Creates an Inser SQL Statement specified by the given parameters
+	 * Creates an Insert SQL Statement specified by the given parameters
 	 * @param table
 	 * @param columns
 	 * @param values

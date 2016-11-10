@@ -94,6 +94,9 @@ public abstract class Language {
 	public String guestWelcome(){
 		return "Welcome to Guest Page";
 	}
+	public String guestName(){
+		return "Name: ";
+	}
 	public String guestRatingErrorMessageFirstName(){
 		return "Please type in a First Name!";
 	}
