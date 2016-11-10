@@ -20,7 +20,7 @@ if(checkoutInfo == null){checkoutInfo = "0";}
 System.out.println("Total price: " + totalPrice);
 %>
 
-<h1>Checkout</h1>
+<h1><%=language.employeeCheckoutHeading() %></h1>
 <form id="checkoutForm" action="<%=request.getContextPath() %>/Employee/Checkout-room" method="post">
 	<label><%=language.employeeCheckoutRoomNumber() %>
 		<input type="text" name="roomNumber" placeholder="Number" maxlength="3" size="3"/>
