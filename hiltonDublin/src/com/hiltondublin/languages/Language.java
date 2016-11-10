@@ -24,6 +24,9 @@ public abstract class Language {
 	public String add(){
 		return "add";
 	}
+	public String search(){
+		return "search";
+	}
 
 	
 	//NAVIGATIONSLIDE
@@ -378,6 +381,9 @@ public abstract class Language {
 	}
 	public String administratorModifyProductSuccessfulAddProductToReservation(){
 		return "Successfully add product to reservation";
+	}
+	public String administratorModifyRoomHeading(){
+		return "Modify Room";
 	}
 	
 }

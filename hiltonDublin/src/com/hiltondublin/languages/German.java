@@ -22,6 +22,9 @@ public class German extends Language {
 	public String add(){
 		return "add";
 	}
+	public String search(){
+		return "suchen";
+	}
 	
 	//Navigation Slide
 	public String navigationSlideGuest(){
@@ -363,5 +366,8 @@ public class German extends Language {
 	}
 	public String administratorModifyProductSuccessfulAddProductToReservation(){
 		return "Erfolgreich Produkt zur Reservierung hinzugefügt";
+	}
+	public String administratorModifyRoomHeading(){
+		return "Zimmer modifizieren";
 	}
 }
