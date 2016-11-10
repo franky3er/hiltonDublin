@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.hiltondublin.classes.Reservation"%>
 <%@page import="com.hiltondublin.users.GuestSingleton"%>
 <%@page import="com.hiltondublin.classes.Room" %>
@@ -19,7 +20,25 @@
 		Room room = (Room) request.getAttribute("room");
 		Reservation reservation = (Reservation) request.getAttribute("reservation");
 		
+		SimpleDateFormat onlyDayDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Date ArrivalDate = reservation.getArrivalDate();
+		Date DepartureDate = reservation.getDepartureDate();
+		
+		String ArrivalString = onlyDayDateFormat.format(ArrivalDate);
+		String DepartureString = onlyDayDateFormat.format(DepartureDate);
+		
 		int[] Type = (int[]) request.getAttribute("Type");
+		
+		%>
+		<input type="hidden" name="guestID" value=<%=guest.getGuestID()%>>
+		<input type="hidden" name="arrivalString" value=<%=ArrivalString%>>
+		<input type="hidden" name="departureString" value=<%=DepartureString%>>
+		<input type="hidden" name="Type1" value=<%=Type[0]%>>
+		<input type="hidden" name="Type2" value=<%=Type[1]%>>
+		<input type="hidden" name="Type3" value=<%=Type[2]%>>
+		
+		<%
 		
 		if(Type[0] != 0) {
 			roomtype1 = dbConnection.getAvailableRooms(1, Type[0], reservation.getArrivalDate(), reservation.getDepartureDate(), room.isSmoking());
@@ -43,8 +62,6 @@
 		else {
 			%><input type="hidden" name="type1" value="null"><%
 		}
-		
-		
 		
 		if(Type[1] != 0) {
 			roomtype2 = dbConnection.getAvailableRooms(2, Type[1], reservation.getArrivalDate(), reservation.getDepartureDate(), room.isSmoking());

@@ -2,6 +2,8 @@ package com.hiltondublin.servlets;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -51,16 +53,22 @@ public class ReservationServlet extends HttpServlet {
 		
 		Reservation reservation = new Reservation();
 		
-		try {
-			reservation.setArrivalDate(HiltonDublinDBConnection.mySQLDateFormat.parse(request.getParameter("checkin")));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		SimpleDateFormat onlyDayDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
+		String ArrivalString = request.getParameter("checkin");
+		String DepartureString = request.getParameter("checkout");
+
 		try {
-			reservation.setDepartureDate(HiltonDublinDBConnection.mySQLDateFormat.parse(request.getParameter("checkout")));
+			Date ArrivalDate = onlyDayDateFormat.parse(ArrivalString);
+			Date DepartureDate = onlyDayDateFormat.parse(DepartureString);
+			
+			reservation.setArrivalDate(ArrivalDate);
+			reservation.setDepartureDate(DepartureDate);
+			
 		} catch (ParseException e) {
-			e.printStackTrace();
+			response.sendRedirect("onlinereservation.jsp");
+			
+			return ;
 		}
 		
 		// checking passport-number is just number

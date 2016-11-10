@@ -2,7 +2,9 @@ package com.hiltondublin.servlets;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -31,10 +33,28 @@ public class ShowroomServlet extends HttpServlet {
 		
 		HiltonDublinDBConnection dbConnection = HiltonDublinDBConnection.getInstance();
 		
-		Guest guest = (Guest) request.getAttribute("guest");
-		Reservation reservation = (Reservation) request.getAttribute("reservation");
+		String guestID = request.getParameter("guestID");
+		Guest guest = dbConnection.getGuests(guestID, null, null, null, null, null, null, null).get(0);
+		Reservation reservation = new Reservation();
 		reservation.setGuest(guest);
 		reservation.setGuestID(guest.getGuestID());
+		
+		String ArrivalString = request.getParameter("arrivalString");
+		String DepartureString = request.getParameter("departureString");
+		
+		SimpleDateFormat onlyDayDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		
+		try {
+			Date ArrivalDate = onlyDayDateFormat.parse(ArrivalString);
+			Date DepartureDate = onlyDayDateFormat.parse(DepartureString);
+			
+			reservation.setArrivalDate(ArrivalDate);
+			reservation.setDepartureDate(DepartureDate);
+			
+		} catch (ParseException e1) {
+			response.reset();
+			return ;
+		}
 		
 		List<Room> roomtype1 = new ArrayList<Room>();
 		List<Room> roomtype2 = new ArrayList<Room>();
@@ -92,10 +112,12 @@ public class ShowroomServlet extends HttpServlet {
 			}
 		}
 		
-		int[] Type = (int[]) request.getAttribute("Type");
+		int Type1 = Integer.parseInt(request.getParameter("Type1"));
+		int Type2 = Integer.parseInt(request.getParameter("Type2"));
+		int Type3 = Integer.parseInt(request.getParameter("Type3"));
 		
 		//check count of checked roomtype is same with user's input
-		if(Type[0] == count1 && Type[1] == count2 && Type[2] == count3)
+		if(Type1 == count1 && Type2 == count2 && Type3 == count3)
 		{
 			ShowroomService shroom = new ShowroomService();
 			try
