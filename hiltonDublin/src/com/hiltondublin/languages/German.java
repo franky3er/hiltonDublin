@@ -331,10 +331,10 @@ public class German extends Language {
 	public String administratorModifyRoomDetailsOccupied(){
 		return "Besetzt: ";
 	}
-	public String administratorDeleteRoomSuccessful(){
+	public String administratorDeleteRoomFromReservationSuccessful(){
 		return "Zimmer erfolgreich von der Reservierung gelöscht";
 	}
-	public String administratorDeleteRoomError(){
+	public String administratorDeleteRoomFromReservationError(){
 		return "Zimmer nicht erfolgreich von der Reservierung gelöscht";
 	}
 	public String administratorAddRoomToReservationErrorNoAvailableRoom(){
@@ -345,5 +345,23 @@ public class German extends Language {
 	}
 	public String administratorAddRoomToReservationSuccessful(){
 		return "Zuordnung des Zimmers zu dieser Reservierung erfolgreich";
+	}
+	public String administratorModifyProductHeading(){
+		return "Produkt Details";
+	}
+	public String administratorModifyProductProductName(){
+		return "Produktname: ";
+	}
+	public String administratorModifyProductPrice(){
+		return "Preis: ";
+	}
+	public String administratorModifyProductSuccessfulyDeletedFromReservation(){
+		return "Erfolgreich Product von der Reservierung gelöscht";
+	}
+	public String administratorModifyProductErrorDeleteFromReservation(){
+		return "Löschung des Produkts von der Reservierung fehlgeschlagen. Kein Produkt gefunden.";
+	}
+	public String administratorModifyProductSuccessfulAddProductToReservation(){
+		return "Erfolgreich Produkt zur Reservierung hinzugefügt";
 	}
 }

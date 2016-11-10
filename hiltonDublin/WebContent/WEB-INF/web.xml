@@ -156,4 +156,20 @@
     <servlet-name>addRoomToReservation</servlet-name>
     <url-pattern>/Admin/Modify-Reservation-add-room</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>deleteProductFromReservation</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.DeleteProductFromReservationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>deleteProductFromReservation</servlet-name>
+    <url-pattern>/Admin/Modify-Reservation-delete-product</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>addProductToReservation</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.AddProductToReservationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>addProductToReservation</servlet-name>
+    <url-pattern>/Admin/Modify-Reservation-add-product</url-pattern>
+  </servlet-mapping>
 </web-app>

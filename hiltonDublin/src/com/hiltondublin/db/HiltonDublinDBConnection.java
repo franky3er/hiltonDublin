@@ -2295,10 +2295,10 @@ public class HiltonDublinDBConnection extends Helper {
 	public String deleteReserved_ProductsAsSQLStatement(String orderID, String productID, String reservationID, String additionalSQLCondition){
 		//Write Values and Tables in Arrays
 		String []values = {orderID, productID, reservationID};
-		String table = RESERVED_ROOM;
+		String table = RESERVED_PRODUCT;
 						
 		//Get SQL Statement
-		return createDeleteStatement(table, RESERVED_ROOM_COLUMNS, values, additionalSQLCondition);
+		return createDeleteStatement(table, RESERVED_PRODUCT_COLUMNS, values, additionalSQLCondition);
 			
 	}
 	
@@ -2360,7 +2360,7 @@ public class HiltonDublinDBConnection extends Helper {
 			sqlStatement += selectItem;
 		}
 		sqlStatement += " FROM " + CONSUMERPRODUCT + " INNER JOIN " + RESERVED_PRODUCT + " ON " + CONSUMERPRODUCT_PRODUCTID + "=" + RESERVED_PRODUCT_PRODUCTID;
-		sqlStatement += " WHERE " + RESERVED_PRODUCT_RESERVATIONID + "='" + reservationID + "' ;";
+		sqlStatement += " WHERE " + RESERVED_PRODUCT_RESERVATIONID + "='" + reservationID + "' ORDER BY " + CONSUMERPRODUCT_NAME + " ASC ;";
 		
 		ResultSet rs = executeQueryAndReturnResultSet(sqlStatement);
 		
