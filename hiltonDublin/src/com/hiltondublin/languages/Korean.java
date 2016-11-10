@@ -16,13 +16,13 @@ public class Korean extends Language{
 		return "아니";
 	}
 	public String delete(){
-		return "삭";
+		return "삭제";
 	}
 	public String add(){
-		return "추";
+		return "추가";
 	}
 	public String search(){
-		return "검";
+		return "검색";
 	}
 	//NAVIGATIONSLIDE
 	public String navigationSlideHome(){
