@@ -76,6 +76,16 @@
     <servlet-name>checkoutServletVerified</servlet-name>
     <url-pattern>/Employee/Checkout-room-verified</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>onlinecancellation</servlet-name>
+    <jsp-file>/onlinecancellation.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>onlinecancellation</servlet-name>
+    <url-pattern>/Guest/Cancellation</url-pattern>
+  </servlet-mapping>
+  
   <servlet>
     <servlet-name>rating</servlet-name>
     <jsp-file>/rating.jsp</jsp-file>
@@ -83,7 +93,7 @@
   <servlet-mapping>
     <servlet-name>rating</servlet-name>
     <url-pattern>/Guest/Rating</url-pattern>
-  </servlet-mapping>
+  </servlet-mapping>  
   <servlet>
     <servlet-name>chargeProduct</servlet-name>
     <jsp-file>/chargeProduct.jsp</jsp-file>
