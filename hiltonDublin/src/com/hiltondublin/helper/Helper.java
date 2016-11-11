@@ -18,6 +18,8 @@ public class Helper {
 		return email.matches(regexEmailValidation);
 	}
 	
+	//Comment
+	
 	/**
 	 * converts the boolean (true/false) to a tiny int (1/0)
 	 * @param bool
