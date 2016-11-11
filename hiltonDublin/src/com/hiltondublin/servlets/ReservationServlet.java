@@ -1,16 +1,22 @@
 package com.hiltondublin.servlets;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.hiltondublin.classes.Reservation;
+import com.hiltondublin.classes.Room;
+import com.hiltondublin.db.HiltonDublinDBConnection;
 import com.hiltondublin.service.ReservationService;
 import com.hiltondublin.users.Guest;
-import com.hiltondublin.users.GuestSingleton;
 
 /**
  * Servlet implementation class ReservationServlet
@@ -20,52 +26,68 @@ public class ReservationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-	}
-
-	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HiltonDublinDBConnection dbConnection = HiltonDublinDBConnection.getInstance(); 
+		
 		Guest guest = new Guest();
-		GuestSingleton guestinfo = GuestSingleton.getInstatnce();
 
-		guest.setLastName(request.getParameter("lastname"));
-		guest.setFirstName(request.getParameter("firstname"));
-		guest.setPhoneNumber(request.getParameter("phonenr"));
-		guest.setEmail(request.getParameter("email"));
-		guest.setAddress(request.getParameter("address"));
-		guest.setPassportNr(Integer.parseInt(request.getParameter("passportnr")));
+		guest.setLastName(request.getParameter("lastname")); //TODO: Chec if empty and return an error message to the user
+		guest.setFirstName(request.getParameter("firstname")); //TODO: Same as first name
+		guest.setPhoneNumber(request.getParameter("phonenr")); //TODO: Can be left empty
+		guest.setEmail(request.getParameter("email")); //TODO: Check if email address is empty and in right format and return error message to user if not
+		guest.setAddress(request.getParameter("address")); //TODO: Check if empty and return error message to user
+		guest.setPassportNr(Integer.parseInt(request.getParameter("passportnr"))); //TODO: Check if it is integer before and if empty and return an error message to the user
 		
+		Room room = new Room();
+		if(request.getParameter("smoking").equals("true")) {
+			room.setSmoking(true);
+		}
+		else {
+			room.setSmoking(false);
+		}
 		
-		//Singleton
-		guestinfo.setLastName(request.getParameter("lastname"));
-		guestinfo.setFirstName(request.getParameter("firstname"));
-		guestinfo.setPhoneNumber(request.getParameter("phonenr"));
-		guestinfo.setEmail(request.getParameter("email"));
-		guestinfo.setAddress(request.getParameter("address"));
-		guestinfo.setPassportNr(Integer.parseInt(request.getParameter("passportnr")));
-		guestinfo.setSmoking(request.getParameter("smoking"));
-		guestinfo.setCheckin(request.getParameter("checkin"));
-		guestinfo.setCheckout(request.getParameter("checkout"));
-		guestinfo.setGuests(Integer.parseInt(request.getParameter("numberOfGuests")));
-		guestinfo.setType1(Integer.parseInt(request.getParameter("numtype1")));
-		guestinfo.setType2(Integer.parseInt(request.getParameter("numtype2")));
-		guestinfo.setType3(Integer.parseInt(request.getParameter("numtype3")));
+		// number of each type rooms that user need
+		int[] Type = {Integer.parseInt(request.getParameter("numtype1")), Integer.parseInt(request.getParameter("numtype2")), Integer.parseInt(request.getParameter("numtype3"))};
 		
+		Reservation reservation = new Reservation();
 		
-		int roomtype1 = Integer.parseInt(request.getParameter("numtype1"));
-		int roomtype2 = Integer.parseInt(request.getParameter("numtype2"));
-		int roomtype3 = Integer.parseInt(request.getParameter("numtype3"));
+		SimpleDateFormat onlyDayDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
+		String ArrivalString = request.getParameter("checkin");
+		String DepartureString = request.getParameter("checkout");
+
+		try {
+			Date ArrivalDate = onlyDayDateFormat.parse(ArrivalString);
+			Date DepartureDate = onlyDayDateFormat.parse(DepartureString);
+			
+			reservation.setArrivalDate(ArrivalDate);
+			reservation.setDepartureDate(DepartureDate);
+			
+		} catch (ParseException e) {
+			response.sendRedirect("onlinereservation.jsp");
+			
+			return ;
+		}
+		
+		// checking passport-number is just number
+		int passportcheck = guest.getPassportNr();
+		while(passportcheck != 0)
+		{
+			if(passportcheck%10 >= 0 && passportcheck%10 < 10)
+			{
+				passportcheck = passportcheck / 10;
+			}
+			else
+			{
+				System.out.println("Passport number is wrong!!");
+				return ;
+			}
+		}
 		ReservationService reserve = new ReservationService();
 		
-		guest = reserve.findGuestID(guest, roomtype1 + roomtype2 + roomtype3);
-		
-		guestinfo.setGuestID(guest.getGuestID());
+		guest = reserve.findGuestID(guest, Type[0]+Type[1]+Type[2]);
 		
 		if(guest.getGuestID() == -1) {
 			response.sendRedirect("onlinereservation.jsp");
@@ -73,10 +95,14 @@ public class ReservationServlet extends HttpServlet {
 			return ;
 		}
 		else {
-			response.sendRedirect("onlinereservationsh.jsp");
+			request.setAttribute("guest", guest);
+			request.setAttribute("room", room);
+			request.setAttribute("reservation", reservation);
+			request.setAttribute("Type", Type);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("Online-Reservation-sh");
+			dispatcher.forward(request, response);
 			
 			return ;
 		}
 	}
-
 }

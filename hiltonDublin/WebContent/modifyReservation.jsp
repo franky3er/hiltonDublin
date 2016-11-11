@@ -1,6 +1,7 @@
 <%@page import="com.hiltondublin.classes.Reservation" %>
 <%@page import="com.hiltondublin.classes.Room" %>
 <%@page import="com.hiltondublin.classes.RoomType" %>
+<%@page import="com.hiltondublin.classes.ConsumerProduct" %>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 
@@ -13,6 +14,7 @@ String error = (String) request.getAttribute("error");
 String showContent = (String) request.getAttribute("showContent");
 
 List<RoomType> roomTypes = dbConnection.getRoomTypes(null, null, null, null, null, null);
+List<ConsumerProduct> consumerProducts = dbConnection.getConsumerProducts(null, null, null, null);
 
 //ERRORS
 boolean errorFirstNameEmpty = false;
@@ -26,6 +28,9 @@ boolean errorDeleteRoom = false;
 boolean errorAddRoomToReservationNoAvailableRoomsFound = false;
 boolean errorAddRoomToReservationFailed = false;
 boolean successfullyAddRoomToReservation = false;
+boolean errorDeleteProductFromReservationNoProductToDelete = false;
+boolean successfullyDeleteProductFromReservation = false;
+boolean successfullyAddProductToReservation = false;
 
 //Modify Reservation Details Params
 String modifyReservationDetailsError = (String) request.getAttribute("modifyReservationDetailsError");
@@ -117,6 +122,28 @@ if(addRoomToReservationSuccessful.equals("1")){
 	successfullyAddRoomToReservation = true;
 }
 
+//Modify Product Details
+String deleteProductFromReservationError = (String) request.getAttribute("deleteProductFromReservationError");
+String deleteProductFromReservationSuccessful = (String) request.getAttribute("deleteProductFromReservationSuccessful");
+String addProductToReservationSuccessful = (String) request.getAttribute("addProductToReservationSuccessful");
+if(deleteProductFromReservationError == null){
+	deleteProductFromReservationError = "0";
+}
+if(deleteProductFromReservationSuccessful == null){
+	deleteProductFromReservationSuccessful = "0";
+}
+if(addProductToReservationSuccessful == null){
+	addProductToReservationSuccessful = "0";
+}
+if(deleteProductFromReservationError.equals("1")){
+	errorDeleteProductFromReservationNoProductToDelete = true;
+}
+if(deleteProductFromReservationSuccessful.equals("1")){
+	successfullyDeleteProductFromReservation = true;
+}
+if(addProductToReservationSuccessful.equals("1")){
+	successfullyAddProductToReservation = true;
+}
 %>
 
 <h1><%=language.administratorModifyReservationHeading() %></h1>
@@ -193,9 +220,15 @@ if(addRoomToReservationSuccessful.equals("1")){
 	<%} if(successfullyMofifiedGuest){ %> 
 		<p class="informational"><%=language.administratorModifyGuestDetailsSuccessful() %></p> 
 	<%} if(successfullyDeleteRoom){ %> 
-		<p class="informational"><%=language.administratorDeleteRoomSuccessful() %></p> 
+		<p class="informational"><%=language.administratorDeleteRoomFromReservationSuccessful() %></p> 
 	<%} if(successfullyAddRoomToReservation){ %> 
 		<p class="informational"><%=language.administratorAddRoomToReservationSuccessful() %></p> 
+	<%} if(successfullyAddProductToReservation){ %> 
+		<p class="informational"><%=language.administratorModifyProductSuccessfulAddProductToReservation()%></p> 
+	<%} if(successfullyDeleteProductFromReservation){ %> 
+		<p class="informational"><%=language.administratorModifyProductSuccessfulyDeletedFromReservation() %></p> 
+	<%} if(errorDeleteProductFromReservationNoProductToDelete){ %> 
+		<p class="error"><%=language.administratorModifyProductErrorDeleteFromReservation() %></p> 
 	<%} if(errorFirstNameEmpty){ %> 
 		<p class="error"><%=language.administratorModifyGuestErrorFirstNameEmpty() %></p> 
 	<%} if(errorAddRoomToReservationNoAvailableRoomsFound){ %> 
@@ -211,7 +244,7 @@ if(addRoomToReservationSuccessful.equals("1")){
 	<%} if(errorPassportNrNotInRightFormat){ %> 
 		<p class="error"><%=language.administratorModifyGuestErrorPassportNrNotInRightFormat() %></p>
 	<%} if(errorDeleteRoom){ %> 
-		<p class="error"><%=language.administratorDeleteRoomError() %></p>
+		<p class="error"><%=language.administratorDeleteRoomFromReservationError() %></p>
 	<%} %>
 	
 <br/>
@@ -337,6 +370,53 @@ if(addRoomToReservationSuccessful.equals("1")){
 	</form>
 	
 </table>
+
+<br/>
+
+<h2><%=language.administratorModifyProductHeading() %></h2>
+
+<table class="showValues">
+	<tr>
+		<th><%=language.administratorModifyProductProductName() %></th>
+		<th><%=language.administratorModifyProductPrice() %></th>
+		<th></th>
+	</tr>
+	
+	<%
+	List<ConsumerProduct> products = reservation.getConsumerProducts();
+	for(ConsumerProduct product : products){ %>
+	<tr>
+		<td><%=product.getName() %></td>
+		<td><%=product.getPrice() %></td>
+		<td>
+			<form action="<%=request.getContextPath() %>/Admin/Modify-Reservation-delete-product" method="post">
+				<input type="hidden" name="bookingNumber" value="<%=Integer.toString(reservation.getBookingNumber()) %>"/>
+				<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+				<input type="hidden" name="productID" value="<%=product.getProductID() %>"/>
+				<input type="submit" value="<%=language.delete() %>"/>
+			</form>
+		</td>
+	</tr>
+	<%} %>
+	
+	<form action="<%=request.getContextPath() %>/Admin/Modify-Reservation-add-product" method="post">
+	<tr>
+		<td>
+			<select name="productID">
+			<%for(ConsumerProduct product : consumerProducts){ %>
+				<option value="<%=product.getProductID() %>"><%=product.getName() %></option>
+			<%} %>
+			</select>
+		</td>
+		<td></td>
+		<td><input type="submit" value="<%=language.add() %>"/></td>
+	</tr>
+	<input type="hidden" name="bookingNumber" value="<%=Integer.toString(reservation.getBookingNumber()) %>"/>
+	<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+	</form>
+</table>
+
+<br/>
 
 <%} %>
 

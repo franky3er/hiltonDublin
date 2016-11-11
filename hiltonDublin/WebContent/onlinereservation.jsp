@@ -1,13 +1,27 @@
 <%@page import="com.hiltondublin.classes.Room" %>
 <%@page import="java.util.List"%>
+<%@page import="java.util.Calendar" %>
 <%@page import="java.util.ArrayList" %>
 <%@page import="java.lang.*" %>
     
 <%@ include file="navigationSlideGuestHeader.jsp" %>
 
+<%
+	Calendar currentDay = Calendar.getInstance();
+	currentDay.setTime(new Date());
+	String currentDayAsString = dbConnection.onlyDayDateFormat.format(currentDay.getTime());
+	
+	Calendar tomorrowDay = Calendar.getInstance();
+	tomorrowDay.setTime(new Date());
+	tomorrowDay.add(Calendar.DAY_OF_MONTH, 1);
+	String tomorrowDayAsString = dbConnection.onlyDayDateFormat.format(tomorrowDay.getTime());
+	
+	//TODO: Load Room Types Dynamically from database for selection
+%>
+
 <h1>Online Reservation</h1>
 
-<form id="check_guestinfo" action="Reservation" method="post">
+<form id="check_guestinfo" action="<%=request.getContextPath() %>/Guest/Online-Reservation-check" method="post">
 	<fieldset>
 		<legend>Guest Info</legend>
 		<table>
@@ -51,8 +65,8 @@
 		<td>Smoking</td>
 		</tr>
 		<tr>
-		<td><input type="date" id="checkin" name="checkin" min="2016-11-01" required></td>
-		<td><input type="date" id="checkout" name="checkout" min="2016-11-02" required></td>
+		<td><input type="date" id="checkin" name="checkin" value="<%=currentDayAsString %>" min="<%=currentDayAsString %>" required></td>
+		<td><input type="date" id="checkout" name="checkout" value="<%=tomorrowDayAsString %>" min="<%=tomorrowDayAsString %>" required></td>
 		<td><input type="number" id="numberOfGuests" name="numberOfGuests" min="1" max="6" required></td>
 		<td>
 		<input id="smoking" type="radio" name="smoking" value="true" checked>
@@ -73,9 +87,9 @@
 		<td>Triple</td>
 		</tr>
 		<tr>
-		<td><input type="number" id="numtype1" name="numtype1" min="0" required></td>
-		<td><input type="number" id="numtype2" name="numtype2" min="0" required></td>
-		<td><input type="number" id="numtype3" name="numtype3" min="0" required></td>
+		<td><input type="number" id="numtype1" name="numtype1" value="0" min="0" required></td>
+		<td><input type="number" id="numtype2" name="numtype2" value="0" min="0" required></td>
+		<td><input type="number" id="numtype3" name="numtype3" value="0" min="0" required></td>
 		</tr>
 		</table>
 	</fieldset>

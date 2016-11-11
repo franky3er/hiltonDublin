@@ -24,6 +24,9 @@ public abstract class Language {
 	public String add(){
 		return "add";
 	}
+	public String search(){
+		return "search";
+	}
 
 	
 	//NAVIGATIONSLIDE
@@ -90,6 +93,9 @@ public abstract class Language {
 	//GUEST
 	public String guestWelcome(){
 		return "Welcome to Guest Page";
+	}
+	public String guestName(){
+		return "Name: ";
 	}
 	public String guestRatingErrorMessageFirstName(){
 		return "Please type in a First Name!";
@@ -346,10 +352,10 @@ public abstract class Language {
 	public String administratorModifyRoomDetailsOccupied(){
 		return "Occupied: ";
 	}
-	public String administratorDeleteRoomSuccessful(){
+	public String administratorDeleteRoomFromReservationSuccessful(){
 		return "Delete Room successful";
 	}
-	public String administratorDeleteRoomError(){
+	public String administratorDeleteRoomFromReservationError(){
 		return "Delete Room failed";
 	}
 	public String administratorAddRoomToReservationErrorNoAvailableRoom(){
@@ -360,6 +366,27 @@ public abstract class Language {
 	}
 	public String administratorAddRoomToReservationSuccessful(){
 		return "Add room to reservation successful";
+	}
+	public String administratorModifyProductHeading(){
+		return "Product Details";
+	}
+	public String administratorModifyProductProductName(){
+		return "Product Name: ";
+	}
+	public String administratorModifyProductPrice(){
+		return "Price: ";
+	}
+	public String administratorModifyProductSuccessfulyDeletedFromReservation(){
+		return "Successfully deleted product from reservation";
+	}
+	public String administratorModifyProductErrorDeleteFromReservation(){
+		return "Delete product from reservation failed. Found no product to delete.";
+	}
+	public String administratorModifyProductSuccessfulAddProductToReservation(){
+		return "Successfully add product to reservation";
+	}
+	public String administratorModifyRoomHeading(){
+		return "Modify Room";
 	}
 	
 }
