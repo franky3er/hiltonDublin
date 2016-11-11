@@ -33,12 +33,12 @@ public class ReservationServlet extends HttpServlet {
 		
 		Guest guest = new Guest();
 
-		guest.setLastName(request.getParameter("lastname"));
-		guest.setFirstName(request.getParameter("firstname"));
-		guest.setPhoneNumber(request.getParameter("phonenr"));
-		guest.setEmail(request.getParameter("email"));
-		guest.setAddress(request.getParameter("address"));
-		guest.setPassportNr(Integer.parseInt(request.getParameter("passportnr")));
+		guest.setLastName(request.getParameter("lastname")); //TODO: Chec if empty and return an error message to the user
+		guest.setFirstName(request.getParameter("firstname")); //TODO: Same as first name
+		guest.setPhoneNumber(request.getParameter("phonenr")); //TODO: Can be left empty
+		guest.setEmail(request.getParameter("email")); //TODO: Check if email address is empty and in right format and return error message to user if not
+		guest.setAddress(request.getParameter("address")); //TODO: Check if empty and return error message to user
+		guest.setPassportNr(Integer.parseInt(request.getParameter("passportnr"))); //TODO: Check if it is integer before and if empty and return an error message to the user
 		
 		Room room = new Room();
 		if(request.getParameter("smoking").equals("true")) {
@@ -99,7 +99,7 @@ public class ReservationServlet extends HttpServlet {
 			request.setAttribute("room", room);
 			request.setAttribute("reservation", reservation);
 			request.setAttribute("Type", Type);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("onlinereservationsh.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("Online-Reservation-sh");
 			dispatcher.forward(request, response);
 			
 			return ;
