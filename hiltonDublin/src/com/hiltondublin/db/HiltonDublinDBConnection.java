@@ -25,7 +25,7 @@ import com.hiltondublin.users.Administrator;
 import com.hiltondublin.users.Employee;
 import com.hiltondublin.users.Guest;
 import com.hiltondublin.users.User;
-import com.mysql.jdbc.SocketMetadata.Helper;
+import com.hiltondublin.helper.*;
 
 public class HiltonDublinDBConnection extends Helper {
 	//MySQL Date Format
@@ -2784,12 +2784,12 @@ public class HiltonDublinDBConnection extends Helper {
 		String depDate = mySQLDateFormat.format(departureDate);
 		String isSmoking = Boolean.toString(smoking);
 		isSmoking = convertBooleanToTinyInt(isSmoking);
-		String additionalSQLCondition = ROOM_NUMBER + " IN ( SELECT " + RESERVED_ROOM_ROOMNUMBER + " FROM " + RESERVED_ROOM;
+		String additionalSQLCondition = "( " + ROOM_NUMBER + " IN ( SELECT " + RESERVED_ROOM_ROOMNUMBER + " FROM " + RESERVED_ROOM;
 		additionalSQLCondition += " WHERE " + RESERVED_ROOM_RESERVATIONID + " NOT IN ("; 
 		additionalSQLCondition += " SELECT " + RESERVATION_RESERVATIONID + " FROM " + RESERVATION;
 		additionalSQLCondition += " WHERE " + RESERVATION_ARRIVALDATE + " BETWEEN '" + arrDate + "' AND '" + depDate + "' ";
 		additionalSQLCondition += " OR " + RESERVATION_DEPARTUREDATE + " BETWEEN '" + arrDate + "' AND '" + depDate + "' )) ";
-		additionalSQLCondition += " OR " + ROOM_NUMBER + " NOT IN ( SELECT " + RESERVED_ROOM_ROOMNUMBER + " FROM " + RESERVED_ROOM + ")";
+		additionalSQLCondition += " OR " + ROOM_NUMBER + " NOT IN ( SELECT " + RESERVED_ROOM_ROOMNUMBER + " FROM " + RESERVED_ROOM + "))";
 		
 		List<Room> rooms = getRooms(null, Integer.toString(roomTypeID), isSmoking, null, additionalSQLCondition);
 		
