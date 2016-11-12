@@ -101,6 +101,14 @@
     <servlet-name>onlinecancellation</servlet-name>
     <url-pattern>/Guest/Cancellation</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>onlinecancellation-employee</servlet-name>
+    <jsp-file>/onlinecancellation-employee.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>onlinecancellation-employee</servlet-name>
+    <url-pattern>/Employee/Cancellation</url-pattern>
+  </servlet-mapping>
   
   <servlet>
     <servlet-name>rating</servlet-name>

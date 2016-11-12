@@ -8,7 +8,7 @@
 		<form action="<%=getURLWithContextPath(request) %>/Guest/Online-Reservation" method="get">
 			<input class="navigationPage" type="submit" value="Reservation" />
 		</form>
-		<form action="cancellation.jsp" method="get">
+		<form action="<%=getURLWithContextPath(request) %>/Employee/Cancellation" method="get">
 			<input class="navigationPage" type="submit" value="Cancellation" />
 		</form>
 		<form action="checkin.jsp" method="get">
