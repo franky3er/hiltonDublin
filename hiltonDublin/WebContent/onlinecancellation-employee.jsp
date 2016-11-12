@@ -1,12 +1,13 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Cancel for emplyee</title>
-</head>
-<body>
+<%@ include file="navigationSlideEmployeeHeader.jsp" %>
+<%@page import="com.hiltondublin.db.HiltonDublinDBConnection"%>
+<%@page import="com.hiltondublin.classes.Reservation" %>
+<%@page import="com.hiltondublin.classes.Room" %>
+<%@page import="com.hiltondublin.users.Guest" %>
+<%@page import="com.hiltondublin.classes.ConsumerProduct" %>
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList" %>
+<%@page import= "java.sql.ResultSet" %>
 
-</body>
-</html>
+
+
+<%@ include file="navigationSlideEmployeeFooter.jsp" %>
