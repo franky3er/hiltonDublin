@@ -10,7 +10,7 @@
 
 <h1>Online Reservation</h1>
 
-<form id="roomsh" action="Showroom" method="post">
+<form id="roomsh" action="<%=request.getContextPath() %>/Guest/Online=Reservation-show" method="post">
 	<%
 		List<Room> roomtype1 = new ArrayList<Room>();
 		List<Room> roomtype2 = new ArrayList<Room>();
