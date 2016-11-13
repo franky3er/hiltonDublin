@@ -45,6 +45,14 @@
     <url-pattern>/Guest/Online-Reservation-check</url-pattern>
   </servlet-mapping>
   <servlet>
+  	<servlet-name>ShowroomServlet</servlet-name>
+  	<servlet-class>com.hiltondublin.servlets.ShowroomServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ShowroomServlet</servlet-name>
+  	<url-pattern>/Guest/Online=Reservation-show</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>loginServlet</servlet-name>
     <servlet-class>com.hiltondublin.servlets.LoginServlet</servlet-class>
   </servlet>

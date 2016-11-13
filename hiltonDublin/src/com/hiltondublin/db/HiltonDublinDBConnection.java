@@ -1519,7 +1519,17 @@ public class HiltonDublinDBConnection extends Helper {
 		// Write Values and Tables in Arrays
 		String[] values = { reservationID, guestID, arrivalDate, departureDate, paid };
 		String table =  RESERVATION ;
-				
+		
+		List<Reservation> reservations = getReservations(reservationID, guestID, arrivalDate, departureDate, paid, additionalSQLCondition);
+		
+		if(reservations != null){
+			for(Reservation reservation : reservations){
+				deleteGuests(Integer.toString(reservation.getGuestID()), null, null, null, null, null, null, null);
+				deleteReserved_Rooms(null, Integer.toString(reservation.getBookingNumber()), null);
+				deleteReserved_Products(null, null, Integer.toString(reservation.getBookingNumber()), null);
+			}
+		}
+		
 		//Get SQL Statement
 		return createDeleteStatement(table, RESERVATION_COLUMNS, values, additionalSQLCondition);
 			
