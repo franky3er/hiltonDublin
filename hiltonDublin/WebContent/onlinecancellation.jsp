@@ -1,5 +1,6 @@
 
 <%@page import="com.hiltondublin.db.HiltonDublinDBConnection"%>
+<%@page import="com.hiltondublin.helper.Helper" %>
 <%@page import="com.hiltondublin.classes.Room" %>
 <%@page import="com.hiltondublin.classes.Reservation" %>
 <%@page import="com.hiltondublin.users.Guest" %>
@@ -9,100 +10,13 @@
 <%@page import= "java.sql.ResultSet" %>
 
 <%@ include file="navigationSlideGuestHeader.jsp" %>
-     
-<%
-	/*Get Rooms data*/
-	String roomNumber = null;
-	String typeID = null;
-	String smoking = "true";
-	String occupied = "false";
-	String additionalSQL = HiltonDublinDBConnection.ROOM_NUMBER + ">'200'";
-	
-	List<String> roomsAsStrings = new ArrayList<String>();
-	
-	List<Room> rooms = dbConnection.getRooms(roomNumber, typeID, smoking, occupied, additionalSQL);
-	System.out.println("rooms.size() : "+rooms.size());
-	System.out.println("HiltonDublinDBConnection.ROOM_NUMBER : "+HiltonDublinDBConnection.ROOM_NUMBER);
-	System.out.println("additionalSQL : "+additionalSQL);
-	for(Room room : rooms){
-		roomsAsStrings.add("RoomNumber: " + room.getRoomNumber() + "   typeID: " + room.getTypeID() + "   smoking: " + room.isSmoking() + "   occupied: " + room.isOccupied());
-	}
-	
-	
-	/*Insert fake Geust data
-	 String guestID =null;
-	 String  firstName = "Max";
-	 String  lastName = "Mustermann";
-	 String  phoneNumber = "12345678";
-	 String  email = "email@gmail.com";
-	 String address ="Eine Adresse 103 Hamburg";
-	 String  passportNr = "123456"; 
-	 String additionalSQLCondition = null;
-	 */
-	 /*
-	 ResultSet guestID_primKey = dbConnection.insertGuest(null, firstName, lastName, phoneNumber, email, address, passportNr);
-	   
-	 if(guestID_primKey.next()){
-			guestID = guestID_primKey.getString(1); //Returns the Primary Key of the inserted row in the GUEST table
-			 
-			System.out.println("guestID_primKey.getString(1)= "+guestID);
-		}  
-	 */  
-	 
-	 /*Get Geust data*/
-	 String guestID =null;
-	 String  firstName =null;
-	 String  lastName =null;
-	 String  phoneNumber =null;
-	 String  email =null;
-	 String address =null;
-	 String  passportNr =null;
-	 String additionalSQLCondition = null;	 
-	 //List<String> guestsAsStrings = new ArrayList<String>();	 
-
-	 //Get every saved guests datas from DB.
-	List<Guest> guests = dbConnection.getGuests(guestID, firstName, lastName, phoneNumber, email, address, passportNr, additionalSQLCondition);
-	 System.out.println("guest.size(): " + guests.size());
-	/*  for(Guest guest : guests){
-		 guestsAsStrings.add("GuestId: "+guest.getGuestID()+"  LastName :"+guest.getLastName());
-		 System.out.println("GuestId: "+guest.getGuestID()+"  Lastname :"+guest.getLastName());
-	 }  */
-
-	
-	/*Insert fake Bookings data*/
-	/* 	String reservationID = "1";
-	String arrivalDate = "2016-11-03 00:00:00";
-	String departureDate = "2016-11-05 00:00:00";
-	String paid = "false"; */
-	/* 	 ResultSet reservationID_primKey = dbConnection.insertReservation(null, guestID, arrivalDate, departureDate, paid);
-	 
-	if(reservationID_primKey.next()){
-		reservationID = reservationID_primKey.getString(1); //Returns the Primary Key of the inserted row in the Reservation table
-	}  
-	 */
-	
-	/*Get Bookings data*/
-	String reservationID = null;
-	String arrivalDate = null;
-	String departureDate = null;
-	String paid = null;
-	
-	/*Get Bookings data*/
-	List<String> reservationAsStrings = new ArrayList<String>();
-	List<Reservation> reservations = dbConnection.getReservations(reservationID, guestID, arrivalDate, departureDate, paid, additionalSQLCondition);
-	 System.out.println("reservations.size() : "+reservations.size());
-	 /*
-	for(Reservation reservation : reservations)
-	{
-		reservationAsStrings.add("Booking Number: "+reservation.getBookingNumber()+"  guestID: "+reservation.getGuestID());
-		System.out.println("Booking Number: "+reservation.getBookingNumber()+"  guestID: "+reservation.getGuestID());
-		
-	}  	 */
-%>
 
 <%
 String inputReservationId = request.getParameter("inputReservationId");
 String inputLastname = request.getParameter("inputlastname");
+
+Reservation reservation = null;
+Guest guest = null;
 
 boolean isSubmitted = false;
 boolean isFilledOutCorrect = true;
@@ -122,6 +36,11 @@ if(inputReservationId!=null && inputLastname!=null){
 		errorMessage += "Booking reference is missing"+"<br/>";
 		isFilledOutCorrect = false;
 		reservationidWrong = true;
+	} else {
+		if(!Helper.isInteger(inputReservationId)){
+			errorMessage += "Booking reference must be from type Integer"+"<br/>";
+			isFilledOutCorrect = false;
+		}
 	}
 	if(inputLastname.isEmpty() || inputLastname.trim().equals("") )
 	{
@@ -130,33 +49,35 @@ if(inputReservationId!=null && inputLastname!=null){
 		lastNameWrong = true;
 	}
 	if(isFilledOutCorrect){
-	
-		 for(Reservation reservation : reservations){
-			 resultMessage = "Can't find Booking reference."+"<br/>";
-			if( inputReservationId.trim().equals(reservation.getBookingNumber()+"" ) )
-			{
-				reservationIdFound =true;
-				resultMessage = "";
-				break;
-			}
-			
-		}//end of reservation for loop
-		for(Guest guest : guests){
-			resultMessage2 = "Can't find Last name."+"<br/>";
-				if(inputLastname.equals(guest.getLastName()))
-				{
-					lastnameFound =true;
-				resultMessage2 = "";
-				break;
+		
+		List<Reservation> reservations = dbConnection.getReservations(inputReservationId, null, null, null, null, null);
+		if(reservations != null){
+			if(!reservations.isEmpty()){
+				reservationIdFound = true;
+				reservation = reservations.get(0);
+				
+				guest = dbConnection.getGuests(Integer.toString(reservation.getBookingNumber()), null, null, null, null, null, null, null).get(0);
+				
+				if(guest.getLastName().equals(inputLastname)){
+					lastnameFound = true;
+				} else {
+					resultMessage2 = "Last Name doesn't match to reservation";
 				}
-		 } //end of guest for loop
+				
+			} else {
+				resultMessage = "Can't find Booking reference."+"<br/>";
+			}
+		} else {
+			resultMessage = "Can't find Booking reference."+"<br/>";
+		}
+		
 		isSubmitted = true;
 		
 	}
 	
 	if(reservationIdFound==true && lastnameFound==true) { 
 		resultFound =true;
-		
+			dbConnection.deleteReservations(Integer.toString(reservation.getBookingNumber()), null, null, null, null, null);
 		}
 }
 %>
@@ -192,22 +113,7 @@ if(inputReservationId!=null && inputLastname!=null){
 <p class="loginError"><%=errorMessage %></p>
 <p class="loginError"><%=resultMessage %><%=resultMessage2%></p>
 <%} else if(resultFound) { 
-	String orderID = null;
-	String productID = null;
-	//dbConnection.deleteReservations(inputReservationId, guestID, arrivalDate, departureDate, paid, additionalSQLCondition); 
-	//dbConnection.deleteReserved_Rooms(roomNumber, inputReservationId, additionalSQLCondition);
-	//dbConnection.deleteReserved_Products(orderID, productID, inputReservationId, additionalSQLCondition);
-	List<String> reserved_roomAsStrings = new ArrayList<String>();
-	List<String> reserved_productsAsStrings = new ArrayList<String>();
-	List<Room> reserved_rooms = dbConnection.getReservedRooms(reservationID);
-	List<ConsumerProduct> reserved_products = dbConnection.getReservedProducts(reservationID);
-	
-	for(Room reserved_room : reserved_rooms){
-		reserved_roomAsStrings.add(reserved_room.getRoomNumber()+"");
-	}
-	for(ConsumerProduct reserved_prouct : reserved_products ){
-		reserved_productsAsStrings.add(reserved_prouct.getProductID()+"");
-	}	
+	List<Room> reservedRooms = reservation.getRooms();
 %>
 
 <h1>Your Bookings</h1>
@@ -215,17 +121,12 @@ if(inputReservationId!=null && inputLastname!=null){
 <p><b>Booking reference</b></p>  <%=inputReservationId %>
 <p><b>Last name</b></p><%=inputLastname %>
 <p><b>Room number </b></p>
-<%
-for(String reserved_roomAsString : reserved_roomAsStrings){
-%>	
- <p><%=reserved_roomAsString %></p>
-<%
-}
-%>
+<% for(Room reservedRoom : reservedRooms){ %>	
+ <p><%=reservedRoom.getRoomNumber() %></p>
+<%}%>
 
 <p></p><b>The booking is canceled. We hope to see you again!</b>
-<%} 
-else { %>
+<%} else { %>
 <h1>Book Cancellation</h1>
 <form id="onlinecancellationform" name="onlinecancellationform" action="<%=request.getRequestURI()%>" method="post">
 <table>
