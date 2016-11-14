@@ -229,4 +229,12 @@
     <servlet-name>modifyRoomSelectOption</servlet-name>
     <url-pattern>/Admin/Modify-Room-select-option</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyRoomGetRooms</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.ModifyRoomGetRoomsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyRoomGetRooms</servlet-name>
+    <url-pattern>/Admin/Modify-Room-get-rooms</url-pattern>
+  </servlet-mapping>
 </web-app>

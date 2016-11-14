@@ -79,7 +79,14 @@ public class Helper {
 	}
 	
 	public static boolean isInteger(String number){
+		if(number == null){
+			return false;
+		}
 		return number.matches(regexInteger);
+	}
+	
+	public static boolean isBoolean(String bool){
+		return (bool.matches("1") || bool.matches("0") || bool.matches("true") || bool.matches("false"));
 	}
 	
 	/**

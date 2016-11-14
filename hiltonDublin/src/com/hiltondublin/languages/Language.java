@@ -398,5 +398,23 @@ public abstract class Language {
 	public String administratorModifyRoomSelectAddRoom(){
 		return "Add Room";
 	}
+	public String administratorModifyRoomSearchRoomErrorRoomNumberNotInRightFormat(){
+		return "Room Number must be from type Integer. ";
+	}
+	public String administratorModifyRoomSearchRoomErrorTypeIDNotInRightFormat(){
+		return "Room Type ID must be from type Integer. ";
+	}
+	public String administratorModifyRoomSearchRoomErrorSmokingNotInRightFormat(){
+		return "Smoking must be from type Boolean. ";
+	}
+	public String administratorModifyRoomSearchRoomErrorOccupiedNotInRightFormat(){
+		return "Occupied must be from type Boolean. ";
+	}
+	public String administratorModifyRoomSearchRoomErrorNoRoomsFound(){
+		return "No room found";
+	}
+	public String administratorModifyRoomSearchRoomSuccessfulFoundRoom(int ammount){
+		return "Found " + ammount + " room(s)";
+	}
 	
 }

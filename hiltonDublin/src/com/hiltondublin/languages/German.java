@@ -380,4 +380,22 @@ public class German extends Language {
 	public String administratorModifyRoomSelectAddRoom(){
 		return "Zimmer hinzufügen";
 	}
+	public String administratorModifyRoomSearchRoomErrorRoomNumberNotInRightFormat(){
+		return "Zimmernummer muss vom Typ Integer sein. ";
+	}
+	public String administratorModifyRoomSearchRoomErrorTypeIDNotInRightFormat(){
+		return "Zimmertyp ID muss vom Typ Integer sein. ";
+	}
+	public String administratorModifyRoomSearchRoomErrorSmokingNotInRightFormat(){
+		return "Rauchen muss vom Typ Boolean sein. ";
+	}
+	public String administratorModifyRoomSearchRoomErrorOccupiedNotInRightFormat(){
+		return "Besetzt muss vom Typ Boolean sein. ";
+	}
+	public String administratorModifyRoomSearchRoomErrorNoRoomsFound(){
+		return "Kein Zimmer gefunden";
+	}
+	public String administratorModifyRoomSearchRoomSuccessfulFoundRoom(int ammount){
+		return ammount + " Zimmer gefunden";
+	}
 }
