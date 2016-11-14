@@ -1,25 +1,27 @@
 <%@page import="com.hiltondublin.classes.Room"%>
 <%@page import="com.hiltondublin.classes.Reservation"%>
-<%@ include file="navigationSlideEmployeeHeader.jsp" %>
+<%@ include file="navigationSlideGuestHeader.jsp" %>
 <h1>Check In</h1>
-<form name="checkinform" id="checkinform" action="get">
-	<table>
-		<tr>
-			<td><input type="text" name="firstName"/></td>
-		</tr>
-		<tr>
-			<td><input type="text" name="lastName"/></td>
-		</tr>
-		<tr>
-			<td><input type="submit" value="submit"/></td>
-	</table>
-</form>
 <%
-String firstName = request.getParameter("firstName");
-String lastName = request.getParameter("lastName");
-List<Reservation> reservation = dbConnection.getReservationsFromGuestName(firstName, lastName);
-for(Reservation res: reservation) {%>
-	Room: <% List<Room> room = res.getRooms();
-}
+String firstName = (String) request.getParameter("firstName");
+String lastName = (String) request.getParameter("lastName");
+List<Reservation> reservations = dbConnection.getReservationsFromGuestName(firstName, lastName);
+
 %>
-<%@ include file="navigationSlideEmployeeFooter.jsp" %>
+	<form id="checkinForm" name="checkinForm" action="<%=request.getRequestURI()%>" method="post">
+	<label>Name: 
+		<input type="text" name="firstName" placeholder="First Name" />
+		<input type="text" name="lastName" placeholder="Last Name" />
+		<input type="submit" name="checkin" value="submit"/>
+	</label>
+	</form>
+	<%if(firstName != null && lastName!= null) {%>
+	<%if(reservations == null){out.println("There are no reservations for " + firstName + " " + lastName);}else{ %>
+	<% for(Reservation res: reservations){ %>
+	<select name="reservations">
+		<option><%=res.getBookingNumber() %></option>
+	</select>
+	<%} %>
+	<%}} %>
+	
+<%@ include file="navigationSlideGuestFooter.jsp" %>
