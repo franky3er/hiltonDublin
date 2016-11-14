@@ -24,6 +24,9 @@ public class German extends Language {
 	}
 	public String search(){
 		return "suchen";
+	}	
+	public String whatWouldYouLikeToDo(){
+		return "Was möchten sie tun? ";
 	}
 	
 	//Navigation Slide
@@ -369,5 +372,12 @@ public class German extends Language {
 	}
 	public String administratorModifyRoomHeading(){
 		return "Zimmer modifizieren";
+	}
+	
+	public String administratorModifyRoomSelectModifyRoom(){
+		return "Zimmer modifizieren";
+	}
+	public String administratorModifyRoomSelectAddRoom(){
+		return "Zimmer hinzufügen";
 	}
 }

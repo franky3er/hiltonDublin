@@ -15,12 +15,8 @@
 	int chargeProductError = 0;
 
 	List<ConsumerProduct> consumerProducts = dbConnection.getConsumerProducts(null,null,null, null);
-
 	
-		Reservation reservation = dbConnection.getReservationFromRoomNumber(roomno);
-		int reservationid = reservation.getBookingNumber();	
-		dbConnection.assignProductToReservation(productID, Integer.toString(reservationid), null);	
-		isSubmitted = true;
+	Reservation reservation = null;
 		
 	if(roomno != null ){
 		if(roomno.isEmpty() || roomno.trim().equals("")){
@@ -33,7 +29,7 @@
 				if(reservation == null){
 					chargeProductError = 3; //No reservation found for room number
 				} else {
-					reservationid = reservation.getBookingNumber();
+					int reservationid = reservation.getBookingNumber();
 					dbConnection.assignProductToReservation(null, productID, Integer.toString(reservationid));	
 					isSubmitted = true;
 				}
@@ -54,11 +50,13 @@
 		<tr>
 		<td><%=language.employeeChargeProductProduct() %> </td>
 		<td>
+			<%if(consumerProducts != null){ %>
 			<select name="consumerproducts">
 				<%for(ConsumerProduct conProducts: consumerProducts){ %>
 				<option value="<%=conProducts.getProductID()%>"><%=conProducts.getName()%></option>
 				<%} %>
 			</select>
+			<%} %>
 		</td>
 		</tr>
 		<tr>

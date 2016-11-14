@@ -45,12 +45,12 @@
     <url-pattern>/Guest/Online-Reservation-check</url-pattern>
   </servlet-mapping>
   <servlet>
-  	<servlet-name>ShowroomServlet</servlet-name>
-  	<servlet-class>com.hiltondublin.servlets.ShowroomServlet</servlet-class>
+    <servlet-name>ShowroomServlet</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.ShowroomServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>ShowroomServlet</servlet-name>
-  	<url-pattern>/Guest/Online=Reservation-show</url-pattern>
+    <servlet-name>ShowroomServlet</servlet-name>
+    <url-pattern>/Guest/Online=Reservation-show</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>loginServlet</servlet-name>
@@ -100,7 +100,6 @@
     <servlet-name>checkoutServletVerified</servlet-name>
     <url-pattern>/Employee/Checkout-room-verified</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>onlinecancellation</servlet-name>
     <jsp-file>/onlinecancellation.jsp</jsp-file>
@@ -117,7 +116,6 @@
     <servlet-name>onlinecancellation-employee</servlet-name>
     <url-pattern>/Employee/Cancellation</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>rating</servlet-name>
     <jsp-file>/rating.jsp</jsp-file>
@@ -125,7 +123,7 @@
   <servlet-mapping>
     <servlet-name>rating</servlet-name>
     <url-pattern>/Guest/Rating</url-pattern>
-  </servlet-mapping>  
+  </servlet-mapping>
   <servlet>
     <servlet-name>chargeProduct</servlet-name>
     <jsp-file>/chargeProduct.jsp</jsp-file>
@@ -213,5 +211,22 @@
   <servlet-mapping>
     <servlet-name>addProductToReservation</servlet-name>
     <url-pattern>/Admin/Modify-Reservation-add-product</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>modifyRoom</servlet-name>
+    <jsp-file>/modifyRoom.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyRoom</servlet-name>
+    <url-pattern>/Admin/Modify-Room</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyRoomSelectOption</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.ModifyRoomSelectOptionServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyRoomSelectOption</servlet-name>
+    <url-pattern>/Admin/Modify-Room-select-option</url-pattern>
   </servlet-mapping>
 </web-app>

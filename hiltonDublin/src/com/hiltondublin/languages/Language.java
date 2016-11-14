@@ -27,6 +27,9 @@ public abstract class Language {
 	public String search(){
 		return "search";
 	}
+	public String whatWouldYouLikeToDo(){
+		return "What would you like to do? ";
+	}
 
 	
 	//NAVIGATIONSLIDE
@@ -387,6 +390,13 @@ public abstract class Language {
 	}
 	public String administratorModifyRoomHeading(){
 		return "Modify Room";
+	}
+	
+	public String administratorModifyRoomSelectModifyRoom(){
+		return "Modify Room";
+	}
+	public String administratorModifyRoomSelectAddRoom(){
+		return "Add Room";
 	}
 	
 }

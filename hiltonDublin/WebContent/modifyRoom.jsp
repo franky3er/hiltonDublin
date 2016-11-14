@@ -13,13 +13,34 @@ List<RoomType> roomTypes = dbConnection.getRoomTypes(null, null, null, null, nul
 
 
 if(showContent==null){
-	showContent = "searchRooms";
+	showContent = "showOptions";
 }
 %>
 
 <h1><%=language.administratorModifyRoomHeading() %></h1>
+<%if(showContent.equals("showOptions")){ %>
 
-<%if(showContent.equals("searchRooms")){ %>
+<h4><%=language.whatWouldYouLikeToDo() %></h4>
+<table>
+  <tr>
+    <td>
+    	<form action="<%=request.getContextPath() %>/Admin/Modify-Room-select-option" method="get">
+    		<input type="hidden" name="optionSelection" value="modifyRoom"/>
+    		<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+    		<input type="submit" value="<%=language.administratorModifyRoomSelectModifyRoom() %>"/>
+    	</form>
+    </td>
+    <td>
+    	<form action="<%=request.getContextPath() %>/Admin/Modify-Room-select-option" method="get">
+    		<input type="hidden" name="optionSelection" value="addRoom"/>
+    		<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+    		<input type="submit" value="<%=language.administratorModifyRoomSelectAddRoom() %>"/>
+    	</form>
+    </td>
+  </tr>
+</table>
+
+<%} else if(showContent.equals("searchRooms")){ %>
 <form action="" method="get">
 <table class="showValues">
   <tr>
@@ -51,6 +72,10 @@ if(showContent==null){
   </tr>
 </table>
 </form>
+<%} else if(showContent.equals("addRoom")){%>
+
+
+
 <%} %>
 
 <%@ include file="navigationSlideAdminFooter.jsp" %>
