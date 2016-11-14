@@ -28,6 +28,9 @@ public class German extends Language {
 	public String whatWouldYouLikeToDo(){
 		return "Was möchten sie tun? ";
 	}
+	public String modify(){
+		return "modifizieren";
+	}
 	
 	//Navigation Slide
 	public String navigationSlideGuest(){

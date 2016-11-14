@@ -14,6 +14,7 @@ String searchRoomErrorTypeID = (String) request.getAttribute("searchRoomErrorTyp
 String searchRoomErrorSmoking = (String) request.getAttribute("searchRoomErrorSmoking");
 String searchRoomErrorOccupied = (String) request.getAttribute("searchRoomErrorOccupied");
 List<Room> foundRooms = (List<Room>) request.getAttribute("foundRooms");
+Room selectedRoom = (Room) request.getAttribute("selectedRoom");
 
 List<RoomType> roomTypes = dbConnection.getRoomTypes(null, null, null, null, null, null);
 
@@ -79,6 +80,21 @@ if(searchRoomErrorOccupied.equals("1")){
   </tr>
 </table>
 
+<%} else if(showContent.equals("modifyRoom")){ %>
+
+
+	<%if(selectedRoom != null){ %>
+<form action="" method="post">
+<table>
+  <tr>
+    <td><%=language.administratorModifyRoomDetailsRoomNumber() %></td>
+    <td><input type="text" maxlength="3" size="3" value="<%=selectedRoom.getRoomNumber() %>"/></td>
+  </tr>
+</table>
+</form>
+	<%} %>
+
+
 <%} else if(showContent.equals("searchRooms")){ %>
 
 <form action="<%=request.getContextPath() %>/Admin/Modify-Room-get-rooms" method="get">
@@ -128,9 +144,39 @@ if(searchRoomErrorOccupied.equals("1")){
 
 <%if(foundRooms == null){ %>
 <p class="error"><%=language.administratorModifyRoomSearchRoomErrorNoRoomsFound() %></p>
-<%} else { %>
-
-<p class="informational"><%=language.administratorModifyRoomSearchRoomSuccessfulFoundRoom(foundRooms.size()) %></p>
+<%} else { 
+	if(foundRooms.size()==0){%>
+		<p class="error"><%=language.administratorModifyRoomSearchRoomErrorNoRoomsFound() %></p>
+	<%} else { %>
+		<p class="informational"><%=language.administratorModifyRoomSearchRoomSuccessfulFoundRoom(foundRooms.size()) %></p>
+	<%} %>
+	
+<%if(foundRooms != null){ %>
+	<%if(foundRooms.size() != 0){ %>
+<table class="showValues">
+  <tr>
+    <th><%=language.administratorModifyRoomDetailsRoomNumber() %></th>
+    <th><%=language.administratorModifyRoomDetailsType() %></th>
+    <th><%=language.administratorModifyRoomDetailsSmoking() %></th>
+    <th><%=language.administratorModifyRoomDetailsOccupied() %></th>
+    <th></th>
+  </tr>
+  <%for(Room room : foundRooms){ %>
+  <form action="<%=request.getContextPath() %>/Admin/Modify-Room-get-room" method="get">
+  <tr>
+    <td><%=room.getRoomNumber() %></td>
+    <td><%=room.getType().getName() %></td>
+    <td><%=room.isSmoking() %></td>
+    <td><%=room.isOccupied() %></td>
+    <td><input type="submit" value="<%=language.modify() %>"/></td>
+  </tr>
+  <input type="hidden" name="roomNumber" value="<%=room.getRoomNumber() %>"/>
+  <input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+  </form>
+  <%} %>
+</table>
+	<%} %>
+<%} %>
 
 <%}}} else if(showContent.equals("addRoom")){%>
 

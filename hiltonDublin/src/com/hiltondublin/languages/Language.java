@@ -30,6 +30,9 @@ public abstract class Language {
 	public String whatWouldYouLikeToDo(){
 		return "What would you like to do? ";
 	}
+	public String modify(){
+		return "modify";
+	}
 
 	
 	//NAVIGATIONSLIDE

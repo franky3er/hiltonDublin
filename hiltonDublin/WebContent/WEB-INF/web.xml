@@ -212,7 +212,6 @@
     <servlet-name>addProductToReservation</servlet-name>
     <url-pattern>/Admin/Modify-Reservation-add-product</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>modifyRoom</servlet-name>
     <jsp-file>/modifyRoom.jsp</jsp-file>
@@ -236,5 +235,13 @@
   <servlet-mapping>
     <servlet-name>modifyRoomGetRooms</servlet-name>
     <url-pattern>/Admin/Modify-Room-get-rooms</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyRoomGetRoom</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.ModifyRoomGetRoomServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyRoomGetRoom</servlet-name>
+    <url-pattern>/Admin/Modify-Room-get-room</url-pattern>
   </servlet-mapping>
 </web-app>
