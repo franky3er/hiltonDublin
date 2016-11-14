@@ -84,13 +84,43 @@ if(searchRoomErrorOccupied.equals("1")){
 
 
 	<%if(selectedRoom != null){ %>
-<form action="" method="post">
-<table>
+<form action="<%=request.getContextPath() %>/Admin/Modify-Room-details" method="post">
+<table class="showValues">
   <tr>
     <td><%=language.administratorModifyRoomDetailsRoomNumber() %></td>
-    <td><input type="text" maxlength="3" size="3" value="<%=selectedRoom.getRoomNumber() %>"/></td>
+    <td><input type="text" name="newRoomNumber" maxlength="3" size="3" value="<%=selectedRoom.getRoomNumber() %>"/></td>
+  </tr>
+  <tr>
+    <td><%=language.administratorModifyRoomDetailsType() %></td>
+    <td>
+    	<select name="typeID">
+    		<%for(RoomType roomType : roomTypes){ %>
+    		<option <%if(selectedRoom.getTypeID() == roomType.getRoomTypeID()){ %>selected <%} %> value="<%=roomType.getRoomTypeID() %>"><%=roomType.getName() %></option>
+    		<%} %>
+    	</select>
+    </td>
+  </tr>
+  <tr>
+  	<td><%=language.administratorModifyRoomDetailsSmoking() %></td>
+  	<td>
+  		<input type="radio" name="smoking" value="1" <%if(selectedRoom.isSmoking()){ %>checked<%} %> /><%=language.yes() %>
+  		<input type="radio" name="smoking" value="0" <%if(!selectedRoom.isSmoking()){ %>checked<%} %> /><%=language.no() %>
+  	</td>
+  </tr>
+  <tr>
+  	<td><%=language.administratorModifyRoomDetailsOccupied() %></td>
+  	<td>
+  		<input type="radio" name="occupied" value="1" <%if(selectedRoom.isOccupied()){ %>checked<%} %> /><%=language.yes() %>
+  		<input type="radio" name="occupied" value="0" <%if(!selectedRoom.isOccupied()){ %>checked<%} %> /><%=language.no() %>
+  	</td>
+  </tr>
+  <tr>
+  	<td></td>
+  	<td><input type="submit" value="<%=language.modify() %>"/></td>
   </tr>
 </table>
+<input type="hidden" name="roomNumber" value="<%=selectedRoom.getRoomNumber() %>"/>
+<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
 </form>
 	<%} %>
 

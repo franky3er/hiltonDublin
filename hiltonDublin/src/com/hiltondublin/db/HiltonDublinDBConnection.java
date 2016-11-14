@@ -628,6 +628,42 @@ public class HiltonDublinDBConnection extends Helper {
 	//-----------------------------------------ROOM---------------------------------------------
 	//------------------------------------------------------------------------------------------
 	
+	public int updateRoom(String roomNumber, Room room){
+		//Get values in String format
+		String newRoomNumber, typeID, smoking, occupied;
+		if(room.getRoomNumber() == -1){
+			newRoomNumber = null;
+		} else {
+			newRoomNumber = Integer.toString(room.getRoomNumber());
+		}
+		if(room.getTypeID() == -1){
+			typeID = null;
+		}
+		else {
+			typeID = Integer.toString(room.getTypeID());
+		}
+		smoking = Boolean.toString(room.isSmoking());
+		occupied = Boolean.toString(room.isOccupied());
+				
+		//Convert Booleans to tinyint
+		smoking = convertBooleanToTinyInt(smoking);
+		occupied = convertBooleanToTinyInt(occupied);
+		
+		//Set set cells
+		String []setColumns = {ROOM_NUMBER, ROOM_TYPEID, ROOM_SMOKING, ROOM_OCCUPIED};
+		String []setValues = {newRoomNumber, typeID, smoking, occupied};
+		List<Cell> setCells = getCellListWithNullValues(setColumns, setValues);
+		
+		//Set condition cells
+		String []conditionColumns = {ROOM_NUMBER};
+		String []conditionValues = {roomNumber};
+		List<Cell> conditionCells = getCellList(conditionColumns, conditionValues);
+		
+		String sqlStatement = createUpdateStatement(ROOM, conditionCells, setCells, null);
+				
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
+	
 	/**
 	 * Updates a given room in the database and returns the number of rows it effected
 	 * @param room
@@ -2841,6 +2877,7 @@ public class HiltonDublinDBConnection extends Helper {
 	 * @return List<Reservation>
 	 */
 	public List<Reservation> getReservationsFromGuestName(String firstName, String lastName){
+		System.out.println("HERE.......");
 		List<Reservation> reservations = new ArrayList<Reservation>();
 		
 		Date currentDate = new Date();

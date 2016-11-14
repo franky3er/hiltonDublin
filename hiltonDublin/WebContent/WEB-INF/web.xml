@@ -244,4 +244,12 @@
     <servlet-name>modifyRoomGetRoom</servlet-name>
     <url-pattern>/Admin/Modify-Room-get-room</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyRoomDetails</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.ModifyRoomServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyRoomDetails</servlet-name>
+    <url-pattern>/Admin/Modify-Room-details</url-pattern>
+  </servlet-mapping>
 </web-app>

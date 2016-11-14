@@ -1,6 +1,7 @@
 package com.hiltondublin.servlets;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -26,32 +27,21 @@ public class ModifyRoomGetRoomServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String url = request.getParameter("url");
-		String roomNumber = Helper.setNullIfEmptyString("roomNumber");
+		String roomNumber = Helper.setNullIfEmptyString(request.getParameter("roomNumber"));
 		
-		boolean getRoom = true;
+		Room room = null;
 		
 		if(roomNumber != null){
 			if(Helper.isInteger(roomNumber)){
-				Room room = dbConnection.getRooms(roomNumber, null, null, null, null).get(0);
-				
-				if(room != null){
-					request.setAttribute("selectedRoom", room);
-				} else {
-					getRoom = false;
+				List<Room> rooms = dbConnection.getRooms(roomNumber, null, null, null, null);
+				if(rooms!=null){
+					room = rooms.get(0);
 				}
-			} else {
-				getRoom = false;
-			}
-		} else {
-			getRoom = false;
-		}
+			} 
+		} 
 		
-		if(getRoom){
-			request.setAttribute("showContent", "modifyRoom");
-		} else {
-			request.setAttribute("showContent", "searchRooms");
-		}
-		
+		request.setAttribute("selectedRoom", room);
+		request.setAttribute("showContent", "modifyRoom");
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(url);
 		dispatcher.forward(request, response);
