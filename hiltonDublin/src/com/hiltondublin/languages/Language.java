@@ -2,6 +2,7 @@ package com.hiltondublin.languages;
 
 import java.util.List;
 
+import com.hiltondublin.classes.ConsumerProduct;
 import com.hiltondublin.classes.Room;
 
 public abstract class Language {
@@ -470,6 +471,24 @@ public abstract class Language {
 	}
 	public String administratorModifyProductErrorProductNotFound(){
 		return "Product not found. ";
+	}
+	public String administratorModifyProductErrorProductIDMissing(){
+		return "Please type in a product ID. ";
+	}
+	public String administratorModifyProductErrorProductIDAllreadyExist(){
+		return "Product with this product ID allready excist. ";
+	}
+	public String administratorModifyProductErrorProductNameMissing(){
+		return "Please type in a product name. ";
+	}
+	public String administratorModifyProductErrorPriceMissing(){
+		return "Please type in a price. ";
+	}
+	public String administratorModifyProductSuccessful(){
+		return "Modify Product successful. ";
+	}
+	public String administratorAddProductSuccessful(ConsumerProduct product){
+		return "Successfully added new product. (Product ID: " + product.getProductID() + ", Product Name: " + product.getName() + ", Price: " + product.getPrice() + ") "; 
 	}
 	
 }

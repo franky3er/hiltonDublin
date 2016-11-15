@@ -16,9 +16,13 @@ String searchProductErrorPrice = (String) request.getAttribute("searchProductErr
 String modifyProductErrorProductID = (String) request.getAttribute("modifyProductErrorProductID");
 String modifyProductErrorProductName = (String) request.getAttribute("modifyProductErrorProductName");
 String modifyProductErrorPrice = (String) request.getAttribute("modifyProductErrorPrice");
+String modifyProductSuccessful = (String) request.getAttribute("modifyProductSuccessful");
+
+String addProductSuccessful = (String) request.getAttribute("addProductSuccessful");
 
 List<ConsumerProduct> foundProducts = (List<ConsumerProduct>) request.getAttribute("foundProducts");
 ConsumerProduct selectedProduct = (ConsumerProduct) request.getAttribute("selectedProduct");
+ConsumerProduct addedProduct = (ConsumerProduct) request.getAttribute("addedProduct");
 
 boolean searchProductErrorProductIDNotInRightFormat = false;
 boolean searchProductErrorPriceNotInRightFormat = false;
@@ -30,6 +34,9 @@ boolean modifyProductErrorProductIDAllreadyExist = false;
 boolean modifyProductErrorProductNameMissing = false;
 boolean modifyProductErrorPriceMissing = false;
 boolean modifyProductErrorPriceNotInRightFormat = false;
+boolean modifyProductSuccess = false;
+
+boolean addProductSuccess = false;
 
 if(showContent == null){
 	showContent = "showOptions";
@@ -51,6 +58,12 @@ if(modifyProductErrorProductName == null){
 }
 if(modifyProductErrorPrice == null){
 	modifyProductErrorPrice = "0";
+}
+if(modifyProductSuccessful == null){
+	modifyProductSuccessful = "0";
+}
+if(addProductSuccessful == null){
+	addProductSuccessful = "0";
 }
 
 
@@ -80,6 +93,12 @@ if(modifyProductErrorPrice.equals("1")){
 }
 if(modifyProductErrorPrice.equals("2")){
 	modifyProductErrorPriceNotInRightFormat = true;
+}
+if(modifyProductSuccessful.equals("1")){
+	modifyProductSuccess = true;
+}
+if(addProductSuccessful.equals("1")){
+	addProductSuccess = true;
 }
 %>
 
@@ -116,19 +135,20 @@ if(modifyProductErrorPrice.equals("2")){
 		  	<tr>
 		    	<td><%=language.administratorModifyProductProductID() %></td>
 		    	<td>
-		    		<input type="text" name="newProductID" value="<%=selectedProduct.getProductID() %>"/>
+		    		<input <%if(modifyProductErrorProductIDMissing||modifyProductErrorProductIDNotInRightFormat||modifyProductErrorProductIDAllreadyExist){ %>class="emptyTextField"<%} %> type="text" name="newProductID" value="<%=selectedProduct.getProductID() %>"/>
 		    	</td>
 		  	</tr>
 		  	<tr>
 		    	<td><%=language.administratorModifyProductProductName() %></td>
 		    	<td>
-		    		<input type="text" name="productName" value="<%=selectedProduct.getName() %>"/>
+		    		<input <%if(modifyProductErrorProductNameMissing){ %>class="emptyTextField"<%} %> type="text" name="productName" value="<%=selectedProduct.getName() %>"/>
 		    	</td>
 		  	</tr>
 		  	<tr>
 		    	<td><%=language.administratorModifyProductPrice() %></td>
 		    	<td>
-		    		<input type="text" name="price" value="<%=selectedProduct.getPrice() %>"/>
+		    		<input <%if(modifyProductErrorPriceMissing||modifyProductErrorPriceNotInRightFormat){ %>class="emptyTextField"<%} %> type="text" name="price" value="<%=selectedProduct.getPrice() %>"/>
+		    		<br/><p class="information">Format 01.00</p>
 		    	</td>
 		  	</tr>
 		  	<tr>
@@ -139,6 +159,15 @@ if(modifyProductErrorPrice.equals("2")){
 		<input type="hidden" name="productID" value="<%=selectedProduct.getProductID() %>"/>
 		<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>	   	 		
 		</form>
+		
+		<%if(modifyProductErrorProductIDMissing){ %><p class="error"><%=language.administratorModifyProductErrorProductIDMissing() %></p><%} %>
+		<%if(modifyProductErrorProductIDNotInRightFormat){ %><p class="error"><%=language.administratorModifyProductErrorProductIDNotInRightFormat() %></p><%} %>
+		<%if(modifyProductErrorProductIDAllreadyExist){ %><p class="error"><%=language.administratorModifyProductErrorProductIDAllreadyExist() %></p><%} %>
+		<%if(modifyProductErrorProductNameMissing){ %><p class="error"><%=language.administratorModifyProductErrorProductNameMissing() %></p><%} %>
+		<%if(modifyProductErrorPriceMissing){ %><p class="error"><%=language.administratorModifyProductErrorPriceMissing() %></p><%} %>
+		<%if(modifyProductErrorPriceNotInRightFormat){ %><p class="error"><%=language.administratorModifyProductErrorPriceNotInRightFormat() %></p><%} %>
+		
+		<%if(modifyProductSuccess){ %><p class="informational"><%=language.administratorModifyProductSuccessful() %></p><%} %>
 		
 	<%} else { %>
 		<p class="error"><%=language.administratorModifyProductErrorProductNotFound() %></p>
@@ -208,8 +237,39 @@ if(modifyProductErrorPrice.equals("2")){
 	
 	<%} %>
 
-<%} else if(showContent.equals("addProducts")){%>
+<%} else if(showContent.equals("addProduct")){%>
 
+<form action="<%=request.getContextPath() %>/Admin/Modify-Product-add-product" method="post">
+<table class="showValues">
+	<tr>
+		<td><%=language.administratorModifyProductProductID() %></td>
+		<td><input <%if(modifyProductErrorProductIDNotInRightFormat||modifyProductErrorProductIDAllreadyExist){ %>class="emptyTextField"<%} %> type="text" name="productID"/></td>
+	</tr>
+	<tr>
+		<td><%=language.administratorModifyProductProductName() %></td>
+		<td><input <%if(modifyProductErrorProductNameMissing){ %>class="emptyTextField"<%} %> type="text" name="productName"/></td>
+	</tr>
+	<tr>
+		<td><%=language.administratorModifyProductPrice() %></td>
+		<td>
+			<input <%if(modifyProductErrorPriceMissing||modifyProductErrorPriceNotInRightFormat){ %>class="emptyTextField"<%} %> type="text" name="price"/>
+			<br/><p class="information">Format 01.00</p>
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><input type="submit" value="<%=language.add() %>"/></td>
+	</tr>
+</table>
+<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+</form>
+
+<%if(modifyProductErrorProductIDNotInRightFormat){ %><p class="error"><%=language.administratorModifyProductErrorProductIDNotInRightFormat() %></p><%} %>
+<%if(modifyProductErrorProductIDAllreadyExist){ %><p class="error"><%=language.administratorModifyProductErrorProductIDAllreadyExist() %></p><%} %>
+<%if(modifyProductErrorProductNameMissing){ %><p class="error"><%=language.administratorModifyProductErrorProductNameMissing() %></p><%} %>
+<%if(modifyProductErrorPriceMissing){ %><p class="error"><%=language.administratorModifyProductErrorPriceMissing() %></p><%} %>
+<%if(modifyProductErrorPriceNotInRightFormat){ %><p class="error"><%=language.administratorModifyProductErrorPriceNotInRightFormat() %></p><%} %>
+<%if(addedProduct!=null){ %><%if(addProductSuccess){ %><p class="informational"><%=language.administratorAddProductSuccessful(addedProduct) %></p><%}} %>
 
 <%} %>
 

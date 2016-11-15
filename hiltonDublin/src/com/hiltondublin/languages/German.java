@@ -2,6 +2,7 @@ package com.hiltondublin.languages;
 
 import java.util.List;
 
+import com.hiltondublin.classes.ConsumerProduct;
 import com.hiltondublin.classes.Room;
 
 public class German extends Language {
@@ -452,5 +453,23 @@ public class German extends Language {
 	}
 	public String administratorModifyProductErrorProductNotFound(){
 		return "Produkt nicht gefunden. ";
+	}
+	public String administratorModifyProductErrorProductIDMissing(){
+		return "Geben sie bitte eine Produkt ID ein. ";
+	}
+	public String administratorModifyProductErrorProductIDAllreadyExist(){
+		return "Ein Produkt mit dieser Produkt ID existiert schon. ";
+	}
+	public String administratorModifyProductErrorProductNameMissing(){
+		return "Geben sie bitte einen Produkt Namen ein. ";
+	}
+	public String administratorModifyProductErrorPriceMissing(){
+		return "Geben sie bitte einen Preis ein. ";
+	}
+	public String administratorModifyProductSuccessful(){
+		return "Erfolgreich Produkt modifiziert. ";
+	}
+	public String administratorAddProductSuccessful(ConsumerProduct product){
+		return "Erfolgreich neues Produkt hinzugefügt. (Produkt ID: " + product.getProductID() + ", Produkt Name: " + product.getName() + ", Preis: " + product.getPrice() + ") "; 
 	}
 }

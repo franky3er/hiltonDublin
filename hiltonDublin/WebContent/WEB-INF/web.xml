@@ -300,4 +300,12 @@
     <servlet-name>modifyProductDetails</servlet-name>
     <url-pattern>/Admin/Modify-Product-details</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>ModifyProductAddRoom</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.AddProductServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ModifyProductAddRoom</servlet-name>
+    <url-pattern>/Admin/Modify-Product-add-product</url-pattern>
+  </servlet-mapping>
 </web-app>
