@@ -13,12 +13,23 @@ String lookedForProducts = (String) request.getAttribute("lookedForProducts");
 String searchProductErrorProductID = (String) request.getAttribute("searchProductErrorProductID");
 String searchProductErrorPrice = (String) request.getAttribute("searchProductErrorPrice");
 
+String modifyProductErrorProductID = (String) request.getAttribute("modifyProductErrorProductID");
+String modifyProductErrorProductName = (String) request.getAttribute("modifyProductErrorProductName");
+String modifyProductErrorPrice = (String) request.getAttribute("modifyProductErrorPrice");
+
 List<ConsumerProduct> foundProducts = (List<ConsumerProduct>) request.getAttribute("foundProducts");
 ConsumerProduct selectedProduct = (ConsumerProduct) request.getAttribute("selectedProduct");
 
 boolean searchProductErrorProductIDNotInRightFormat = false;
 boolean searchProductErrorPriceNotInRightFormat = false;
 boolean lookedForProd = false;
+
+boolean modifyProductErrorProductIDMissing = false;
+boolean modifyProductErrorProductIDNotInRightFormat = false;
+boolean modifyProductErrorProductIDAllreadyExist = false;
+boolean modifyProductErrorProductNameMissing = false;
+boolean modifyProductErrorPriceMissing = false;
+boolean modifyProductErrorPriceNotInRightFormat = false;
 
 if(showContent == null){
 	showContent = "showOptions";
@@ -32,6 +43,15 @@ if(searchProductErrorProductID == null){
 if(searchProductErrorPrice == null){
 	searchProductErrorPrice = "0";
 }
+if(modifyProductErrorProductID == null){
+	modifyProductErrorProductID = "0";
+}
+if(modifyProductErrorProductName == null){
+	modifyProductErrorProductName = "0";
+}
+if(modifyProductErrorPrice == null){
+	modifyProductErrorPrice = "0";
+}
 
 
 if(searchProductErrorProductID.equals("1")){
@@ -42,6 +62,24 @@ if(searchProductErrorPrice.equals("1")){
 }
 if(lookedForProducts.equals("1")){
 	lookedForProd = true;
+}
+if(modifyProductErrorProductID.equals("1")){
+	modifyProductErrorProductIDMissing = true;
+}
+if(modifyProductErrorProductID.equals("2")){
+	modifyProductErrorProductIDNotInRightFormat = true;
+}
+if(modifyProductErrorProductID.equals("3")){
+	modifyProductErrorProductIDAllreadyExist = true;
+}
+if(modifyProductErrorProductName.equals("1")){
+	modifyProductErrorProductNameMissing = true;
+}
+if(modifyProductErrorPrice.equals("1")){
+	modifyProductErrorPriceMissing = true;
+}
+if(modifyProductErrorPrice.equals("2")){
+	modifyProductErrorPriceNotInRightFormat = true;
 }
 %>
 
