@@ -144,14 +144,14 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 			<input class="navigationPage" type="submit" value="<%=language.navigationSlideAdmin() %>" />
 		</form>
 		<%if(loggedIn){ %>
-		<form action="modifyRoom.html" method="get">
-			<input class="navigationDetail" type="submit" value="Modify Room" />
+		<form action="<%=getURLWithContextPath(request) %>/Admin/Modify-Room" method="get">
+			<input class="navigationDetail" type="submit" value="<%=language.administratorModifyRoomHeading() %>" />
 		</form>
-		<form action="modifyReservation.html" method="get">
-			<input class="navigationDetail" type="submit" value="Modify Reservation" />
+		<form action="<%=getURLWithContextPath(request) %>/Admin/Modify-Reservation" method="get">
+			<input class="navigationDetail" type="submit" value="<%=language.administratorModifyReservationHeading() %>" />
 		</form>
-		<form action="modifyProduct.html" method="get">
-			<input class="navigationDetail" type="submit" value="Modify Product" />
+		<form action="<%=getURLWithContextPath(request) %>/Admin/Modify-Product" method="get">
+			<input class="navigationDetail" type="submit" value="<%=language.administratorModifyProductHead() %>" />
 		</form>
 		<form action="registerEmployee.html" method="get">
 			<input class="navigationDetail" type="submit" value="Register Employee" />

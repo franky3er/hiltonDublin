@@ -8,6 +8,7 @@ import com.hiltondublin.db.Cell;
 public class Helper {
 	public final static String regexEmailValidation = "^[\\w!#$%&’*+/=?`{|}~^-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
 	public final static String regexInteger = "\\d*$";
+	public final static String regexDouble = "-?\\d+(\\.\\d+)?";
 	
 	/**
 	 * Validates Email address and returns true if email address matches to a email address
@@ -83,6 +84,13 @@ public class Helper {
 			return false;
 		}
 		return number.matches(regexInteger);
+	}
+	
+	public static boolean isDouble(String number){
+		if(number == null){
+			return false;
+		}
+		return number.matches(regexDouble);
 	}
 	
 	public static boolean isBoolean(String bool){

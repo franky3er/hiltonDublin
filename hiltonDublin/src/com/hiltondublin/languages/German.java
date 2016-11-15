@@ -425,4 +425,32 @@ public class German extends Language {
 	public String administratorAddRoomSuccessful(Room room){
 		return "Erfolgreich neues Zimmer hinzugefügt (Zimmernummer: " + room.getRoomNumber() + ", Typ: " + room.getType().getName() + ", Rauchen: " + room.isSmoking() + ", Besetzt: " + room.isOccupied() + ") ";
 	}
+	
+	public String administratorModifyProductHead(){
+		return "Produkt modifizieren";
+	}
+	public String administratorModifyProductSelectModifyProduct(){
+		return "Produkt modifizieren";
+	}
+	public String administratorModifyProductSelectAddProduct(){
+		return "Produkt hinzufügen";
+	}
+	public String administratorModifyProductProductID(){
+		return "Produkt ID: ";
+	}
+	public String administratorModifyProductErrorProductIDNotInRightFormat(){
+		return "Produkt ID muss vom Typ Integer sein. ";
+	}
+	public String administratorModifyProductErrorPriceNotInRightFormat(){
+		return "Preis muss vom Typ Double sein. ";
+	}
+	public String administratorModifyProductSuccessfulFoundProduct(int ammount){
+		return ammount + " Produkt(e) gefunden ";
+	}
+	public String administratorModifyProductErrorNoRoomFound(){
+		return "Keine Produkte gefunden. ";
+	}
+	public String administratorModifyProductErrorProductNotFound(){
+		return "Produkt nicht gefunden. ";
+	}
 }

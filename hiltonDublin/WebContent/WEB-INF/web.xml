@@ -260,4 +260,44 @@
     <servlet-name>modifyRoomAddRoom</servlet-name>
     <url-pattern>/Admin/Modify-Room-add-room</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyProduct</servlet-name>
+    <jsp-file>/modifyProduct.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyProduct</servlet-name>
+    <url-pattern>/Admin/Modify-Product</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyProductSelectOption</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.ModifyProductSelectOptionServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyProductSelectOption</servlet-name>
+    <url-pattern>/Admin/Modify-Product-select-option</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyProductGetProducts</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.ModifyProductGetProductsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyProductGetProducts</servlet-name>
+    <url-pattern>/Admin/Modify-Product-get-products</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyProductGetProduct</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.ModifyProductGetProductServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyProductGetProduct</servlet-name>
+    <url-pattern>/Admin/Modify-Product-get-product</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyProductDetails</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.ModifyProductServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyProductDetails</servlet-name>
+    <url-pattern>/Admin/Modify-Product-details</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -444,4 +444,32 @@ public abstract class Language {
 		return "Successfully add new room (Room number: " + room.getRoomNumber() + ", Type: " + room.getType().getName() + ", Smoking: " + room.isSmoking() + ", Occupied: " + room.isOccupied() + ") ";
 	}
 	
+	public String administratorModifyProductHead(){
+		return "Modify Product";
+	}
+	public String administratorModifyProductSelectModifyProduct(){
+		return "Modify Product";
+	}
+	public String administratorModifyProductSelectAddProduct(){
+		return "Add Product";
+	}
+	public String administratorModifyProductProductID(){
+		return "Product ID: ";
+	}
+	public String administratorModifyProductErrorProductIDNotInRightFormat(){
+		return "Product ID must be from type Integer. ";
+	}
+	public String administratorModifyProductErrorPriceNotInRightFormat(){
+		return "Price must be from type Double. ";
+	}
+	public String administratorModifyProductSuccessfulFoundProduct(int ammount){
+		return "Found " + ammount + " product(s) ";
+	}
+	public String administratorModifyProductErrorNoRoomFound(){
+		return "No products found. ";
+	}
+	public String administratorModifyProductErrorProductNotFound(){
+		return "Product not found. ";
+	}
+	
 }
