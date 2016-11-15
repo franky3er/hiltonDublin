@@ -9,12 +9,21 @@
 <%
 String showContent = (String) request.getAttribute("showContent");
 String lookedForRooms = (String) request.getAttribute("lookedForRooms");
+
 String searchRoomErrorRoomNumber = (String) request.getAttribute("searchRoomErrorRoomNumber");
 String searchRoomErrorTypeID = (String) request.getAttribute("searchRoomErrorTypeID");
 String searchRoomErrorSmoking = (String) request.getAttribute("searchRoomErrorSmoking");
 String searchRoomErrorOccupied = (String) request.getAttribute("searchRoomErrorOccupied");
+
+String modifyRoomErrorRoomNumber = (String) request.getAttribute("modifyRoomErrorRoomNumber");
+String modifyRoomSuccessful = (String) request.getAttribute("modifyRoomSuccessful");
+
+String addRoomErrorRoomNumber = (String) request.getAttribute("addRoomErrorRoomNumber");
+String addRoomSuccessful = (String) request.getAttribute("addRoomSuccessful");
+
 List<Room> foundRooms = (List<Room>) request.getAttribute("foundRooms");
 Room selectedRoom = (Room) request.getAttribute("selectedRoom");
+Room addedRoom = (Room) request.getAttribute("addedRoom");
 
 List<RoomType> roomTypes = dbConnection.getRoomTypes(null, null, null, null, null, null);
 
@@ -23,6 +32,17 @@ boolean searchRoomErrorRoomNumberNotInRightFormat = false;
 boolean searchRoomErrorTypeIDNotINRightFormat = false;
 boolean searchRoomErrorSmokingNotInRightFormat = false;
 boolean searchRoomErrorOccupiedNotInRightFormat = false;
+
+boolean modifyRoomErrorRoomNumberMissing = false;
+boolean modifyRoomErrorRoomNumberNotInRightFormat = false;
+boolean modifyRoomErrorRoomNotFound = false;
+boolean modifyRoomSuccessfulUpdateRoom = false;
+
+boolean addRoomErrorRoomNumberMissing = false;
+boolean addRoomErrorRoomNumberNotInRightFormat = false;
+boolean addRoomErrorRoomAllreadyExist = false;
+boolean addRoomSuccessfulInsertRoom = false;
+
 
 if(showContent==null){
 	showContent = "showOptions";
@@ -42,6 +62,18 @@ if(searchRoomErrorSmoking == null){
 if(searchRoomErrorOccupied == null){
 	searchRoomErrorOccupied = "0";
 }
+if(modifyRoomErrorRoomNumber == null){
+	modifyRoomErrorRoomNumber = "0";
+}
+if(modifyRoomSuccessful == null){
+	modifyRoomSuccessful = "0";
+}
+if(addRoomErrorRoomNumber == null){
+	addRoomErrorRoomNumber = "0";
+}
+if(addRoomSuccessful == null){
+	addRoomSuccessful = "0";
+}
 
 if(searchRoomErrorRoomNumber.equals("1")){
 	searchRoomErrorRoomNumberNotInRightFormat = true;
@@ -54,6 +86,32 @@ if(searchRoomErrorSmoking.equals("1")){
 }
 if(searchRoomErrorOccupied.equals("1")){
 	searchRoomErrorOccupiedNotInRightFormat = true;
+}
+
+if(modifyRoomErrorRoomNumber.equals("1")){
+	modifyRoomErrorRoomNumberMissing = true;
+}
+if(modifyRoomErrorRoomNumber.equals("2")){
+	modifyRoomErrorRoomNumberNotInRightFormat = true;
+}
+if(modifyRoomErrorRoomNumber.equals("3")){
+	modifyRoomErrorRoomNotFound = true;
+}
+if(modifyRoomSuccessful.equals("1")){
+	modifyRoomSuccessfulUpdateRoom = true;
+}
+
+if(addRoomErrorRoomNumber.equals("1")){
+	addRoomErrorRoomNumberMissing = true;
+}
+if(addRoomErrorRoomNumber.equals("2")){
+	addRoomErrorRoomNumberNotInRightFormat = true;
+}
+if(addRoomErrorRoomNumber.equals("3")){
+	addRoomErrorRoomAllreadyExist = true;
+}
+if(addRoomSuccessful.equals("1")){
+	addRoomSuccessfulInsertRoom = true;
 }
 %>
 
@@ -88,7 +146,7 @@ if(searchRoomErrorOccupied.equals("1")){
 <table class="showValues">
   <tr>
     <td><%=language.administratorModifyRoomDetailsRoomNumber() %></td>
-    <td><input type="text" name="newRoomNumber" maxlength="3" size="3" value="<%=selectedRoom.getRoomNumber() %>"/></td>
+    <td><input <%if(modifyRoomErrorRoomNumberMissing||modifyRoomErrorRoomNumberNotInRightFormat){ %>class="emptyTextField"<%} %> type="text" name="newRoomNumber" maxlength="3" size="3" value="<%=selectedRoom.getRoomNumber() %>"/></td>
   </tr>
   <tr>
     <td><%=language.administratorModifyRoomDetailsType() %></td>
@@ -103,15 +161,15 @@ if(searchRoomErrorOccupied.equals("1")){
   <tr>
   	<td><%=language.administratorModifyRoomDetailsSmoking() %></td>
   	<td>
-  		<input type="radio" name="smoking" value="1" <%if(selectedRoom.isSmoking()){ %>checked<%} %> /><%=language.yes() %>
-  		<input type="radio" name="smoking" value="0" <%if(!selectedRoom.isSmoking()){ %>checked<%} %> /><%=language.no() %>
+  		<input type="radio" name="smoking" value="true" <%if(selectedRoom.isSmoking()){ %>checked<%} %> /><%=language.yes() %>
+  		<input type="radio" name="smoking" value="false" <%if(!selectedRoom.isSmoking()){ %>checked<%} %> /><%=language.no() %>
   	</td>
   </tr>
   <tr>
   	<td><%=language.administratorModifyRoomDetailsOccupied() %></td>
   	<td>
-  		<input type="radio" name="occupied" value="1" <%if(selectedRoom.isOccupied()){ %>checked<%} %> /><%=language.yes() %>
-  		<input type="radio" name="occupied" value="0" <%if(!selectedRoom.isOccupied()){ %>checked<%} %> /><%=language.no() %>
+  		<input type="radio" name="occupied" value="true" <%if(selectedRoom.isOccupied()){ %>checked<%} %> /><%=language.yes() %>
+  		<input type="radio" name="occupied" value="false" <%if(!selectedRoom.isOccupied()){ %>checked<%} %> /><%=language.no() %>
   	</td>
   </tr>
   <tr>
@@ -122,6 +180,11 @@ if(searchRoomErrorOccupied.equals("1")){
 <input type="hidden" name="roomNumber" value="<%=selectedRoom.getRoomNumber() %>"/>
 <input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
 </form>
+
+<%if(modifyRoomErrorRoomNumberMissing){ %><p class="error"><%=language.administratorModifyRoomErrorRoomNumberMissing() %></p><%} %>
+<%if(modifyRoomErrorRoomNumberNotInRightFormat){ %><p class="error"><%=language.administratorModifyRoomErrorRoomNumberNotInRightFormat() %></p><%} %>
+<%if(modifyRoomErrorRoomNotFound){ %><p class="error"><%=language.administratorModifyRoomErrorRoomNotFound() %></p><%} %>
+<%if(modifyRoomSuccessfulUpdateRoom){ %><p class="informational"><%=language.administratorModifyRoomSuccessful() %></p><%} %>	
 	<%} %>
 
 
@@ -210,8 +273,48 @@ if(searchRoomErrorOccupied.equals("1")){
 
 <%}}} else if(showContent.equals("addRoom")){%>
 
+<form action="<%=request.getContextPath() %>/Admin/Modify-Room-add-room" method="post">
+<table class="showValues">
+  <tr>
+    <td><%=language.administratorModifyRoomDetailsRoomNumber() %></td>
+    <td><input <%if(addRoomErrorRoomNumberMissing||addRoomErrorRoomNumberNotInRightFormat){ %>class="emptyTextField"<%} %> type="text" name="roomNumber" maxlength="3" size="3" /></td>
+  </tr>
+  <tr>
+    <td><%=language.administratorModifyRoomDetailsType() %></td>
+    <td>
+    	<select name="typeID">
+    		<%for(RoomType roomType : roomTypes){ %>
+    		<option value="<%=roomType.getRoomTypeID() %>"><%=roomType.getName() %></option>
+    		<%} %>
+    	</select>
+    </td>
+  </tr>
+  <tr>
+  	<td><%=language.administratorModifyRoomDetailsSmoking() %></td>
+  	<td>
+  		<input type="radio" name="smoking" value="true" /><%=language.yes() %>
+  		<input type="radio" name="smoking" value="false" checked /><%=language.no() %>
+  	</td>
+  </tr>
+  <tr>
+  	<td><%=language.administratorModifyRoomDetailsOccupied() %></td>
+  	<td>
+  		<input type="radio" name="occupied" value="true" /><%=language.yes() %>
+  		<input type="radio" name="occupied" value="false" checked /><%=language.no() %>
+  	</td>
+  </tr>
+  <tr>
+  	<td></td>
+  	<td><input type="submit" value="<%=language.add() %>"/></td>
+  </tr>
+</table>
+<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+</form>
 
-
+<%if(addRoomErrorRoomNumberMissing){ %><p class="error"><%=language.administratorAddRoomErrorRoomNumberMissing() %></p><%} %>
+<%if(addRoomErrorRoomNumberNotInRightFormat){ %><p class="error"><%=language.administratorAddRoomErrorRoomNumberNotInRightFormat() %></p><%} %>
+<%if(addRoomErrorRoomAllreadyExist){ %><p class="error"><%=language.administratorAddRoomErrorRoomAllreadyExist() %></p><%} %>
+<%if(addRoomSuccessfulInsertRoom){ %><p class="informational"><%=language.administratorAddRoomSuccessful(addedRoom) %></p><%} %>
 <%} %>
 
 <%@ include file="navigationSlideAdminFooter.jsp" %>

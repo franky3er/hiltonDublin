@@ -401,4 +401,28 @@ public class German extends Language {
 	public String administratorModifyRoomSearchRoomSuccessfulFoundRoom(int ammount){
 		return ammount + " Zimmer gefunden";
 	}
+	public String administratorModifyRoomErrorRoomNumberMissing(){
+		return "Bitte geben sie eine Zimmernummer ein.";
+	}
+	public String administratorModifyRoomErrorRoomNumberNotInRightFormat(){
+		return "Zimmernummer muss vom Typ Integer sein. ";
+	}
+	public String administratorModifyRoomErrorRoomNotFound(){
+		return "Zimmer nicht gefunden. ";
+	}
+	public String administratorModifyRoomSuccessful(){
+		return "Erfolgreich Zimmer modifiziert. ";
+	}
+	public String administratorAddRoomErrorRoomNumberMissing(){
+		return "Bitte geben sie eine Zimmernummer ein.";
+	}
+	public String administratorAddRoomErrorRoomNumberNotInRightFormat(){
+		return "Zimmernummer muss vom Typ Integer sein. ";
+	}
+	public String administratorAddRoomErrorRoomAllreadyExist(){
+		return "Zimmer existiert bereits. ";
+	}
+	public String administratorAddRoomSuccessful(Room room){
+		return "Erfolgreich neues Zimmer hinzugefügt (Zimmernummer: " + room.getRoomNumber() + ", Typ: " + room.getType().getName() + ", Rauchen: " + room.isSmoking() + ", Besetzt: " + room.isOccupied() + ") ";
+	}
 }

@@ -1,6 +1,8 @@
 package com.hiltondublin.servlets;
 
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -15,10 +17,10 @@ import com.hiltondublin.db.HiltonDublinDBConnection;
 import com.hiltondublin.helper.Helper;
 
 /**
- * Servlet implementation class ModifyRoomServlet
+ * Servlet implementation class ModifyRoomAddRoomServlet
  */
-@WebServlet("/ModifyRoomServlet")
-public class ModifyRoomServlet extends HttpServlet {
+@WebServlet("/ModifyRoomAddRoomServlet")
+public class AddRoomServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private HiltonDublinDBConnection dbConnection = HiltonDublinDBConnection.getInstance();
 
@@ -28,56 +30,49 @@ public class ModifyRoomServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String url = request.getParameter("url");
 		String roomNumber = Helper.setNullIfEmptyString(request.getParameter("roomNumber"));
-		String newRoomNumber = Helper.setNullIfEmptyString(request.getParameter("newRoomNumber"));
 		String typeID = Helper.setNullIfEmptyString(request.getParameter("typeID"));
 		String smoking = Helper.setNullIfEmptyString(request.getParameter("smoking"));
 		String occupied = Helper.setNullIfEmptyString(request.getParameter("occupied"));
 		
-		boolean updateRoom = true;
+		boolean insertRoom = true;
 		
-		Room room = dbConnection.getRooms(roomNumber, null, null, null, null).get(0);
-		
-		if(newRoomNumber!=null){
-			if(Helper.isInteger(newRoomNumber)){
+		if(roomNumber != null){
+			if(Helper.isInteger(roomNumber)){
 				List<Room> rooms = dbConnection.getRooms(roomNumber, null, null, null, null);
-				if(rooms!=null){
-					if(rooms.isEmpty()){
-						request.setAttribute("modifyRoomErrorRoomNumber", "3");
-						updateRoom = false;
+				if(rooms != null){
+					if(!rooms.isEmpty()){
+						request.setAttribute("addRoomErrorRoomNumber", "3");
+						insertRoom = false;
 					}
-				} else {
-					request.setAttribute("modifyRoomErrorRoomNumber", "3");
-					updateRoom = false;
-				}
+				} 
 			} else {
-				request.setAttribute("modifyRoomErrorRoomNumber", "2");
-				updateRoom = false;
+				request.setAttribute("addRoomErrorRoomNumber", "2");
+				insertRoom = false;
 			}
 		} else {
-			request.setAttribute("modifyRoomErrorRoomNumber", "1");
-			updateRoom = false;
+			request.setAttribute("addRoomErrorRoomNumber", "1");
+			insertRoom = false;
 		}
 		
 		
-		if(updateRoom){
-			room.setRoomNumber(Integer.parseInt(newRoomNumber));
+		if(insertRoom){
+			Room room = new Room();
+			room.setRoomNumber(Integer.parseInt(roomNumber));
 			room.setTypeID(Integer.parseInt(typeID));
 			room.setSmoking(Boolean.parseBoolean(smoking));
 			room.setOccupied(Boolean.parseBoolean(occupied));
 			
-			if(dbConnection.updateRoom(roomNumber, room)>0){
-				request.setAttribute("modifyRoomSuccessful", "1");
-				room = dbConnection.getRooms(newRoomNumber, null, null, null, null).get(0);
-			} else {
-				request.setAttribute("modifyRoomFailed", "1");
+			ResultSet rs = dbConnection.insertRoom(room);
+			if(rs != null){
+				request.setAttribute("addRoomSuccessful", "1");
 				room = dbConnection.getRooms(roomNumber, null, null, null, null).get(0);
+				request.setAttribute("addedRoom", room);
+			} else {
+				request.setAttribute("addRoomFailed", "1");
 			}
-		} else {
-			room = dbConnection.getRooms(roomNumber, null, null, null, null).get(0);
 		}
 		
-		request.setAttribute("selectedRoom", room);
-		request.setAttribute("showContent", "modifyRoom");
+		request.setAttribute("showContent", "addRoom");
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(url);
 		dispatcher.forward(request, response);

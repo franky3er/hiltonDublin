@@ -419,5 +419,29 @@ public abstract class Language {
 	public String administratorModifyRoomSearchRoomSuccessfulFoundRoom(int ammount){
 		return "Found " + ammount + " room(s)";
 	}
+	public String administratorModifyRoomErrorRoomNumberMissing(){
+		return "Please type in a room number.";
+	}
+	public String administratorModifyRoomErrorRoomNumberNotInRightFormat(){
+		return "Room number must be from type Integer. ";
+	}
+	public String administratorModifyRoomErrorRoomNotFound(){
+		return "Room not found. ";
+	}
+	public String administratorModifyRoomSuccessful(){
+		return "Successfully modified room. ";
+	}
+	public String administratorAddRoomErrorRoomNumberMissing(){
+		return "Please type in a room number.";
+	}
+	public String administratorAddRoomErrorRoomNumberNotInRightFormat(){
+		return "Room number must be from type Integer. ";
+	}
+	public String administratorAddRoomErrorRoomAllreadyExist(){
+		return "Room allready exist. ";
+	}
+	public String administratorAddRoomSuccessful(Room room){
+		return "Successfully add new room (Room number: " + room.getRoomNumber() + ", Type: " + room.getType().getName() + ", Smoking: " + room.isSmoking() + ", Occupied: " + room.isOccupied() + ") ";
+	}
 	
 }

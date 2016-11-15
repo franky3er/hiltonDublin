@@ -252,4 +252,12 @@
     <servlet-name>modifyRoomDetails</servlet-name>
     <url-pattern>/Admin/Modify-Room-details</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyRoomAddRoom</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.AddRoomServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyRoomAddRoom</servlet-name>
+    <url-pattern>/Admin/Modify-Room-add-room</url-pattern>
+  </servlet-mapping>
 </web-app>
