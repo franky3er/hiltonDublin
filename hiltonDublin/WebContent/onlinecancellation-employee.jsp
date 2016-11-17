@@ -198,8 +198,9 @@
 			if (ischeckBox)
 						for (int i = 0; i < checkBox.length; i++) {
 							dbConnection.deleteReservations(checkBox[i], guestID, arrivalDate, departureDate, paid,
-									additionalSQLCondition);
-						}
+									additionalSQLCondition);%>
+			<p><b>Booking reference : <%=checkBox[i] %> is canceled.		</b></p>	
+		<%}
 		%>
 		<%
 			reservations = dbConnection.getReservations(reservationID, guestID, arrivalDate, departureDate,
