@@ -29,28 +29,12 @@
     <url-pattern>/Guest/Online-Reservation</url-pattern>
   </servlet-mapping>
   <servlet>
-    <servlet-name>onlineReservationSh</servlet-name>
-    <jsp-file>/onlinereservationsh.jsp</jsp-file>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>onlineReservationSh</servlet-name>
-    <url-pattern>/Guest/Online-Reservation-sh</url-pattern>
-  </servlet-mapping>
-  <servlet>
     <servlet-name>reservationServlet</servlet-name>
     <servlet-class>com.hiltondublin.servlets.ReservationServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>reservationServlet</servlet-name>
     <url-pattern>/Guest/Online-Reservation-check</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <servlet-name>ShowroomServlet</servlet-name>
-    <servlet-class>com.hiltondublin.servlets.ShowroomServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ShowroomServlet</servlet-name>
-    <url-pattern>/Guest/Online=Reservation-show</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>loginServlet</servlet-name>
@@ -261,6 +245,14 @@
     <url-pattern>/Admin/Modify-Room-add-room</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>modifyRoomDeleteRoom</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.ModifyRoomDeleteRoomServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyRoomDeleteRoom</servlet-name>
+    <url-pattern>/Admin/Modify-Room-delete-room</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>modifyProduct</servlet-name>
     <jsp-file>/modifyProduct.jsp</jsp-file>
   </servlet>
@@ -308,7 +300,6 @@
     <servlet-name>ModifyProductAddRoom</servlet-name>
     <url-pattern>/Admin/Modify-Product-add-product</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>registerEmployee</servlet-name>
     <jsp-file>/register.jsp</jsp-file>

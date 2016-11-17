@@ -377,6 +377,9 @@ public class German extends Language {
 	public String administratorModifyRoomHeading(){
 		return "Zimmer modifizieren";
 	}
+	public String administratorDeleteRoomSuccessful(){
+		return "Zimmer erfolgreich gelöscht. ";
+	}
 	
 	public String administratorModifyRoomSelectModifyRoom(){
 		return "Zimmer modifizieren";

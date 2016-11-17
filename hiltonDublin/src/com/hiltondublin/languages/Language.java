@@ -398,6 +398,9 @@ public abstract class Language {
 	public String administratorModifyRoomHeading(){
 		return "Modify Room";
 	}
+	public String administratorDeleteRoomSuccessful(){
+		return "Successfully delete room. ";
+	}
 	
 	public String administratorModifyRoomSelectModifyRoom(){
 		return "Modify Room";

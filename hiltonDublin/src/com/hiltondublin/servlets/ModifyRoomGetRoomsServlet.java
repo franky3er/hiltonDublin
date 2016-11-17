@@ -33,6 +33,11 @@ public class ModifyRoomGetRoomsServlet extends HttpServlet {
 		String smoking = Helper.setNullIfEmptyString(request.getParameter("smoking"));
 		String occupied = Helper.setNullIfEmptyString(request.getParameter("occupied"));
 		
+		if(roomNumber != null) request.setAttribute("roomNumber", roomNumber);
+		if(typeID != null) request.setAttribute("typeID", typeID);
+		if(smoking != null) request.setAttribute("smoking", smoking);
+		if(occupied != null) request.setAttribute("occupied", occupied);
+		
 		boolean searchForRooms = true;
 		
 		if(roomNumber != null){

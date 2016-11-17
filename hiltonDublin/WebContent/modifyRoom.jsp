@@ -7,6 +7,7 @@
 <%@ include file="navigationSlideAdminHeader.jsp" %>
 
 <%
+
 String showContent = (String) request.getAttribute("showContent");
 String lookedForRooms = (String) request.getAttribute("lookedForRooms");
 
@@ -14,6 +15,12 @@ String searchRoomErrorRoomNumber = (String) request.getAttribute("searchRoomErro
 String searchRoomErrorTypeID = (String) request.getAttribute("searchRoomErrorTypeID");
 String searchRoomErrorSmoking = (String) request.getAttribute("searchRoomErrorSmoking");
 String searchRoomErrorOccupied = (String) request.getAttribute("searchRoomErrorOccupied");
+String searchRoomRoomNumber = (String) request.getAttribute("roomNumber");
+String searchRoomTypeID = (String) request.getAttribute("typeID");
+String searchRoomSmoking = (String) request.getAttribute("smoking");
+String searchRoomOccupied = (String) request.getAttribute("smoking");
+
+String deleteRoomSuccessful = (String) request.getAttribute("deleteRoomSuccessful");
 
 String modifyRoomErrorRoomNumber = (String) request.getAttribute("modifyRoomErrorRoomNumber");
 String modifyRoomSuccessful = (String) request.getAttribute("modifyRoomSuccessful");
@@ -32,6 +39,8 @@ boolean searchRoomErrorRoomNumberNotInRightFormat = false;
 boolean searchRoomErrorTypeIDNotINRightFormat = false;
 boolean searchRoomErrorSmokingNotInRightFormat = false;
 boolean searchRoomErrorOccupiedNotInRightFormat = false;
+
+boolean deleteRoomSuccess = false;
 
 boolean modifyRoomErrorRoomNumberMissing = false;
 boolean modifyRoomErrorRoomNumberNotInRightFormat = false;
@@ -74,6 +83,21 @@ if(addRoomErrorRoomNumber == null){
 if(addRoomSuccessful == null){
 	addRoomSuccessful = "0";
 }
+if(deleteRoomSuccessful == null){
+	deleteRoomSuccessful = "0";
+}
+if(searchRoomRoomNumber == null){
+	searchRoomRoomNumber = "";
+}
+if(searchRoomTypeID == null){
+	searchRoomTypeID = "";
+}
+if(searchRoomSmoking == null){
+	searchRoomSmoking = "";
+}
+if(searchRoomOccupied == null){
+	searchRoomOccupied = "";
+}
 
 if(searchRoomErrorRoomNumber.equals("1")){
 	searchRoomErrorRoomNumberNotInRightFormat = true;
@@ -86,6 +110,10 @@ if(searchRoomErrorSmoking.equals("1")){
 }
 if(searchRoomErrorOccupied.equals("1")){
 	searchRoomErrorOccupiedNotInRightFormat = true;
+}
+
+if(deleteRoomSuccessful.equals("1")){
+	deleteRoomSuccess = true;
 }
 
 if(modifyRoomErrorRoomNumber.equals("1")){
@@ -233,6 +261,8 @@ if(addRoomSuccessful.equals("1")){
 <p class="error"><%=language.administratorModifyRoomSearchRoomErrorSmokingNotInRightFormat() %></p>
 <%} if(searchRoomErrorOccupiedNotInRightFormat){ %>
 <p class="error"><%=language.administratorModifyRoomSearchRoomErrorOccupiedNotInRightFormat() %></p>
+<%} if(deleteRoomSuccess){ %>
+<p class="informational"><%=language.administratorDeleteRoomSuccessful() %></p>
 <%} %>
 
 <%if(foundRooms == null){ %>
@@ -253,19 +283,35 @@ if(addRoomSuccessful.equals("1")){
     <th><%=language.administratorModifyRoomDetailsSmoking() %></th>
     <th><%=language.administratorModifyRoomDetailsOccupied() %></th>
     <th></th>
+    <th></th>
   </tr>
   <%for(Room room : foundRooms){ %>
-  <form action="<%=request.getContextPath() %>/Admin/Modify-Room-get-room" method="get">
+  
   <tr>
     <td><%=room.getRoomNumber() %></td>
     <td><%=room.getType().getName() %></td>
     <td><%=room.isSmoking() %></td>
     <td><%=room.isOccupied() %></td>
-    <td><input type="submit" value="<%=language.modify() %>"/></td>
+    <td>
+    	<form action="<%=request.getContextPath() %>/Admin/Modify-Room-get-room" method="get">
+    		<input type="submit" value="<%=language.modify() %>"/>
+    		<input type="hidden" name="roomNumber" value="<%=room.getRoomNumber() %>"/>
+  			<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+  		</form>
+   	</td>
+    <td>
+    	<form action="<%=request.getContextPath() %>/Admin/Modify-Room-delete-room" method="post">
+    		<input type="submit" value="<%=language.delete() %>"/>
+    		<input type="hidden" name="roomNumber" value="<%=room.getRoomNumber() %>"/>
+  			<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+  			<input type="hidden" name="searchRoomNumber" value="<%=searchRoomRoomNumber %>"/>
+  			<input type="hidden" name="searchTypeID" value="<%=searchRoomTypeID %>"/>
+  			<input type="hidden" name="searchSmoking" value="<%=searchRoomSmoking %>"/>
+  			<input type="hidden" name="searchOccupied" value="<%=searchRoomRoomNumber %>"/>
+    	</form>
+    </td>
   </tr>
-  <input type="hidden" name="roomNumber" value="<%=room.getRoomNumber() %>"/>
-  <input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
-  </form>
+  
   <%} %>
 </table>
 	<%} %>
