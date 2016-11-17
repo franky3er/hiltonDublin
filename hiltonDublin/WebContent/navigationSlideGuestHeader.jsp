@@ -75,6 +75,15 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 		<form action="<%=getURLWithContextPath(request) %>/Guest" method="get">
 			<input class="navigationPage" type="submit" value="<%=language.navigationSlideGuest() %>" />
 		</form>
+		<form action="<%=getURLWithContextPath(request) %>/Guest/Online-Reservation" method="get">
+			<input class="navigationDetail" type="submit" value="Reservation" />
+		</form>
+		<form action="<%=getURLWithContextPath(request) %>/Guest/Cancellation" method="get">
+			<input class="navigationDetail" type="submit" value="Cancellation" />
+		</form>
+		<form action="<%=getURLWithContextPath(request) %>/Guest/Rating" method="get">
+			<input class="navigationDetail" type="submit" value="<%=language.guestRatingRating() %>" />
+		</form>
 		<form action="<%=getURLWithContextPath(request) %>/Employee" method="get">
 			<input class="navigationPage" type="submit" value="<%=language.navigationSlideEmployee() %>" />
 		</form>
