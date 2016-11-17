@@ -4,21 +4,21 @@
 	<p>This is the main page for the Employees.<br>
 	Employees can make online reservations, cancel reservations, check in, check out and charge products.
 	</p>
-		<div>
+	<div id="plaintextNavigationArea">
 		<form action="<%=getURLWithContextPath(request) %>/Guest/Online-Reservation" method="get">
-			<input class="navigationPage" type="submit" value="Reservation" />
+			<input class="plaintextNavigationAreaDetail" type="submit" value="Reservation" />
 		</form>
 		<form action="<%=getURLWithContextPath(request) %>/Employee/Cancellation" method="get">
-			<input class="navigationPage" type="submit" value="Cancellation" />
+			<input class="plaintextNavigationAreaDetail" type="submit" value="Cancellation" />
 		</form>
 		<form action="checkin.jsp" method="get">
-			<input class="navigationPage" type="submit" value="Check-in" />
+			<input class="plaintextNavigationAreaDetail" type="submit" value="Check-in" />
 		</form>
 		<form action="<%=getURLWithContextPath(request) %>/Employee/Checkout" method="get">
-			<input class="navigationPage" type="submit" value="<%=language.employeeCheckoutHeading() %>" />
+			<input class="plaintextNavigationAreaDetail" type="submit" value="<%=language.employeeCheckoutHeading() %>" />
 		</form>
 		<form action="<%=getURLWithContextPath(request) %>/Employee/Charge-Product" method="get">
-			<input class="navigationPage" type="submit" value="<%=language.employeeChargeProductHeading() %>" />
+			<input class="plaintextNavigationAreaDetail" type="submit" value="<%=language.employeeChargeProductHeading() %>" />
 		</form>
 	</div>
 </body>
