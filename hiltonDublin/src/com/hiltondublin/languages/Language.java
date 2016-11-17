@@ -34,6 +34,9 @@ public abstract class Language {
 	public String modify(){
 		return "modify";
 	}
+	public String register(){
+		return "register";
+	}
 
 	
 	//NAVIGATIONSLIDE
@@ -491,4 +494,61 @@ public abstract class Language {
 		return "Successfully added new product. (Product ID: " + product.getProductID() + ", Product Name: " + product.getName() + ", Price: " + product.getPrice() + ") "; 
 	}
 	
+	public String administratorRegisterEmployeeHeading(){
+		return "Register Employee";
+	}
+	public String administratorRegisterEmployeeFirstName(){
+		return "FIRST NAME: ";
+	}
+	public String administratorRegisterEmployeeLastName(){
+		return "LAST NAME: ";
+	}
+	public String administratorRegisterEmployeePhone(){
+		return "PHONE: ";
+	}
+	public String administratorRegisterEmployeeEmail(){
+		return "EMAIL: ";
+	}
+	public String administratorRegisterEmployeeUsername(){
+		return "USERNAME: ";
+	}
+	public String administratorRegisterEmployeeIsAdmin(){
+		return "ADMIN: ";
+	}
+	public String administratorRegisterEmployeePassword(){
+		return "PASSWORD: ";
+	}
+	public String administratorRegisterEmployeePasswordRepeat(){
+		return "PASSWORD REPEAT: ";
+	}
+	public String administratorRegisterEmployeeErrorFirstNameMissing(){
+		return "Please type in a first name. ";
+	}
+	public String administratorRegisterEmployeeErrorLastNameMissing(){
+		return "Please type in a last name. ";
+	}
+	public String administratorRegisterEmployeeErrorEmailMissing(){
+		return "Please type in an email address. ";
+	}
+	public String administratorRegisterEmployeeErrorEmailNotInRightFormat(){
+		return "Email is not in right format and can not be validated. ";
+	}
+	public String administratorRegisterEmployeeErrorUsernameMissing(){
+		return "Please type in a username. "; 
+	}
+	public String administratorRegisterEmployeeErrorPasswordMissing(){
+		return "Please type password and password repeat. ";
+	}
+	public String administratorRegisterEmployeeErrorPasswordNotInRightFormat(){
+		return "Password not in right format. It must at least consist of 8 characters. ";
+	}
+	public String administratorRegisterEmployeeErrorPasswordNotMatchingPasswordRepeat(){
+		return "Password not matching with password repeat. ";
+	}
+	public String administratorRegisterEmployeeErrorUsernameAllreadyExist(){
+		return "User allready exist. ";
+	}
+	public String administratorRegisterEmployeeSuccessful(){
+		return "Successfully registered new Employee. ";
+	}
 }

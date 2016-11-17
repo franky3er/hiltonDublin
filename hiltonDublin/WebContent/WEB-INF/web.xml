@@ -308,4 +308,21 @@
     <servlet-name>ModifyProductAddRoom</servlet-name>
     <url-pattern>/Admin/Modify-Product-add-product</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>registerEmployee</servlet-name>
+    <jsp-file>/register.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>registerEmployee</servlet-name>
+    <url-pattern>/Admin/Register-Employee</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>registerEmployeeCheck</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.RegisterEmployeeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>registerEmployeeCheck</servlet-name>
+    <url-pattern>/Admin/Register-Employee-check</url-pattern>
+  </servlet-mapping>
 </web-app>

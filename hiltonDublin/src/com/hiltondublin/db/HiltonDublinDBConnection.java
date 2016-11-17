@@ -1487,6 +1487,37 @@ public class HiltonDublinDBConnection extends Helper {
 		return insertConsumerProduct(consumerProductID, name, price);
 	}
 	
+	public int updateConsumerProduct(String productID, ConsumerProduct consumerProduct){
+		String consumerProductID, name, price;
+		if(consumerProduct.getProductID() == -1){
+			consumerProductID = null;
+		}
+		else {
+			consumerProductID = Integer.toString(consumerProduct.getProductID());
+		}
+		name = consumerProduct.getName();
+		if(consumerProduct.getPrice() == -1){
+			price = null;
+		}
+		else {
+			price = Double.toString(consumerProduct.getPrice());
+		}
+		
+		//Set set cells
+		String []setColumns = {CONSUMERPRODUCT_PRODUCTID, CONSUMERPRODUCT_NAME, CONSUMERPRODUCT_PRICE};
+		String []setValues = {consumerProductID, name, price};
+		List<Cell> setCells = getCellList(setColumns, setValues);
+				
+		//Set condition cells
+		String []conditionColumns = {CONSUMERPRODUCT_PRODUCTID};
+		String []conditionValues = {productID};
+		List<Cell> conditionCells = getCellListWithNullValues(conditionColumns, conditionValues);
+			
+		String sqlStatement = createUpdateStatement(CONSUMERPRODUCT, conditionCells, setCells, null);
+		
+		return executeUpdateAndReturnNumberOfRows(sqlStatement);
+	}
+	
 	public int updateConsumerProduct(ConsumerProduct consumerProduct){
 		
 		String consumerProductID, name, price;
@@ -2685,6 +2716,29 @@ public class HiltonDublinDBConnection extends Helper {
 	//------------------------------------------------------------------------------------------
 	//-------------------------------------EMPLOYEE---------------------------------------------
 	//------------------------------------------------------------------------------------------
+	
+	public ResultSet insertEmployee(String username, String firstName, String lastName, String password, String admin, String email, String phoneNumber){
+		if(!isConnected()){
+			return null;
+		}
+		
+		//Convert Booleans to tinyint
+		admin = convertBooleanToTinyInt(admin);
+		
+		//Create cell List
+		String []values = {username, firstName, lastName, password, admin, email, phoneNumber};
+		
+		//Return cell List with contained values
+		List<Cell> cells = getCellList(EMPLOYEE_COLUMNS, values);
+		
+		//Create insert SQL Statement
+		String sqlStatement = createInsertStatement(EMPLOYEE, cells);
+		
+		//Execute update
+		return executeUpdateAndReturnPrimaryKeys(sqlStatement);
+		
+		
+	}
 	
 	/**
 	 * Creates a Select Statement to get all Employees / Administrators specified by the parameters.

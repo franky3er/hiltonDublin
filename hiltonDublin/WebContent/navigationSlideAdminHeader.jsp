@@ -153,8 +153,8 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 		<form action="<%=getURLWithContextPath(request) %>/Admin/Modify-Product" method="get">
 			<input class="navigationDetail" type="submit" value="<%=language.administratorModifyProductHead() %>" />
 		</form>
-		<form action="registerEmployee.html" method="get">
-			<input class="navigationDetail" type="submit" value="Register Employee" />
+		<form action="<%=getURLWithContextPath(request) %>/Admin/Register-Employee" method="get">
+			<input class="navigationDetail" type="submit" value="<%=language.administratorRegisterEmployeeHeading() %>" />
 		</form>
 		<%} %>
 	</div>

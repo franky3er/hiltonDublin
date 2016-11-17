@@ -472,4 +472,59 @@ public class German extends Language {
 	public String administratorAddProductSuccessful(ConsumerProduct product){
 		return "Erfolgreich neues Produkt hinzugefügt. (Produkt ID: " + product.getProductID() + ", Produkt Name: " + product.getName() + ", Preis: " + product.getPrice() + ") "; 
 	}
+	
+	public String administratorRegisterEmployeeHeading(){
+		return "Arbeitskraft Registrierung";
+	}
+	public String administratorRegisterEmployeeFirstName(){
+		return "VORNAME: ";
+	}
+	public String administratorRegisterEmployeeLastName(){
+		return "NACHNAME: ";
+	}
+	public String administratorRegisterEmployeePhone(){
+		return "TELEFONUMMER: ";
+	}
+	public String administratorRegisterEmployeeEmail(){
+		return "EMAIL: ";
+	}
+	public String administratorRegisterEmployeeUsername(){
+		return "BENUTZERNAME: ";
+	}
+	public String administratorRegisterEmployeePassword(){
+		return "PASSWORT: ";
+	}
+	public String administratorRegisterEmployeePasswordRepeat(){
+		return "PASSWORT WIEDERHOLEN: ";
+	}
+	public String administratorRegisterEmployeeErrorFirstNameMissing(){
+		return "Bitte geben sie einen Vornamen ein. ";
+	}
+	public String administratorRegisterEmployeeErrorLastNameMissing(){
+		return "Bitte geben sie einen Nachnamen ein. ";
+	}
+	public String administratorRegisterEmployeeErrorEmailMissing(){
+		return "Bitte geben sie eine Email adresse ein. ";
+	}
+	public String administratorRegisterEmployeeErrorEmailNotInRightFormat(){
+		return "Email ist nicht im richtigen Format und kann nicht validiert werden. ";
+	}
+	public String administratorRegisterEmployeeErrorUsernameMissing(){
+		return "Bitte geben sie einen Benutzernamen ein. "; 
+	}
+	public String administratorRegisterEmployeeErrorPasswordMissing(){
+		return "Bitte geben sie ein Passwort und die Passwort Wiederholung ein. ";
+	}
+	public String administratorRegisterEmployeeErrorPasswordNotInRightFormat(){
+		return "Passwort nicht im richtigen Format. Es muss aus mindestens 8 Zeichen bestehen. ";
+	}
+	public String administratorRegisterEmployeeErrorPasswordNotMatchingPasswordRepeat(){
+		return "Passwort passt nicht zur Passwort Wiederholung. ";
+	}
+	public String administratorRegisterEmployeeErrorUsernameAllreadyExist(){
+		return "Benutzer existiert bereits. ";
+	}
+	public String administratorRegisterEmployeeSuccessful(){
+		return "Erfolgreich neue Arbeitskraft registriert. ";
+	}
 }

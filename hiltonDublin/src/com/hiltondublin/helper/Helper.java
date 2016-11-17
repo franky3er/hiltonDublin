@@ -29,9 +29,9 @@ public class Helper {
 	public static String convertBooleanToTinyInt(String bool) {
 		if(bool!=null){
 			if(!bool.isEmpty()){
-				if(bool == "true"){
+				if(bool.equals("true")){
 					bool = "1";
-				} else if (bool == "false"){
+				} else if (bool.equals("false")){
 					bool = "0";
 				}
 			}
@@ -64,7 +64,7 @@ public class Helper {
 	 */
 	public static String setNullIfEmptyString(String string){
 		if(string != null){
-			string.trim();
+			string = string.trim();
 			if(string.equals("")){
 				string = null;
 			}
