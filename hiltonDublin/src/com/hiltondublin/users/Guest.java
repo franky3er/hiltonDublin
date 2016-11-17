@@ -1,8 +1,8 @@
 package com.hiltondublin.users;
 
 public class Guest extends User {
-	private int guestID;
-	private String address;
+	private int guestID = -1;
+	private String address = null;
 	private int passportNr;
 	
 	public int getGuestID() {

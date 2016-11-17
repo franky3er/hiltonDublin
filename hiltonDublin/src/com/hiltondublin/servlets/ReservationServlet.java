@@ -63,7 +63,9 @@ public class ReservationServlet extends HttpServlet {
 		
 		guest.setLastName(request.getParameter("lastname"));
 		guest.setFirstName(request.getParameter("firstname"));
-		guest.setEmail(request.getParameter("email"));
+		if(request.getParameter("email") != null) {
+			guest.setEmail(request.getParameter("email"));
+		}
 		guest.setAddress(request.getParameter("address"));
 		guest.setPhoneNumber(request.getParameter("phonenr"));
 		

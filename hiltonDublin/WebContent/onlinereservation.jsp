@@ -42,7 +42,7 @@
 				<td><input type="email" id="email" name="email" placeholder="ex) example@example.com" required></td>
 			</tr>
 			<tr>
-				<td><label for="passportnr">PASSPORT NR. (*)</label></td>
+				<td><label for="passportnr">PASSPORT NR.</label></td>
 				<td><input type="text" id="passportnr" name="passportnr" placeholder="Insert PassportNumber" required></td>
 			</tr>
 			<tr>
