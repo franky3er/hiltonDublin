@@ -1,6 +1,7 @@
 package com.hiltondublin.servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.hiltondublin.classes.Reservation;
 import com.hiltondublin.classes.Room;
-import com.hiltondublin.db.HiltonDublinDBConnection;
+import com.hiltondublin.helper.Helper;
 import com.hiltondublin.service.ReservationService;
 import com.hiltondublin.users.Guest;
 
@@ -29,18 +30,45 @@ public class ReservationServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HiltonDublinDBConnection dbConnection = HiltonDublinDBConnection.getInstance(); 
-		
+		Helper helper = new Helper();
 		Guest guest = new Guest();
-
-		guest.setLastName(request.getParameter("lastname")); //TODO: Chec if empty and return an error message to the user
-		guest.setFirstName(request.getParameter("firstname")); //TODO: Same as first name
-		guest.setPhoneNumber(request.getParameter("phonenr")); //TODO: Can be left empty
-		guest.setEmail(request.getParameter("email")); //TODO: Check if email address is empty and in right format and return error message to user if not
-		guest.setAddress(request.getParameter("address")); //TODO: Check if empty and return error message to user
-		guest.setPassportNr(Integer.parseInt(request.getParameter("passportnr"))); //TODO: Check if it is integer before and if empty and return an error message to the user
+		
+		//check phone number is integer
+		if(request.getParameter("phonenr") != null && !helper.isInteger(request.getParameter("phonenr"))) {
+			PrintWriter writer = response.getWriter();
+			writer.println("<script type='text/javascript'>");
+			writer.println("alert('Please check your phone number!');");
+			writer.println("history.back();");
+			writer.println("</script>");
+			writer.flush();
+			
+			return;
+		}
+		else {
+			guest.setPassportNr(Integer.parseInt(request.getParameter("passportnr")));
+		}
+		
+		//check passport number is integer
+		if(!helper.isInteger(request.getParameter("passportnr")))
+		{
+			PrintWriter writer = response.getWriter();
+			writer.println("<script type='text/javascript'>");
+			writer.println("alert('Please check your passport number!');");
+			writer.println("history.back();");
+			writer.println("</script>");
+			writer.flush();
+			
+			return;
+		}
+		
+		guest.setLastName(request.getParameter("lastname"));
+		guest.setFirstName(request.getParameter("firstname"));
+		guest.setEmail(request.getParameter("email"));
+		guest.setAddress(request.getParameter("address"));
+		guest.setPhoneNumber(request.getParameter("phonenr"));
 		
 		Room room = new Room();
+		
 		if(request.getParameter("smoking").equals("true")) {
 			room.setSmoking(true);
 		}
@@ -57,6 +85,19 @@ public class ReservationServlet extends HttpServlet {
 		
 		String ArrivalString = request.getParameter("checkin");
 		String DepartureString = request.getParameter("checkout");
+		
+		//Check arrival date is faster than departure date
+		if(ArrivalString.compareTo(DepartureString) > 0)
+		{
+			PrintWriter writer = response.getWriter();
+			writer.println("<script type='text/javascript'>");
+			writer.println("alert('Please check arrivaldate and departuredate!');");
+			writer.println("history.back();");
+			writer.println("</script>");
+			writer.flush();
+			
+			return;
+		}
 
 		try {
 			Date ArrivalDate = onlyDayDateFormat.parse(ArrivalString);
@@ -64,42 +105,38 @@ public class ReservationServlet extends HttpServlet {
 			
 			reservation.setArrivalDate(ArrivalDate);
 			reservation.setDepartureDate(DepartureDate);
-			
 		} catch (ParseException e) {
 			response.sendRedirect("onlinereservation.jsp");
-			
 			return ;
 		}
 		
-		// checking passport-number is just number
-		int passportcheck = guest.getPassportNr();
-		while(passportcheck != 0)
-		{
-			if(passportcheck%10 >= 0 && passportcheck%10 < 10)
-			{
-				passportcheck = passportcheck / 10;
-			}
-			else
-			{
-				System.out.println("Passport number is wrong!!");
-				return ;
+		if(request.getParameter("numberOfGuests") != null) {
+			int numofguest = Integer.parseInt(request.getParameter("numberOfGuests"));
+			
+			// check guest reserve proper amount of rooms
+			if(Type[0]*1+Type[1]*2+Type[2]*3 < numofguest) {
+				PrintWriter writer = response.getWriter();
+				writer.println("<script type='text/javascript'>");
+				writer.println("alert('You need to reserve proper amount of rooms!');");
+				writer.println("history.back();");
+				writer.println("</script>");
+				writer.flush();
+				return;
 			}
 		}
+		
 		ReservationService reserve = new ReservationService();
 		
 		guest = reserve.findGuestID(guest, Type[0]+Type[1]+Type[2]);
 		
 		if(guest.getGuestID() == -1) {
 			response.sendRedirect("onlinereservation.jsp");
-			
 			return ;
 		}
 		else {
-			request.setAttribute("guest", guest);
-			request.setAttribute("room", room);
+			reservation = reserve.findReservationID(reservation, guest, room, Type);
 			request.setAttribute("reservation", reservation);
-			request.setAttribute("Type", Type);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("Online-Reservation-sh");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("paid.jsp");
 			dispatcher.forward(request, response);
 			
 			return ;

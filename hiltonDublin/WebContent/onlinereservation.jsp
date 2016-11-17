@@ -42,12 +42,12 @@
 				<td><input type="email" id="email" name="email" placeholder="ex) example@example.com" required></td>
 			</tr>
 			<tr>
-				<td><label for="phonenr">PHONE NR.</label></td>
-				<td><input type="tel" id="phonenr" name="phonenr" placeholder="Input just number" required></td>
+				<td><label for="passportnr">PASSPORT NR. (*)</label></td>
+				<td><input type="text" id="passportnr" name="passportnr" placeholder="Insert PassportNumber" required></td>
 			</tr>
 			<tr>
-				<td><label for="passportnr">PASSPORT NR.</label></td>
-				<td><input type="text" id="passportnr" name="passportnr" placeholder="Insert PassportNumber" required></td>
+				<td><label for="phonenr">PHONE NR.</label></td>
+				<td><input type="tel" id="phonenr" name="phonenr" placeholder="Input just number" required></td>
 			</tr>
 			<tr>
 				<td></td>
@@ -65,9 +65,9 @@
 		<td>Smoking</td>
 		</tr>
 		<tr>
-		<td><input type="date" id="checkin" name="checkin" value="<%=currentDayAsString %>" min="<%=currentDayAsString %>" required></td>
-		<td><input type="date" id="checkout" name="checkout" value="<%=tomorrowDayAsString %>" min="<%=tomorrowDayAsString %>" required></td>
-		<td><input type="number" id="numberOfGuests" name="numberOfGuests" min="1" max="6" required></td>
+		<td><input type="date" id="checkin" name="checkin" value="<%=currentDayAsString %>" min="<%=currentDayAsString %>" max="2017-12-31" required></td>
+		<td><input type="date" id="checkout" name="checkout" value="<%=tomorrowDayAsString %>" min="<%=tomorrowDayAsString %>" max="2017-12-31" required></td>
+		<td><input type="number" id="numberOfGuests" name="numberOfGuests" value="1" min="1" max="6" required></td>
 		<td>
 		<input id="smoking" type="radio" name="smoking" value="true" checked>
 		<label for="smoking">Yes</label>
@@ -83,13 +83,15 @@
 		<table>
 		<tr>
 		<td>Single</td>
-		<td>Double</td>
-		<td>Triple</td>
+		<td><input type="number" id="numtype1" name="numtype1" value="0" min="0" max="9" required></td>
 		</tr>
 		<tr>
-		<td><input type="number" id="numtype1" name="numtype1" value="0" min="0" required></td>
-		<td><input type="number" id="numtype2" name="numtype2" value="0" min="0" required></td>
-		<td><input type="number" id="numtype3" name="numtype3" value="0" min="0" required></td>
+		<td>Double</td>
+		<td><input type="number" id="numtype2" name="numtype2" value="0" min="0" max="9" required></td>
+		</tr>
+		<tr>
+		<td>Triple</td>
+		<td><input type="number" id="numtype3" name="numtype3" value="0" min="0" max="9" required></td>
 		</tr>
 		</table>
 	</fieldset>
@@ -97,7 +99,7 @@
 		<tr>
 			<td colspan="2" align="center">
 			<input type="submit" value="Submit">
-			<input type="reset" value="Cancel">
+			<input type="reset" value="Reset">
 			</td>
 		</tr>
 	</table>

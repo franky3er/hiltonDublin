@@ -7,7 +7,7 @@
     
 <h1>Reservation</h1>
     
-<form id="reservation_info" action="Reservation" method="post">
+<form id="reservation_info" action="<%=request.getContextPath() %>/Guest/Online-Reservation-check" method="post">
 	<fieldset>
 		<legend>Guest Info</legend>
 		<table>
@@ -28,12 +28,12 @@
 				<td><input type="email" id="email" name="email" placeholder="ex) example@example.com" required></td>
 			</tr>
 			<tr>
-				<td><label for="phonenr">PHONE NR.</label></td>
-				<td><input type="tel" id="phonenr" name="phonenr" placeholder="Input just number" required></td>
-			</tr>
-			<tr>
 				<td><label for="passportnr">PASSPORT NR.</label></td>
 				<td><input type="text" id="passportnr" name="passportnr" placeholder="Insert PassportNumber" required></td>
+			</tr>
+			<tr>
+				<td><label for="phonenr">PHONE NR.</label></td>
+				<td><input type="tel" id="phonenr" name="phonenr" placeholder="Insert Phonenumber"></td>
 			</tr>
 			<tr>
 				<td></td>
@@ -69,13 +69,15 @@
 		<table>
 		<tr>
 		<td>Single</td>
-		<td>Double</td>
-		<td>Triple</td>
+		<td><input type="number" id="numtype1" name="numtype1" value="0"  min="0" max="9" required></td>
 		</tr>
 		<tr>
-		<td><input type="number" id="numtype1" name="numtype1" min="0" required></td>
-		<td><input type="number" id="numtype2" name="numtype2" min="0" required></td>
-		<td><input type="number" id="numtype3" name="numtype3" min="0" required></td>
+		<td>Double</td>
+		<td><input type="number" id="numtype2" name="numtype2" value="0"  min="0" max="9" required></td>
+		</tr>
+		<tr>
+		<td>Triple</td>
+		<td><input type="number" id="numtype3" name="numtype3" value="0"  min="0" max="9" required></td>
 		</tr>
 		</table>
 	</fieldset>
