@@ -496,6 +496,9 @@ public abstract class Language {
 	public String administratorAddProductSuccessful(ConsumerProduct product){
 		return "Successfully added new product. (Product ID: " + product.getProductID() + ", Product Name: " + product.getName() + ", Price: " + product.getPrice() + ") "; 
 	}
+	public String administratorDeleteProductSuccessful(){
+		return "Successfully delete product. ";
+	}
 	
 	public String administratorRegisterEmployeeHeading(){
 		return "Register Employee";

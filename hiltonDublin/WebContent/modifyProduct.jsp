@@ -12,6 +12,11 @@ String showContent = (String) request.getAttribute("showContent");
 String lookedForProducts = (String) request.getAttribute("lookedForProducts");
 String searchProductErrorProductID = (String) request.getAttribute("searchProductErrorProductID");
 String searchProductErrorPrice = (String) request.getAttribute("searchProductErrorPrice");
+String searchedProductID = (String) request.getAttribute("searchedProductID");
+String searchedProductName = (String) request.getAttribute("searchedProductName");
+String searchedPrice = (String) request.getAttribute("searchedPrice");
+
+String deleteProductSuccessful = (String) request.getAttribute("deleteProductSuccessful");
 
 String modifyProductErrorProductID = (String) request.getAttribute("modifyProductErrorProductID");
 String modifyProductErrorProductName = (String) request.getAttribute("modifyProductErrorProductName");
@@ -27,6 +32,8 @@ ConsumerProduct addedProduct = (ConsumerProduct) request.getAttribute("addedProd
 boolean searchProductErrorProductIDNotInRightFormat = false;
 boolean searchProductErrorPriceNotInRightFormat = false;
 boolean lookedForProd = false;
+
+boolean deleteProductSuccess = false;
 
 boolean modifyProductErrorProductIDMissing = false;
 boolean modifyProductErrorProductIDNotInRightFormat = false;
@@ -65,6 +72,18 @@ if(modifyProductSuccessful == null){
 if(addProductSuccessful == null){
 	addProductSuccessful = "0";
 }
+if(searchedProductID == null){
+	searchedProductID = "";
+}
+if(searchedProductName == null){
+	searchedProductName = "";
+}
+if(searchedPrice == null){
+	searchedPrice = "";
+}
+if(deleteProductSuccessful == null){
+	deleteProductSuccessful = "0";
+}
 
 
 if(searchProductErrorProductID.equals("1")){
@@ -99,6 +118,9 @@ if(modifyProductSuccessful.equals("1")){
 }
 if(addProductSuccessful.equals("1")){
 	addProductSuccess = true;
+}
+if(deleteProductSuccessful.equals("1")){
+	deleteProductSuccess = true;
 }
 %>
 
@@ -200,6 +222,7 @@ if(addProductSuccessful.equals("1")){
 
 		<%if(searchProductErrorProductIDNotInRightFormat){ %><p class="error"><%=language.administratorModifyProductErrorProductIDNotInRightFormat() %></p><%} %>
 		<%if(searchProductErrorPriceNotInRightFormat){ %><p class="error"><%=language.administratorModifyProductErrorPriceNotInRightFormat() %></p><%} %>
+		<%if(deleteProductSuccess){ %><p class="informational"><%=language.administratorDeleteProductSuccessful() %></p><%} %>
 		<%if(foundProducts == null){ %><p class="error"><%=language.administratorModifyProductErrorNoRoomFound() %></p><%}%>
 		<%if(foundProducts != null){ %>
 			<%if(foundProducts.size()==0){ %><p class="error"><%=language.administratorModifyProductErrorNoRoomFound() %></p><%} %>
@@ -224,6 +247,16 @@ if(addProductSuccessful.equals("1")){
 				   	 			<input type="submit" value="<%=language.modify() %>"/>
 				   	 			<input type="hidden" name="productID" value="<%=product.getProductID() %>"/>
 				   	 			<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+				   	 		</form>
+				   	 	</td>
+				   	 	<td>
+				   	 		<form action="<%=request.getContextPath() %>/Admin/Modify-Product-delete-product" method="post">
+				   	 			<input type="submit" value="<%=language.delete() %>"/>
+				   	 			<input type="hidden" name="productID" value="<%=product.getProductID() %>"/>
+				   	 			<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+				   	 			<input type="hidden" name="searchedProductID" value="<%=searchedProductID %>"/>
+				   	 			<input type="hidden" name="searchedProductName" value="<%=searchedProductName %>"/>
+				   	 			<input type="hidden" name="searchedPrice" value="<%=searchedPrice %>"/>
 				   	 		</form>
 				   	 	</td>
 				  	</tr>

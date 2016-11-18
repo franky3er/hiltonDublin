@@ -429,6 +429,9 @@ public class German extends Language {
 	public String administratorAddRoomSuccessful(Room room){
 		return "Erfolgreich neues Zimmer hinzugefügt (Zimmernummer: " + room.getRoomNumber() + ", Typ: " + room.getType().getName() + ", Rauchen: " + room.isSmoking() + ", Besetzt: " + room.isOccupied() + ") ";
 	}
+	public String administratorDeleteProductSuccessful(){
+		return "Produkt erfolgreich gelöscht. ";
+	}
 	
 	public String administratorModifyProductHead(){
 		return "Produkt modifizieren";

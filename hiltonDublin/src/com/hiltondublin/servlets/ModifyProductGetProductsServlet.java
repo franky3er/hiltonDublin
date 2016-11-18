@@ -31,6 +31,10 @@ public class ModifyProductGetProductsServlet extends HttpServlet {
 		String productName = Helper.setNullIfEmptyString(request.getParameter("productName"));
 		String price = Helper.setNullIfEmptyString(request.getParameter("price"));
 		
+		if(productID != null) request.setAttribute("searchedProductID", productID);
+		if(productName != null) request.setAttribute("searchedProductName", productName);
+		if(price != null) request.setAttribute("searchedPrice", price);
+		
 		boolean searchForProducts = true;
 		
 		if(productID != null){
