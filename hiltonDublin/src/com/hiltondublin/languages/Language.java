@@ -37,6 +37,24 @@ public abstract class Language {
 	public String register(){
 		return "register";
 	}
+	public String firstName(){
+		return "FIRST NAME";
+	}
+	public String lastName(){
+		return "LAST NAME";
+	}
+	public String address(){
+		return "ADDRESS";
+	}
+	public String email(){
+		return "EMAIL";
+	}
+	public String phone(){
+		return "PHONE";
+	}
+	public String passportNr(){
+		return "PASSPORT NUMBER";
+	}
 
 	
 	//NAVIGATIONSLIDE
@@ -605,4 +623,67 @@ public abstract class Language {
 		return "Successfully canceled reservation. ";
 	}
 	
+	
+	
+	//RESERVATION
+	public String reservationOnlineHeading(){
+		return "Online Reservation";
+	}
+	public String reservationGuestDetails(){
+		return "Guest Details";
+	}
+	public String reservationBookingDetails(){
+		return "Booking Details";
+	}
+	public String reservationRoomDetails(){
+		return "Room Details";
+	}
+	public String reserveAndPay(){
+		return "Reserve and Pay";
+	}
+	public String reservationArrivalDate(){
+		return "Arrival Date";
+	}
+	public String reservationDepartureDate(){
+		return "Departure Date";
+	}
+	public String reservationSmoking(){
+		return "Smoking";
+	}
+	public String reservationPerson(){
+		return "Person";
+	}
+	public String reservationRoomType(){
+		return "Room Type";
+	}
+	public String reservationRoomTypeDescription(){
+		return "Description";
+	}
+	public String reservationRoomTypePicture(){
+		return "Picture";
+	}
+	public String reservationRoomTypeAmmount(){
+		return "Ammount of rooms: ";
+	}
+	public String reservationErrorFirstNameMissing(){
+		return "Please type in a first name. ";
+	}
+	public String reservationErrorLastNameMissing(){
+		return "Please type in a last name. ";
+	}
+	public String reservationErrorAddressMissing(){
+		return "Please type in an address. ";
+	}
+	public String reservationErrorEmailMissing(){
+		return "Please type in an Email address. ";
+	}
+	public String reservationErrorEmailNotInRightFormat(){
+		return "Email is not in right format. Please check your email address. ";
+	}
+	public String reservationErrorPassportNrMissing(){
+		return "Please type in a passport number. ";
+	}	
+	public String reservationErrorPassportNrNotInRightFormat(){
+		return "Passport Number must be from type Integer. ";
+	}
 }

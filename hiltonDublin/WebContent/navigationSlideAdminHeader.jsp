@@ -7,7 +7,8 @@
 <%@page import="com.hiltondublin.languages.German" %>
 <%@page import="com.hiltondublin.languages.Korean" %>
 <%@page import="java.util.*"%> 
-<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>  
+<%@page language="java" %>  
+<%@ page pageEncoding="UTF-8" %>
 <%!
 //Constants
 private static final String ENGLISH = "english";

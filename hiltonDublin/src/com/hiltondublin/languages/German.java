@@ -32,6 +32,24 @@ public class German extends Language {
 	public String modify(){
 		return "modifizieren";
 	}
+	public String firstName(){
+		return "VORNAME";
+	}
+	public String lastName(){
+		return "NACHNAME";
+	}
+	public String address(){
+		return "ADRESSE";
+	}
+	public String email(){
+		return "EMAIL";
+	}
+	public String phone(){
+		return "TELEFON";
+	}
+	public String passportNr(){
+		return "PASSNUMMER";
+	}
 	
 	//Navigation Slide
 	public String navigationSlideGuest(){
@@ -577,5 +595,70 @@ public class German extends Language {
 	}
 	public String employeeCancelReservationSuccessful(){
 		return "Reservierung erfolgreich storniert. ";
+	}
+	
+	
+	
+	
+	//RESERVATION
+	public String reservationOnlineHeading(){
+		return "Online Reservierung";
+	}
+	public String reservationGuestDetails(){
+		return "Gast Details";
+	}
+	public String reservationBookingDetails(){
+		return "Buchungs Details";
+	}
+	public String reservationRoomDetails(){
+		return "Zimmer Details";
+	}
+	public String reserveAndPay(){
+		return "Reservieren und Bezahlen";
+	}
+	public String reservationArrivalDate(){
+		return "Anreisedatum";
+	}
+	public String reservationDepartureDate(){
+		return "Abreisedatum";
+	}
+	public String reservationSmoking(){
+		return "Raucher";
+	}
+	public String reservationPerson(){
+		return "Personen";
+	}
+	public String reservationRoomType(){
+		return "Zimmertyp";
+	}
+	public String reservationRoomTypeDescription(){
+		return "Beschreibung";
+	}
+	public String reservationRoomTypePicture(){
+		return "Bild";
+	}
+	public String reservationRoomTypeAmmount(){
+		return "Anzahl Zimmer: ";
+	}
+	public String reservationErrorFirstNameMissing(){
+		return "Bitte geben sie einen Vornamen ein. ";
+	}
+	public String reservationErrorLastNameMissing(){
+		return "Bitte geben sie einen Nachnamen ein. ";
+	}
+	public String reservationErrorAddressMissing(){
+		return "Bitte geben sie eine Addresse ein. ";
+	}
+	public String reservationErrorEmailMissing(){
+		return "Bitte geben sie eie Email Adresse ein. ";
+	}
+	public String reservationErrorEmailNotInRightFormat(){
+		return "Die Email Adresse ist nicht im richtigen Format. Bitte überprüfen sie die Email Adresse. ";
+	}
+	public String reservationErrorPassportNrMissing(){
+		return "Geben sie bitte eine Passnummer ein. ";
+	}	
+	public String reservationErrorPassportNrNotInRightFormat(){
+		return "Die Passnummer muss vom Typ Integer sein. ";
 	}
 }
