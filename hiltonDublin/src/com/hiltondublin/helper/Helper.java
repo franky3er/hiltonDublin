@@ -2,6 +2,7 @@ package com.hiltondublin.helper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.hiltondublin.db.Cell;
 
@@ -9,6 +10,7 @@ public class Helper {
 	public final static String regexEmailValidation = "^[\\w!#$%&’*+/=?`{|}~^-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
 	public final static String regexInteger = "\\d*$";
 	public final static String regexDouble = "-?\\d+(\\.\\d+)?";
+	public final static Random random = new Random();
 	
 	/**
 	 * Validates Email address and returns true if email address matches to a email address
@@ -145,5 +147,12 @@ public class Helper {
 		}
 		
 		return cells;
+	}
+	
+	public static int randInt(int min, int max) {
+	    
+		int randomNum = random.nextInt((max - min) + 1) + min;
+
+	    return randomNum;
 	}
 }

@@ -99,6 +99,16 @@ public abstract class Language {
 	public String homeWelcome(){
 		return "Welcome to Hilton Dublin";
 	}
+	public String homeWelcomeText(){
+		String welcomeText = "As the most recognized name in the industry, travelers all over the world have been saying Take me to the Hilton for almost a century. "
+				+ "<br> And because of our innovative approach to products, amenities and service, Hilton continues to be synonymous with hotel across the globe. "
+				+ "<br> Hilton Hotels and Resorts remains the stylish, forward thinking global leader of hospitality and we help make traveling easier with our smart design, innovative restaurant concepts, authentic hospitality and commitment to the global community.";
+	
+		return welcomeText;
+	}
+	public String homeBookNow(){
+		return "Book Now!";
+	}
 	
 	//GUEST
 	public String guestWelcome(){
@@ -181,6 +191,22 @@ public abstract class Language {
 	
 	public String guestRatingRatingWorstGrade(){
 		return "* 1 -> Worst Grade";
+	}
+	
+	public String gustRatingRatingSimple(){
+		return "Rating";
+	}
+	public String guestRatingRoomTypeSimple(){
+		return "Room Type";
+	}
+	public String guestRatingCommentSimple(){
+		return "Comment";
+	}
+	public String guestRatingReviewsOurGuests(){
+		return "Reviews our Guests ";
+	}
+	public String guestRatingOverall(){
+		return "instesamt";
 	}
 	
 	//EMPLOYEE
@@ -578,4 +604,5 @@ public abstract class Language {
 	public String employeeCancelReservationSuccessful(){
 		return "Successfully canceled reservation. ";
 	}
+	
 }

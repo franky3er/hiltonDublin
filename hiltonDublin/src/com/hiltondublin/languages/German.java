@@ -161,9 +161,34 @@ public class German extends Language {
 		return "* 1 -> Schlechteste Note";
 	}
 	
+	public String gustRatingRatingSimple(){
+		return "Bewertung";
+	}
+	public String guestRatingRoomTypeSimple(){
+		return "Zimmertyp";
+	}
+	public String guestRatingCommentSimple(){
+		return "Kommentar";
+	}
+	public String guestRatingReviewsOurGuests(){
+		return "Bewertungen unserer Gäste ";
+	}
+	public String guestRatingOverall(){
+		return "insgesamt";
+	}
+	
 	//HOME
 	public String homeWelcome(){
 		return "Willkommen bei Hilton Dublin";
+	}
+	public String homeWelcomeText(){
+		String welcomeText = "Dank unserer zahlreichen Kunden, die uns schon seit über einem Jahrhundert aus der ganzen Welt besuchen kommen, sind wir stolz sagen zu können, dass 'Hilton Hotels and Resorts' eines der angesagtesten Hotels auf der ganzen Welt ist."
+				+ "<br> Und um diesem Ruf gerecht zu werden versprechen wir auch weiterhin unseren Gästen ihren Aufenthalt mit attraktive Produkten, einen freundlichen und verlässlichen Service so angehnehm wie möglich zu gestalten. ";
+	
+		return welcomeText;
+	}
+	public String homeBookNow(){
+		return "Jetzt buchen!";
 	}
 	
 	//EMPLOYEE
@@ -249,7 +274,7 @@ public class German extends Language {
 		return "Admin Bereich";
 	}
 	public String administratorLoginMessage(){
-		return "Sie mï¿½ssen als Administrator eingeloggt sein um Zugang zum Admin Bereich zu erhalten!";
+		return "Sie müssen als Administrator eingeloggt sein um Zugang zum Admin Bereich zu erhalten!";
 	}
 	public String administratorModifyReservationHeading(){
 		return "Reservierung modifizieren";
