@@ -14,6 +14,8 @@
 	String reservationErrorEmail = (String) request.getAttribute("reservationErrorEmail");
 	String reservationErrorPassportNr = (String) request.getAttribute("reservationErrorPassportNr");
 	String reservationErrorDate = (String) request.getAttribute("reservationErrorDate");
+	String reservationErrorNoRoomsSelected = (String) request.getAttribute("reservationErrorNoRoomsSelected");
+	String reservationErrorNotEnoughRooms = (String) request.getAttribute("reservationErrorNotEnoughRooms");
 
 	boolean reservationErrorFirstNameMissing = false;
 	boolean reservationErrorLastNameMissing = false;
@@ -23,6 +25,8 @@
 	boolean reservationErrorPassportNrMissing = false;
 	boolean reservationErrorPassportNrNotInRightFormat = false;
 	boolean reservationErrorDateDepartureDateBeforeArrivalDate = false;
+	boolean reservationErrorNoRoomsSelect = false;
+	boolean reservationErrorBookedOut = false;
 	
 	if(reservationErrorFirstName == null){
 		reservationErrorFirstName = "0";
@@ -41,6 +45,12 @@
 	}
 	if(reservationErrorDate == null){
 		reservationErrorDate = "0";
+	}
+	if(reservationErrorNoRoomsSelected == null){
+		reservationErrorNoRoomsSelected = "0";
+	}
+	if(reservationErrorNotEnoughRooms == null){
+		reservationErrorNotEnoughRooms = "0";
 	}
 	
 	if(reservationErrorFirstName.equals("1")){
@@ -66,6 +76,12 @@
 	}
 	if(reservationErrorDate.equals("1")){
 		reservationErrorDateDepartureDateBeforeArrivalDate = true;
+	}
+	if(reservationErrorNoRoomsSelected.equals("1")){
+		reservationErrorNoRoomsSelect = true;
+	}
+	if(reservationErrorNotEnoughRooms.equals("1")){
+		reservationErrorBookedOut = true;
 	}
 	
 	
@@ -218,6 +234,8 @@
 <%if(reservationErrorPassportNrNotInRightFormat){ %><p class="error"><%=language.reservationErrorPassportNrNotInRightFormat() %></p><%} %>
 <%if(reservationErrorPassportNrMissing){ %><p class="error"><%=language.reservationErrorPassportNrMissing() %></p><%} %>
 <%if(reservationErrorDateDepartureDateBeforeArrivalDate){ %><p class="error"><%=language.reservationErrorDateDepartureDateBeforeArrivalDate() %></p><%} %>
+<%if(reservationErrorNoRoomsSelect){ %><p class="error"><%=language.reservationErrorNoRoomsSelected() %></p><%} %>
+<%if(reservationErrorBookedOut){ %><p class="error"><%=language.reservationErrorBookedOut() %></p><%} %>
 
 
 <%@ include file="navigationSlideGuestFooter.jsp" %>

@@ -2889,7 +2889,7 @@ public class HiltonDublinDBConnection extends Helper {
 		additionalSQLCondition += " SELECT " + RESERVATION_RESERVATIONID + " FROM " + RESERVATION;
 		additionalSQLCondition += " WHERE " + RESERVATION_ARRIVALDATE + " BETWEEN '" + arrDate + "' AND '" + depDate + "' ";
 		additionalSQLCondition += " OR " + RESERVATION_DEPARTUREDATE + " BETWEEN '" + arrDate + "' AND '" + depDate + "' )) ";
-		additionalSQLCondition += " OR " + ROOM_NUMBER + " NOT IN ( SELECT " + RESERVED_ROOM_ROOMNUMBER + " FROM " + RESERVED_ROOM + "))";
+		additionalSQLCondition += " OR " + ROOM_NUMBER + " NOT IN ( SELECT " + RESERVED_ROOM_ROOMNUMBER + " FROM " + RESERVED_ROOM + ")) LIMIT " + ammountOfRooms;
 		
 		List<Room> rooms = getRooms(null, Integer.toString(roomTypeID), isSmoking, null, additionalSQLCondition);
 		

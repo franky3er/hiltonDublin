@@ -664,4 +664,10 @@ public class German extends Language {
 	public String reservationErrorDateDepartureDateBeforeArrivalDate(){
 		return "Das Abreisedatum muss mindestens ein Tag später sein als das Anreisedatum. ";
 	}
+	public String reservationErrorNoRoomsSelected(){
+		return "Please select at least one room from a room type. ";
+	}
+	public String reservationErrorBookedOut(){
+		return "Es tut uns wirklich leid. Aber wir haben zur Zeit leider nicht genügend Zimmer ihrer Anfrage entsprechend. ";
+	}
 }

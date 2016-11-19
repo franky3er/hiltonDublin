@@ -689,4 +689,10 @@ public abstract class Language {
 	public String reservationErrorDateDepartureDateBeforeArrivalDate(){
 		return "Departure date must be at least one day after arrival date. ";
 	}
+	public String reservationErrorNoRoomsSelected(){
+		return "Please select at least one room from a room type. ";
+	}
+	public String reservationErrorBookedOut(){
+		return "We're really sorry. But we've got not enough rooms correspond to your request. ";
+	}
 }
