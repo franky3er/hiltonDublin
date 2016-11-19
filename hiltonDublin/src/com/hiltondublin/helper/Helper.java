@@ -1,15 +1,19 @@
 package com.hiltondublin.helper;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import com.hiltondublin.db.Cell;
+import com.hiltondublin.db.HiltonDublinDBConnection;
 
 public class Helper {
 	public final static String regexEmailValidation = "^[\\w!#$%&’*+/=?`{|}~^-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
 	public final static String regexInteger = "\\d*$";
 	public final static String regexDouble = "-?\\d+(\\.\\d+)?";
+	public final static SimpleDateFormat integerDateFormat = new SimpleDateFormat("yyyyMMdd");
 	public final static Random random = new Random();
 	
 	/**
@@ -154,5 +158,27 @@ public class Helper {
 		int randomNum = random.nextInt((max - min) + 1) + min;
 
 	    return randomNum;
+	}
+	
+	public static boolean arrivalDateBeforeDepartureDate(String arrivalDate, String departureDate){
+		
+		if(arrivalDate != null && departureDate != null){
+			try {
+				arrivalDate = integerDateFormat.format(HiltonDublinDBConnection.onlyDayDateFormat.parse(arrivalDate));
+				departureDate = integerDateFormat.format(HiltonDublinDBConnection.onlyDayDateFormat.parse(departureDate));
+				
+				if(isInteger(arrivalDate) && isInteger(departureDate)){			
+					return (Integer.parseInt(arrivalDate) < Integer.parseInt(departureDate));
+				} else {
+					return false;
+				}
+				
+			} catch (ParseException e) {
+				return false;
+			}
+		} else {
+			return false;
+		}
+		
 	}
 }

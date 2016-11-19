@@ -13,6 +13,7 @@
 	String reservationErrorAddress = (String) request.getAttribute("reservationErrorAddress");
 	String reservationErrorEmail = (String) request.getAttribute("reservationErrorEmail");
 	String reservationErrorPassportNr = (String) request.getAttribute("reservationErrorPassportNr");
+	String reservationErrorDate = (String) request.getAttribute("reservationErrorDate");
 
 	boolean reservationErrorFirstNameMissing = false;
 	boolean reservationErrorLastNameMissing = false;
@@ -21,6 +22,7 @@
 	boolean reservationErrorEmailNotInRightFormat = false;
 	boolean reservationErrorPassportNrMissing = false;
 	boolean reservationErrorPassportNrNotInRightFormat = false;
+	boolean reservationErrorDateDepartureDateBeforeArrivalDate = false;
 	
 	if(reservationErrorFirstName == null){
 		reservationErrorFirstName = "0";
@@ -36,6 +38,9 @@
 	}
 	if(reservationErrorPassportNr == null){
 		reservationErrorPassportNr = "0";
+	}
+	if(reservationErrorDate == null){
+		reservationErrorDate = "0";
 	}
 	
 	if(reservationErrorFirstName.equals("1")){
@@ -59,23 +64,9 @@
 	if(reservationErrorPassportNr.equals("2")){
 		reservationErrorPassportNrNotInRightFormat = true;
 	}
-	
-	
-	
-	
-	String firstName = (String) request.getAttribute("firstName");
-	String lastName = (String) request.getAttribute("lastName");
-	String address = (String) request.getAttribute("address");
-	String email = (String) request.getAttribute("email");
-	String passportNr = (String) request.getAttribute("passportNr");
-	String phone = (String) request.getAttribute("phone");
-	
-	if(firstName == null) firstName = "";
-	if(lastName == null) lastName = "";
-	if(address == null) address = "";
-	if(email == null) email = "";
-	if(passportNr == null) passportNr = "";
-	if(phone == null) phone = "";
+	if(reservationErrorDate.equals("1")){
+		reservationErrorDateDepartureDateBeforeArrivalDate = true;
+	}
 	
 	
 	Calendar currentDay = Calendar.getInstance();
@@ -86,6 +77,29 @@
 	tomorrowDay.setTime(new Date());
 	tomorrowDay.add(Calendar.DAY_OF_MONTH, 1);
 	String tomorrowDayAsString = dbConnection.onlyDayDateFormat.format(tomorrowDay.getTime());
+	
+	
+	String firstName = (String) request.getAttribute("firstName");
+	String lastName = (String) request.getAttribute("lastName");
+	String address = (String) request.getAttribute("address");
+	String email = (String) request.getAttribute("email");
+	String passportNr = (String) request.getAttribute("passportNr");
+	String phone = (String) request.getAttribute("phone");
+	String arrivalDate = (String) request.getAttribute("arrivalDate");
+	String departureDate = (String) request.getAttribute("departureDate");
+	
+	if(firstName == null) firstName = "";
+	if(lastName == null) lastName = "";
+	if(address == null) address = "";
+	if(email == null) email = "";
+	if(passportNr == null) passportNr = "";
+	if(phone == null) phone = "";
+	if(arrivalDate == null) arrivalDate = currentDayAsString;
+	if(departureDate == null) departureDate = tomorrowDayAsString;
+	
+	
+	
+	
 	
 	List<RoomType> roomTypes = dbConnection.getRoomTypes(null, null, null, null, null, null);
 %>
@@ -136,8 +150,8 @@
 				<td><%=language.reservationSmoking() %></td>
 			</tr>
 			<tr>
-				<td><input type="date" id="checkin" name="checkin" value="<%=currentDayAsString %>" min="<%=currentDayAsString %>" max="2017-12-31" ></td>
-				<td><input type="date" id="checkout" name="checkout" value="<%=tomorrowDayAsString %>" min="<%=tomorrowDayAsString %>" max="2017-12-31" ></td>
+				<td><input type="date" id="checkin" name="arrivalDate" value="<%=arrivalDate %>" min="<%=currentDayAsString %>" max="2017-12-31" ></td>
+				<td><input type="date" id="checkout" name="departureDate" value="<%=departureDate %>" min="<%=tomorrowDayAsString %>" max="2017-12-31" ></td>
 				<td><input type="number" id="numberOfGuests" name="numberOfGuests" value="1" min="1" max="6" ></td>
 				<td>
 					<input id="smoking" type="radio" name="smoking" value="true" checked>
@@ -173,7 +187,7 @@
 					</td>
 					<td><%=roomType.getDescription() %></td>
 					<td>
-						<input type="number" name="roomType<%=i %>" value="0" min="0" max="9"/>
+						<input type="number" name="roomTypeAmmount<%=i %>" value="0" min="0" max="9"/>
 						<input type="hidden" name="roomTypeID<%=i %>" value="<%=roomType.getRoomTypeID() %>"/>
 					</td>
 				</tr>
@@ -203,6 +217,7 @@
 <%if(reservationErrorEmailNotInRightFormat){ %><p class="error"><%=language.reservationErrorEmailNotInRightFormat() %></p><%} %>
 <%if(reservationErrorPassportNrNotInRightFormat){ %><p class="error"><%=language.reservationErrorPassportNrNotInRightFormat() %></p><%} %>
 <%if(reservationErrorPassportNrMissing){ %><p class="error"><%=language.reservationErrorPassportNrMissing() %></p><%} %>
+<%if(reservationErrorDateDepartureDateBeforeArrivalDate){ %><p class="error"><%=language.reservationErrorDateDepartureDateBeforeArrivalDate() %></p><%} %>
 
 
 <%@ include file="navigationSlideGuestFooter.jsp" %>

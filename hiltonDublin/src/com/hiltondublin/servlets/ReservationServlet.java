@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.hiltondublin.classes.Reservation;
 import com.hiltondublin.classes.Room;
+import com.hiltondublin.db.HiltonDublinDBConnection;
 import com.hiltondublin.helper.Helper;
 import com.hiltondublin.service.ReservationService;
 import com.hiltondublin.users.Guest;
@@ -25,6 +27,9 @@ import com.hiltondublin.users.Guest;
 @WebServlet("/Reservation")
 public class ReservationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private HiltonDublinDBConnection dbConnection = HiltonDublinDBConnection.getInstance();
+	private static final String KEY_ROOM_TYPE_ID = "roomTypeID";
+	private static final String KEY_ROOM_TYPE_AMMOUNT = "roomTypeAmmoung";
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -40,7 +45,10 @@ public class ReservationServlet extends HttpServlet {
 		String email = Helper.setNullIfEmptyString(request.getParameter("email"));
 		String passportNr = Helper.setNullIfEmptyString(request.getParameter("passportNr"));
 		String phone = Helper.setNullIfEmptyString(request.getParameter("phone"));
-		
+		String arrivalDate = request.getParameter("arrivalDate");
+		String departureDate = request.getParameter("departureDate");
+		String smoking = request.getParameter("smoking");
+		String numberOfGuests = request.getParameter("numberOfGuests");
 		
 		request.setAttribute("firstName", firstName);
 		request.setAttribute("lastName", lastName);
@@ -48,6 +56,8 @@ public class ReservationServlet extends HttpServlet {
 		request.setAttribute("email", email);
 		request.setAttribute("passportNr", passportNr);
 		request.setAttribute("phone", phone);
+		request.setAttribute("arrivalDate", arrivalDate);
+		request.setAttribute("departureDate", departureDate);
 		
 		System.out.println(firstName);
 		
@@ -88,8 +98,27 @@ public class ReservationServlet extends HttpServlet {
 			reserve = false;
 		}
 		
+		if(!Helper.arrivalDateBeforeDepartureDate(arrivalDate, departureDate)){
+			request.setAttribute("reservationErrorDate", "1");
+			reserve = false;
+		}
 		
+		HashMap<Integer, Integer> requestedRoomTypes = new HashMap<Integer, Integer>();
 		
+		int i = 1;
+		while(true){
+			String roomTypeID = request.getParameter(KEY_ROOM_TYPE_ID + i);
+			String roomTypeAmmount = request.getParameter(KEY_ROOM_TYPE_AMMOUNT + i);
+			if(roomTypeID != null && roomTypeAmmount != null){
+				if(Integer.parseInt(roomTypeAmmount)>0){
+					requestedRoomTypes.put(Integer.parseInt(roomTypeID), Integer.parseInt(roomTypeAmmount));
+				}
+			} else {
+				break;
+			}
+			
+			i++;
+		}
 		
 		
 		if(reserve){

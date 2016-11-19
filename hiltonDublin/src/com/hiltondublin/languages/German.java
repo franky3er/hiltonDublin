@@ -661,4 +661,7 @@ public class German extends Language {
 	public String reservationErrorPassportNrNotInRightFormat(){
 		return "Die Passnummer muss vom Typ Integer sein. ";
 	}
+	public String reservationErrorDateDepartureDateBeforeArrivalDate(){
+		return "Das Abreisedatum muss mindestens ein Tag später sein als das Anreisedatum. ";
+	}
 }

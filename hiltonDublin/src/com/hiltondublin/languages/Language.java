@@ -686,4 +686,7 @@ public abstract class Language {
 	public String reservationErrorPassportNrNotInRightFormat(){
 		return "Passport Number must be from type Integer. ";
 	}
+	public String reservationErrorDateDepartureDateBeforeArrivalDate(){
+		return "Departure date must be at least one day after arrival date. ";
+	}
 }
