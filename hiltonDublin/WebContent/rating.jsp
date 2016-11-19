@@ -121,13 +121,18 @@ List<RoomType> roomTypes = dbConnection.getRoomTypes(null, null, null, null, nul
 				<p class="information"><%=language.guestRatingRatingWorstGrade() %></p>
 			</td>
 			<td>
-				<select name="rating">
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option selected value="5">5</option>
-				</select>
+            	<span class="starRating">
+			        <input id="rating5" type="radio" name="rating" value="5">
+			        <label for="rating5">5</label>
+			        <input id="rating4" type="radio" name="rating" value="4">
+			        <label for="rating4">4</label>
+			        <input id="rating3" type="radio" name="rating" value="3" checked>
+			        <label for="rating3">3</label>
+			        <input id="rating2" type="radio" name="rating" value="2">
+			        <label for="rating2">2</label>
+			        <input id="rating1" type="radio" name="rating" value="1">
+			        <label for="rating1">1</label>
+			    </span>
 			</td>
 		</tr>
 		<tr>
