@@ -324,4 +324,28 @@
     <servlet-name>registerEmployeeCheck</servlet-name>
     <url-pattern>/Admin/Register-Employee-check</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>employeeCancelReservation</servlet-name>
+    <jsp-file>/onlinecancellation-employee.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>employeeCancelReservation</servlet-name>
+    <url-pattern>/Employee/Cancel-Reservation</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>cancelReservationGetReservations</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.GetReservationsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>cancelReservationGetReservations</servlet-name>
+    <url-pattern>/Employee/Cancel-Reservation-get-reservations</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>cancelReservationServlet</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.CancelReservationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>cancelReservationServlet</servlet-name>
+    <url-pattern>/Employee/Cancel-Reservation-confirmed</url-pattern>
+  </servlet-mapping>
 </web-app>

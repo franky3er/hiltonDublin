@@ -143,8 +143,8 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 		<form action="<%=getURLWithContextPath(request) %>/Employee/Reservation" method="get">
 			<input class="navigationDetail" type="submit" value="Reservation" />
 		</form>
-		<form action="<%=getURLWithContextPath(request) %>/Employee/Cancellation" method="get">
-			<input class="navigationDetail" type="submit" value="Cancellation" />
+		<form action="<%=getURLWithContextPath(request) %>/Employee/Cancel-Reservation" method="get">
+			<input class="navigationDetail" type="submit" value="<%=language.employeeCancelReservationHeading() %>" />
 		</form>
 		<form action="<%=getURLWithContextPath(request) %>/Employee/Checkin" method="get">
 			<input class="navigationDetail" type="submit" value="Checkin" />

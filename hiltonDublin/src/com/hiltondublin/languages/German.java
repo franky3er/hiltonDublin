@@ -533,4 +533,24 @@ public class German extends Language {
 	public String administratorRegisterEmployeeSuccessful(){
 		return "Erfolgreich neue Arbeitskraft registriert. ";
 	}
+	
+	//EMPLOYEE
+	public String employeeCancelReservationHeading(){
+		return "Reservierung Stornieren";
+	}
+	public String employeeCancelReservationCancelButton(){
+		return "stornieren";
+	}
+	public String employeeCancelReservationNumber(int i){
+		return "Reservierung #" + i;
+	}
+	public String employeeCancelReservationConfirmation(){
+		return "Sind sie sicher, dass sie folgende Reservierung stornieren wollen? ";
+	}
+	public String employeeCancelReservation(){
+		return "Reservierung";
+	}
+	public String employeeCancelReservationSuccessful(){
+		return "Reservierung erfolgreich storniert. ";
+	}
 }

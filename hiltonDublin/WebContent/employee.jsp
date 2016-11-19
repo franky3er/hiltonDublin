@@ -8,8 +8,8 @@
 		<form action="<%=getURLWithContextPath(request) %>/Guest/Online-Reservation" method="get">
 			<input class="plaintextNavigationAreaDetail" type="submit" value="Reservation" />
 		</form>
-		<form action="<%=getURLWithContextPath(request) %>/Employee/Cancellation" method="get">
-			<input class="plaintextNavigationAreaDetail" type="submit" value="Cancellation" />
+		<form action="<%=getURLWithContextPath(request) %>/Employee/Cancel-Reservation" method="get">
+			<input class="plaintextNavigationAreaDetail" type="submit" value="<%=language.employeeCancelReservationHeading() %>" />
 		</form>
 		<form action="checkin.jsp" method="get">
 			<input class="plaintextNavigationAreaDetail" type="submit" value="Check-in" />

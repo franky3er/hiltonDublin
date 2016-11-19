@@ -16,6 +16,7 @@ import org.apache.tomcat.dbcp.dbcp.DbcpException;
 
 import com.hiltondublin.classes.Reservation;
 import com.hiltondublin.db.HiltonDublinDBConnection;
+import com.hiltondublin.helper.Helper;
 
 /**
  * Servlet implementation class GetReservationsServlet
@@ -31,29 +32,11 @@ public class GetReservationsServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String url = request.getParameter("url");
 		
-		String bookingNumber = request.getParameter("bookingNumber");
-		String firstName = request.getParameter("firstName");
-		String lastName = request.getParameter("lastName");
-		String arrivalDate = request.getParameter("arrivalDate");
-		String departureDate = request.getParameter("departureDate");
-		
-		if(bookingNumber.trim().equals("")){
-			bookingNumber = null;
-		}
-		if(firstName.trim().equals("")){
-			firstName = null;
-		}
-		if(lastName.trim().equals("")){
-			lastName = null;
-		}
-		if(arrivalDate.trim().equals("")){
-			arrivalDate = null;
-		}
-		if(departureDate.trim().equals("")){
-			departureDate = null;
-		}
-		
-		System.out.println("Arrival Date: " + arrivalDate);
+		String bookingNumber = Helper.setNullIfEmptyString(request.getParameter("bookingNumber"));
+		String firstName = Helper.setNullIfEmptyString(request.getParameter("firstName"));
+		String lastName = Helper.setNullIfEmptyString(request.getParameter("lastName"));
+		String arrivalDate = Helper.setNullIfEmptyString(request.getParameter("arrivalDate"));
+		String departureDate = Helper.setNullIfEmptyString(request.getParameter("departureDate"));
 		
 		List<Guest> guests = null;
 		

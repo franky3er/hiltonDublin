@@ -557,4 +557,25 @@ public abstract class Language {
 	public String administratorRegisterEmployeeSuccessful(){
 		return "Successfully registered new Employee. ";
 	}
+	
+	
+	//EMPLOYEE
+	public String employeeCancelReservationHeading(){
+		return "Cancel Reservation";
+	}
+	public String employeeCancelReservationCancelButton(){
+		return "cancel";
+	}
+	public String employeeCancelReservationNumber(int i){
+		return "Reservation #" + i;
+	}
+	public String employeeCancelReservationConfirmation(){
+		return "Are you sure you want to cancel the following reservation? ";
+	}
+	public String employeeCancelReservation(){
+		return "Reservation";
+	}
+	public String employeeCancelReservationSuccessful(){
+		return "Successfully canceled reservation. ";
+	}
 }
