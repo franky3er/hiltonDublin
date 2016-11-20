@@ -2930,14 +2930,16 @@ public class HiltonDublinDBConnection extends Helper {
 	 * @param lastName
 	 * @return List<Reservation>
 	 */
-	public List<Reservation> getReservationsFromGuestName(String firstName, String lastName){
+	public List<Reservation> getUnCheckedInReservationsFromGuestName(String firstName, String lastName){
 		List<Reservation> reservations = new ArrayList<Reservation>();
 		
 		Date currentDate = new Date();
 		
 		String curDate = onlyDayDateFormat.format(currentDate) + " 00:00:00";
 		String additionalSQL = RESERVATION_ARRIVALDATE + "<='" + curDate + "' AND " + RESERVATION_DEPARTUREDATE + ">='" + curDate + "' AND ";
-		additionalSQL += RESERVATION_GUESTID + " IN ( SELECT " + GUEST_GUESTID + " FROM " + GUEST + " WHERE " + GUEST_FIRSTNAME + "='" + firstName + "' AND " + GUEST_LASTNAME + "='" + lastName + "' )";
+		additionalSQL += RESERVATION_GUESTID + " IN ( SELECT " + GUEST_GUESTID + " FROM " + GUEST + " WHERE " + GUEST_FIRSTNAME + "='" + firstName + "' AND " + GUEST_LASTNAME + "='" + lastName + "' ) ";
+		additionalSQL += " AND " + RESERVATION_RESERVATIONID + " IN ( SELECT " + RESERVED_ROOM_RESERVATIONID + " FROM " + RESERVED_ROOM + " WHERE " + RESERVED_ROOM_ROOMNUMBER + " IN ( ";
+		additionalSQL += " SELECT " + ROOM_NUMBER + " FROM " + ROOM + " WHERE " + ROOM_OCCUPIED + "='0' ))";
 		
 		reservations = getReservations(null, null, null, null, null, additionalSQL);
 		if(reservations == null){

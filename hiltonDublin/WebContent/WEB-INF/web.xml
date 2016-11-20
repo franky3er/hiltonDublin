@@ -380,4 +380,20 @@
     <servlet-name>cancelReservationServlet</servlet-name>
     <url-pattern>/Employee/Cancel-Reservation-confirmed</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>checkinReservation</servlet-name>
+    <jsp-file>/checkin.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>checkinReservation</servlet-name>
+    <url-pattern>/Employee/Checkin</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>checkinReservationConfirmed</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.CheckinServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>checkinReservationConfirmed</servlet-name>
+    <url-pattern>/Employee/Checkin-confirmed</url-pattern>
+  </servlet-mapping>
 </web-app>

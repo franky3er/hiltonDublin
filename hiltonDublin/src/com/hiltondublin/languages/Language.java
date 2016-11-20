@@ -55,6 +55,12 @@ public abstract class Language {
 	public String passportNr(){
 		return "PASSPORT NUMBER";
 	}
+	public String checkin(){
+		return "checkin";
+	}
+	public String checkinReservationSuccessful(){
+		return "Successfully checked in. ";
+	}
 
 	
 	//NAVIGATIONSLIDE
@@ -630,6 +636,9 @@ public abstract class Language {
 	}
 	public String employeeCancelReservationSuccessful(){
 		return "Successfully canceled reservation. ";
+	}
+	public String employeeCheckinReservationConfirmation(){
+		return "Are you sure you want to checkin to the following reservation? ";
 	}
 	
 	

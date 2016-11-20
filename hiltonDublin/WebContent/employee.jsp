@@ -11,8 +11,8 @@
 		<form action="<%=getURLWithContextPath(request) %>/Employee/Cancel-Reservation" method="get">
 			<input class="plaintextNavigationAreaDetail" type="submit" value="<%=language.employeeCancelReservationHeading() %>" />
 		</form>
-		<form action="checkin.jsp" method="get">
-			<input class="plaintextNavigationAreaDetail" type="submit" value="Check-in" />
+		<form action="<%=getURLWithContextPath(request) %>/Employee/Checkin" method="get">
+			<input class="plaintextNavigationAreaDetail" type="submit" value="<%=language.employeeCheckinHeading() %>" />
 		</form>
 		<form action="<%=getURLWithContextPath(request) %>/Employee/Checkout" method="get">
 			<input class="plaintextNavigationAreaDetail" type="submit" value="<%=language.employeeCheckoutHeading() %>" />

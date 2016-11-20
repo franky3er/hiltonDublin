@@ -50,6 +50,9 @@ public class German extends Language {
 	public String passportNr(){
 		return "PASSNUMMER";
 	}
+	public String checkin(){
+		return "einchecken";
+	}
 	
 	//Navigation Slide
 	public String navigationSlideGuest(){
@@ -287,13 +290,19 @@ public class German extends Language {
 		return "verrechnen";
 	}
 	public String employeeCheckinHeading(){
-		return "Checkin";
+		return "Einchecken";
 	}
 	public String employeeCheckinErrorNoReservationFound(){
 		return "Keine Reservierung gefunden. ";
 	}
 	public String employeeCheckinReservationsFound(int ammount){
 		return ammount + " Reservierung(en) gefunden.";
+	}
+	public String checkinReservationSuccessful(){
+		return "Erfolgreich eingecheckt. ";
+	}
+	public String employeeCheckinReservationConfirmation(){
+		return "Sind sie sicher, dass sie in folgende Reservierung einchecken wollen? ";
 	}
 		
 	//ADMINISTRATOR
