@@ -5,8 +5,8 @@
 	Employees can make online reservations, cancel reservations, check in, check out and charge products.
 	</p>
 	<div id="plaintextNavigationArea">
-		<form action="<%=getURLWithContextPath(request) %>/Guest/Online-Reservation" method="get">
-			<input class="plaintextNavigationAreaDetail" type="submit" value="Reservation" />
+		<form action="<%=getURLWithContextPath(request) %>/Employee/Reservation" method="get">
+			<input class="plaintextNavigationAreaDetail" type="submit" value="<%=language.reservationHeading() %>" />
 		</form>
 		<form action="<%=getURLWithContextPath(request) %>/Employee/Cancel-Reservation" method="get">
 			<input class="plaintextNavigationAreaDetail" type="submit" value="<%=language.employeeCancelReservationHeading() %>" />

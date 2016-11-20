@@ -286,6 +286,15 @@ public class German extends Language {
 	public String employeeChargeProductCharge(){
 		return "verrechnen";
 	}
+	public String employeeCheckinHeading(){
+		return "Checkin";
+	}
+	public String employeeCheckinErrorNoReservationFound(){
+		return "Keine Reservierung gefunden. ";
+	}
+	public String employeeCheckinReservationsFound(int ammount){
+		return ammount + " Reservierung(en) gefunden.";
+	}
 		
 	//ADMINISTRATOR
 	public String administratorAreaHeading(){
@@ -576,6 +585,9 @@ public class German extends Language {
 	public String administratorRegisterEmployeeSuccessful(){
 		return "Erfolgreich neue Arbeitskraft registriert. ";
 	}
+	public String reservationSuccessful(){
+		return "Reservierung erfolgreich";
+	}
 	
 	//EMPLOYEE
 	public String employeeCancelReservationHeading(){
@@ -603,6 +615,9 @@ public class German extends Language {
 	//RESERVATION
 	public String reservationOnlineHeading(){
 		return "Online Reservierung";
+	}
+	public String reservationHeading(){
+		return "Reservierung";
 	}
 	public String reservationGuestDetails(){
 		return "Gast Details";
@@ -672,6 +687,18 @@ public class German extends Language {
 	}
 	public String reservationBookingNumber(){
 		return "BOOKING NUMBER: ";
+	}
+	public String reservationRooms(){
+		return "Zimmer: ";
+	}
+	public String reservationBookingOverview(){
+		return "Buchungsübersicht: ";
+	}
+	public String reservationFirstName(){
+		return "Vorname: ";
+	}
+	public String reservationLastName(){
+		return "Nachname: ";
 	}
 	
 	public String paymentInformation(){

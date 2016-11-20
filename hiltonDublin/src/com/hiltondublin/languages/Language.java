@@ -305,6 +305,15 @@ public abstract class Language {
 	public String employeeChargeProductCharge(){
 		return "charge";
 	}
+	public String employeeCheckinHeading(){
+		return "Checkin";
+	}
+	public String employeeCheckinErrorNoReservationFound(){
+		return "No reservation found. ";
+	}
+	public String employeeCheckinReservationsFound(int ammount){
+		return "Found " + ammount + " reservation(s)";
+	}
 	
 	//ADMINISTRATOR
 	public String administratorAreaHeading(){
@@ -629,6 +638,9 @@ public abstract class Language {
 	public String reservationOnlineHeading(){
 		return "Online Reservation";
 	}
+	public String reservationHeading(){
+		return "Reservation";
+	}
 	public String reservationGuestDetails(){
 		return "Guest Details";
 	}
@@ -697,6 +709,21 @@ public abstract class Language {
 	}
 	public String reservationBookingNumber(){
 		return "BOOKING NUMBER: ";
+	}
+	public String reservationSuccessful(){
+		return "Reservation successful";
+	}
+	public String reservationRooms(){
+		return "Rooms: ";
+	}
+	public String reservationBookingOverview(){
+		return "Booking Overview: ";
+	}
+	public String reservationFirstName(){
+		return "First Name: ";
+	}
+	public String reservationLastName(){
+		return "Last Name: ";
 	}
 	
 	public String paymentInformation(){

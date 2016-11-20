@@ -195,11 +195,11 @@ if(paymentErrorCardHolder.equals("1")){
     		<td><%=payedReservation.getBookingNumber() %></td>
   		</tr>
   		<tr>
-   			<td><%=language.firstName() %></td>
+   			<td><%=language.reservationFirstName() %></td>
     		<td><%=payedReservation.getGuest().getFirstName() %></td>
   		</tr>
   		<tr>
-   			<td><%=language.lastName() %></td>
+   			<td><%=language.reservationLastName() %></td>
     		<td><%=payedReservation.getGuest().getLastName() %></td>
   		</tr>
   		<tr>
@@ -209,6 +209,20 @@ if(paymentErrorCardHolder.equals("1")){
   		<tr>
    			<td><%=language.reservationDepartureDate() %></td>
     		<td><%=dbConnection.onlyDayDateFormat.format(payedReservation.getDepartureDate()) %></td>
+  		</tr>
+  		<tr>
+  			<td><%=language.reservationRooms() %></td>
+  			<td>
+  				<%
+  					List<String> rooms = payedReservation.ammountOfEachRoomTypeAsStrings();
+  					
+  					for(String room : rooms){
+  				%>
+  					
+  					<%=room %><br/>
+  					
+  				<%} %>
+  			</td>
   		</tr>
 	</table>
 

@@ -182,10 +182,21 @@ public class ReservationServlet extends HttpServlet {
 							dbConnection.assignRoomToReservation(Integer.toString(assignedRoom.getRoomNumber()), bookingNumber);
 						}
 						
-						request.setAttribute("bookingNumber", bookingNumber);
-						
-						RequestDispatcher dispatcher = request.getRequestDispatcher("Online-Reservation-payment");
-						dispatcher.forward(request, response);
+						if(!isEmployee){
+							request.setAttribute("bookingNumber", bookingNumber);
+							
+							RequestDispatcher dispatcher = request.getRequestDispatcher("Online-Reservation-payment");
+							dispatcher.forward(request, response);
+						} else {
+							List<Reservation> reservations = dbConnection.getReservations(bookingNumber, null, null, null, null, null);
+							if(reservations != null){
+								if(!reservations.isEmpty()){
+									request.setAttribute("reservation", reservations.get(0));
+								}
+							} else {
+								request.setAttribute("reservationSystemError", "2");
+							}
+						}
 					}
 				}
 			} catch (SQLException e) {
@@ -200,9 +211,6 @@ public class ReservationServlet extends HttpServlet {
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(url);
 		dispatcher.forward(request, response);
-		
-		
-		
 		
 	}
 }

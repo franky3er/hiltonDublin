@@ -1,13 +1,17 @@
 <%@page import="com.hiltondublin.classes.Room" %>
 <%@page import="com.hiltondublin.classes.RoomType" %>
+<%@page import="com.hiltondublin.classes.Reservation" %>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Calendar" %>
 <%@page import="java.util.ArrayList" %>
 <%@page import="java.lang.*" %>
     
-<%@ include file="navigationSlideGuestHeader.jsp" %>
+<%@ include file="navigationSlideEmployeeHeader.jsp" %>
 
 <%
+	
+	Reservation reservation = (Reservation) request.getAttribute("reservation");
+
 	String reservationErrorFirstName = (String) request.getAttribute("reservationErrorFirstName");
 	String reservationErrorLastName = (String) request.getAttribute("reservationErrorLastName");
 	String reservationErrorAddress = (String) request.getAttribute("reservationErrorAddress");
@@ -120,9 +124,9 @@
 	List<RoomType> roomTypes = dbConnection.getRoomTypes(null, null, null, null, null, null);
 %>
 
-<h1><%=language.reservationOnlineHeading() %></h1>
+<h1><%=language.reservationHeading() %></h1>
 
-<form id="check_guestinfo" action="<%=request.getContextPath() %>/Guest/Online-Reservation-check" method="post">
+<form id="check_guestinfo" action="<%=request.getContextPath() %>/Employee/Reservation-check" method="post">
 	<fieldset>
 		<legend><%=language.reservationGuestDetails() %></legend>
 		<table class="showValues">
@@ -238,4 +242,50 @@
 <%if(reservationErrorBookedOut){ %><p class="error"><%=language.reservationErrorBookedOut() %></p><%} %>
 
 
-<%@ include file="navigationSlideGuestFooter.jsp" %>
+<%if(reservation != null){ %>
+	
+	<p class="informational"><%=language.reservationSuccessful() %></p>
+	
+	<h3><%=language.reservationBookingOverview() %></h3>
+	
+	<table class="showValues">
+		<tr>
+   			<td><%=language.reservationBookingNumber() %></td>
+    		<td><%=reservation.getBookingNumber() %></td>
+  		</tr>
+  		<tr>
+   			<td><%=language.reservationFirstName() %></td>
+    		<td><%=reservation.getGuest().getFirstName() %></td>
+  		</tr>
+  		<tr>
+   			<td><%=language.reservationLastName() %></td>
+    		<td><%=reservation.getGuest().getLastName() %></td>
+  		</tr>
+  		<tr>
+   			<td><%=language.reservationArrivalDate() %></td>
+    		<td><%=dbConnection.onlyDayDateFormat.format(reservation.getArrivalDate()) %></td>
+  		</tr>
+  		<tr>
+   			<td><%=language.reservationDepartureDate() %></td>
+    		<td><%=dbConnection.onlyDayDateFormat.format(reservation.getDepartureDate()) %></td>
+  		</tr>
+  		<tr>
+  			<td><%=language.reservationRooms() %></td>
+  			<td>
+  				<%
+  					List<String> rooms = reservation.ammountOfEachRoomTypeAsStrings();
+  					
+  					for(String room : rooms){
+  				%>
+  					
+  					<%=room %><br/>
+  					
+  				<%} %>
+  			</td>
+  		</tr>
+	</table>
+
+	
+<%} %>
+
+<%@ include file="navigationSlideEmployeeFooter.jsp" %>

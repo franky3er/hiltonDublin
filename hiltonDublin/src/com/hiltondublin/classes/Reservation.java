@@ -1,5 +1,6 @@
 package com.hiltondublin.classes;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ public class Reservation {
 	private Guest guest = null;
 	private List<Room> rooms = null;
 	private List<ConsumerProduct> consumerProducts = null;
+	private HiltonDublinDBConnection dbConnection = HiltonDublinDBConnection.getInstance();
 	
 	public int getBookingNumber() {
 		return bookingNumber;
@@ -149,4 +151,38 @@ public class Reservation {
 		
 		return bill;
 	}
+	
+	public HashMap<String, Integer> ammountOfEachRoomType(){
+		HashMap<String, Integer> roomTypes = new HashMap<String, Integer>();
+		
+		for(Room room : rooms){
+			String roomTypeName = room.getType().getName();
+			
+			if(!roomTypes.containsKey(roomTypeName)){
+				roomTypes.put(roomTypeName, new Integer(1));
+			} else {
+				int ammount = (int) roomTypes.get(roomTypeName);
+				ammount++;
+				roomTypes.put(roomTypeName, new Integer(ammount));
+			}
+		}
+		
+		return roomTypes;
+	}
+	
+	public List<String> ammountOfEachRoomTypeAsStrings(){
+		List<String> roomTypeAmmounts = new ArrayList<String>();
+		
+		HashMap<String, Integer> roomTypes = ammountOfEachRoomType();
+		for(Map.Entry<String, Integer> roomType : roomTypes.entrySet()){
+			String roomTypeName = (String) roomType.getKey();
+			int ammount = (int) roomType.getValue();
+			
+			String roomTypeAmmount = roomTypeName + " x " + ammount;
+			roomTypeAmmounts.add(roomTypeAmmount);
+		}
+		
+		return roomTypeAmmounts;
+	}
+	
 }

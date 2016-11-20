@@ -2931,7 +2931,6 @@ public class HiltonDublinDBConnection extends Helper {
 	 * @return List<Reservation>
 	 */
 	public List<Reservation> getReservationsFromGuestName(String firstName, String lastName){
-		System.out.println("HERE.......");
 		List<Reservation> reservations = new ArrayList<Reservation>();
 		
 		Date currentDate = new Date();
