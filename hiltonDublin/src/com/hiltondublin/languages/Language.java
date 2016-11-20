@@ -224,7 +224,7 @@ public abstract class Language {
 		return "Reviews our Guests ";
 	}
 	public String guestRatingOverall(){
-		return "instesamt";
+		return "overall";
 	}
 	
 	//EMPLOYEE
@@ -695,4 +695,71 @@ public abstract class Language {
 	public String reservationErrorBookedOut(){
 		return "We're really sorry. But we've got not enough rooms correspond to your request. ";
 	}
+	public String reservationBookingNumber(){
+		return "BOOKING NUMBER: ";
+	}
+	
+	public String paymentInformation(){
+		return "Payment Information";
+	}
+	public String paymentCardHolder(){
+		return "CARD HOLDER";
+	}
+	public String paymentCardNumber(){
+		return "CARD NUMBER";
+	}
+	public String paymentCvvCode(){
+		return "CVV CODE";
+	}
+	public String paymentExpiration(){
+		return "EXPIRATION (year, month)";
+	}
+	public String paymentYear(){
+		return "Year";
+	}
+	public String paymentMonth(){
+		return "Month";
+	}
+	public String paymentPay(){
+		return "pay";
+	}
+	public String paymentReset(){
+		return "reset";
+	}
+	public String paymentErrorCardNumberMissing(){
+		return "Card Number missing. ";
+	}
+	public String paymentErrorCardNumberInvalid(){
+		return "Card Number invalid. ";
+	}
+	public String paymentErrorCreditCardMissing(){
+		return "Please select a credit card. ";
+	}
+	public String paymentErrorCreditCardUnknown(){
+		return "Unknown Credit Card. ";
+	}
+	public String paymentErrorCvvCodeMissing(){
+		return "CVV Code missing. ";
+	}
+	public String paymentErrorCvvCodeInvalid(){
+		return "CVV Code invalid. ";
+	}
+	public String paymentErrorExpirationYearMissing(){
+		return "Expiration Year missing. ";
+	}
+	public String paymentErrorExpirationMonthMissing(){
+		return "Expiration Month missing. ";
+	}
+	public String paymentErrorCardHolderMissing(){
+		return "Card Holder missing. ";
+	}
+	public String paymentSuccessful(){
+		return "Congratulations! You successfully booked and payed your reservation. "
+				+ "We're looking forward to see you at Hilton Dublin soon! "
+				+ "Please keep in mind to rember your booking number in case you have questions. ";
+	}
+	public String paymentYourBooking(){
+		return "Your Booking: ";
+	}
+	
 }

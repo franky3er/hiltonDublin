@@ -670,4 +670,70 @@ public class German extends Language {
 	public String reservationErrorBookedOut(){
 		return "Es tut uns wirklich leid. Aber wir haben zur Zeit leider nicht genügend Zimmer ihrer Anfrage entsprechend. ";
 	}
+	public String reservationBookingNumber(){
+		return "BOOKING NUMBER: ";
+	}
+	
+	public String paymentInformation(){
+		return "Bezahlungs Inforamtionen";
+	}
+	public String paymentCardHolder(){
+		return "KARTENINHABER";
+	}
+	public String paymentCardNumber(){
+		return "KARTENNUMMER";
+	}
+	public String paymentCvvCode(){
+		return "CVV PRÜFZAHL";
+	}
+	public String paymentExpiration(){
+		return "ABLAUFDATUM (Jahr, Monat)";
+	}
+	public String paymentYear(){
+		return "Jahr";
+	}
+	public String paymentMonth(){
+		return "Monat";
+	}
+	public String paymentPay(){
+		return "bezahlen";
+	}
+	public String paymentReset(){
+		return "zurücksetzen";
+	}
+	public String paymentErrorCardNumberMissing(){
+		return "Kartennummer fehlt. ";
+	}
+	public String paymentErrorCardNumberInvalid(){
+		return "Kartennummer nicht gültig. ";
+	}
+	public String paymentErrorCreditCardMissing(){
+		return "Bitte wählen sie eine Kreditkarte aus. ";
+	}
+	public String paymentErrorCreditCardUnknown(){
+		return "Unbekannte Kredit Karte. ";
+	}
+	public String paymentErrorCvvCodeMissing(){
+		return "CVV Code fehlt. ";
+	}
+	public String paymentErrorCvvCodeInvalid(){
+		return "CVV Code ungültig. ";
+	}
+	public String paymentErrorExpirationYearMissing(){
+		return "Ablaufjahr fehlt. ";
+	}
+	public String paymentErrorExpirationMonthMissing(){
+		return "Ablaufmonat fehlt. ";
+	}
+	public String paymentErrorCardHolderMissing(){
+		return "Karteninhaber fehlt. ";
+	}
+	public String paymentSuccessful(){
+		return "Glückwunsch! Sie haben so eben erfolgreich ihre Reservierung abgeschlossen und bezahlt. "
+				+ "Wir freuen uns sie schon bald bei Hilton Dublin begrüßen zu dürfen! "
+				+ "Bitte behalten sie sich ihre Buchungsnummer im Fall, dass sie fragen an uns haben. ";
+	}
+	public String paymentYourBooking(){
+		return "Ihre Buchung: ";
+	}
 }

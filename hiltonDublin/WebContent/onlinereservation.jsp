@@ -221,7 +221,7 @@
 	</table>
 	
 	<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
-	
+	<input type="hidden" name="isEmployee" value="false" />
 	
 </form>
 

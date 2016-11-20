@@ -13,8 +13,11 @@ public class Helper {
 	public final static String regexEmailValidation = "^[\\w!#$%&’*+/=?`{|}~^-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
 	public final static String regexInteger = "\\d*$";
 	public final static String regexDouble = "-?\\d+(\\.\\d+)?";
+	public final static String regexVisa = "^4[0-9]{12}(?:[0-9]{3})?$";
+	public final static String regexMaxter = "^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$";
 	public final static SimpleDateFormat integerDateFormat = new SimpleDateFormat("yyyyMMdd");
 	public final static Random random = new Random();
+	public final static String regexCvvCode = "^[0-9]{3,4}$";
 	
 	/**
 	 * Validates Email address and returns true if email address matches to a email address
@@ -180,5 +183,29 @@ public class Helper {
 			return false;
 		}
 		
+	}
+	
+	public static boolean checkIfVisa(String visa){
+		if(visa != null){
+			return visa.matches(regexVisa);
+		} else {
+			return false;
+		}
+	}
+	
+	public static boolean checkIfMaster(String master){
+		if(master != null){
+			return master.matches(regexMaxter);
+		} else {
+			return false;
+		}
+	}
+	
+	public static boolean checkCvvCode(String cvvCode){
+		if(cvvCode != null){
+			return cvvCode.matches(regexCvvCode);
+		} else {
+			return false;
+		}
 	}
 }

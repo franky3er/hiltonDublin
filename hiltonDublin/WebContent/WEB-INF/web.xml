@@ -37,6 +37,22 @@
     <url-pattern>/Guest/Online-Reservation-check</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>onlineReservationPayment</servlet-name>
+    <jsp-file>/payment.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>onlineReservationPayment</servlet-name>
+    <url-pattern>/Guest/Online-Reservation-payment</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>onlineReservationPaymentCheck</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.PaymentServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>onlineReservationPaymentCheck</servlet-name>
+    <url-pattern>/Guest/Online-Reservation-payment-check</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>loginServlet</servlet-name>
     <servlet-class>com.hiltondublin.servlets.LoginServlet</servlet-class>
   </servlet>

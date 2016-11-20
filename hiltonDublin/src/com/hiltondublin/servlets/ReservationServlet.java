@@ -42,6 +42,14 @@ public class ReservationServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Guest guest = new Guest();
 		
+		boolean isEmployee = false;
+		
+		if(request.getParameter("isEmployee") != null){
+			isEmployee = Boolean.parseBoolean(request.getParameter("isEmployee"));
+		} else {
+			response.sendRedirect("/");
+		}
+		
 		String url = Helper.setNullIfEmptyString(request.getParameter("url"));
 		
 		String firstName = Helper.setNullIfEmptyString(request.getParameter("firstName"));
@@ -89,8 +97,10 @@ public class ReservationServlet extends HttpServlet {
 				reserve = false;
 			}
 		} else {
-			request.setAttribute("reservationErrorEmail", "1");
-			reserve = false;
+			if(!isEmployee){
+				request.setAttribute("reservationErrorEmail", "1");
+				reserve = false;
+			}
 		}
 		
 		if(passportNr != null){
@@ -174,7 +184,7 @@ public class ReservationServlet extends HttpServlet {
 						
 						request.setAttribute("bookingNumber", bookingNumber);
 						
-						RequestDispatcher dispatcher = request.getRequestDispatcher("payment.jsp");
+						RequestDispatcher dispatcher = request.getRequestDispatcher("Online-Reservation-payment");
 						dispatcher.forward(request, response);
 					}
 				}
