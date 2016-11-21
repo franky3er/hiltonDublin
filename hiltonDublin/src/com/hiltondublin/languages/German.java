@@ -611,6 +611,9 @@ public class German extends Language {
 	public String administratorAddSpecialPriceErrorDateAllreadyExist(){
 		return "Spezial Preis existiert bereits. ";
 	}
+	public String administratorAddRoomTypeSuccessful(){
+		return "Erfolgreich neuen Zimmertyp hinzugefügt. ";
+	}
 	
 	public String administratorRegisterEmployeeHeading(){
 		return "Arbeitskraft Registrierung";

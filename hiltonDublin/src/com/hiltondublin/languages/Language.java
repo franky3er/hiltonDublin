@@ -690,6 +690,9 @@ public abstract class Language {
 	public String administratorAddSpecialPriceErrorDateAllreadyExist(){
 		return "Special Price allready exist. ";
 	}
+	public String administratorAddRoomTypeSuccessful(){
+		return "Successfully added new Room Type. ";
+	}
 	
 	
 	//EMPLOYEE

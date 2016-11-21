@@ -333,6 +333,14 @@
     <url-pattern>/Admin/Modify-Room-Type-special-price-add</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>addRoomType</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.AddRoomTypeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>addRoomType</servlet-name>
+    <url-pattern>/Admin/Modify-Room-Type-add</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>modifyProduct</servlet-name>
     <jsp-file>/modifyProduct.jsp</jsp-file>
   </servlet>

@@ -45,6 +45,8 @@ String deleteSpecialPriceSuccessful = (String) request.getAttribute("deleteSpeci
 String addSpecialPriceErrorDate = (String) request.getAttribute("addSpecialPriceErrorDate");
 String addSpecialPriceSuccessful = (String) request.getAttribute("addSpecialPriceSuccessful");
 
+String addRoomTypeSuccessful = (String) request.getAttribute("addRoomTypeSuccessful");
+
 List<Room> foundRooms = (List<Room>) request.getAttribute("foundRooms");
 Room selectedRoom = (Room) request.getAttribute("selectedRoom");
 Room addedRoom = (Room) request.getAttribute("addedRoom");
@@ -86,6 +88,8 @@ boolean deleteSpecialPriceSuccess = false;
 
 boolean addSpecialPriceErrorDateAllreadyExist = false;
 boolean addSpecialPriceSuccess = false;
+
+boolean addRoomTypeSuccess = false;
 
 if(showContent==null){
 	showContent = "showOptions";
@@ -158,6 +162,9 @@ if(addSpecialPriceErrorDate == null){
 }
 if(addSpecialPriceSuccessful == null){
 	addSpecialPriceSuccessful = "0";
+}
+if(addRoomTypeSuccessful == null){
+	addRoomTypeSuccessful = "0";
 }
 
 if(searchRoomErrorRoomNumber.equals("1")){
@@ -236,6 +243,10 @@ if(addSpecialPriceErrorDate.equals("1")){
 }
 if(addSpecialPriceSuccessful.equals("1")){
 	addSpecialPriceSuccess = true;
+}
+
+if(addRoomTypeSuccessful.equals("1")){
+	addRoomTypeSuccess = true;
 }
 
 
@@ -694,7 +705,40 @@ if(request.getParameter("showContent") != null){
 
 <%} else if(showContent.equals("addRoomType")){ %>
 
-
+	<form action="<%=request.getContextPath() %>/Admin/Modify-Room-Type-add" method="post">
+	
+		<table class="showValues">
+			<tr>
+				<td><%=language.roomTypeName() %></td>
+				<td><input type="text" size="30%" name="roomTypeName" /></td>
+			</tr>
+			<tr>
+				<td><%=language.roomTypePictureResource() %></td>
+				<td><input type="text" size="30%" name="picture" /></td>
+			</tr>
+			<tr>
+				<td><%=language.roomTypeStandardPrice() %></td>
+				<td><input type="text" size="30%" name="standardPrice" /></td>
+			</tr>
+			<tr>
+				<td><%=language.roomTypeDescription() %></td>
+				<td><textarea rows="7" cols="60%" name="description"></textarea></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="submit" value="<%=language.add() %>"/></td>
+			</tr>
+		</table>
+	
+		<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+		<input type="hidden" name="showContent" value="addRoomType"/>
+	</form>
+	
+	<%if(modifyRoomTypeErrorRoomTypeNameMissing){ %><p class="error"><%=language.administratorModifyRoomTypeErrorRoomTypeNameMissing() %></p><%} %>
+	<%if(modifyRoomTypeErrorStandardPriceMissing){ %><p class="error"><%=language.administratorModifyRoomTypeErrorStandardPriceMissing() %></p><%} %>
+	<%if(modifyRoomTypeErrorStandardPriceNotInRightFormat){ %><p class="error"><%=language.administratorModifyRoomTypeErrorStandardPriceNotInRightFormat() %></p><%} %>
+	<%if(addRoomTypeSuccess){ %><p class="informational"><%=language.administratorAddRoomTypeSuccessful() %></p><%} %>
+	
 
 <%} %>
 
