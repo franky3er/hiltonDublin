@@ -30,6 +30,10 @@ public class ModifyRoomSelectOptionServlet extends HttpServlet {
 				request.setAttribute("showContent", "searchRooms");
 			} else if(optionSelection.equals("addRoom")){
 				request.setAttribute("showContent", "addRoom");
+			} else if(optionSelection.equals("modifyRoomType")){
+				request.setAttribute("showContent", "modifyRoomType");
+			} else if(optionSelection.equals("addRoomType")){
+				request.setAttribute("showContent", "addRoomType");
 			}
 		}
 		

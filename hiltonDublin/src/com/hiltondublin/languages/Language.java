@@ -61,6 +61,14 @@ public abstract class Language {
 	public String checkinReservationSuccessful(){
 		return "Successfully checked in. ";
 	}
+	public String weekDay(){
+		return "Weekday: ";
+	}
+	public String price(){
+		return "Price: ";
+	}
+	
+	
 
 	
 	//NAVIGATIONSLIDE
@@ -464,6 +472,12 @@ public abstract class Language {
 	public String administratorModifyRoomSelectModifyRoom(){
 		return "Modify Room";
 	}
+	public String administratorModifyRoomSelectModifyRoomType(){
+		return "Modify Room Type";
+	}
+	public String administratorModifyRoomSelectAddRoomType(){
+		return "Add Room Type";
+	}
 	public String administratorModifyRoomSelectAddRoom(){
 		return "Add Room";
 	}
@@ -615,6 +629,48 @@ public abstract class Language {
 	}
 	public String administratorRegisterEmployeeSuccessful(){
 		return "Successfully registered new Employee. ";
+	}
+	public String administratorModifyRoomTypeSelectRoomType(){
+		return "Room Type Selection: ";
+	}
+	public String administratorModifyRoomTypeDetails(){
+		return "Room Type Details: ";
+	}
+	public String roomTypeName(){
+		return "Room Type Name: ";
+	}
+	public String roomTypePictureResource(){
+		return "Picture Resource: ";
+	}
+	public String roomTypeStandardPrice(){
+		return "Standard Price: ";
+	}
+	public String roomTypeDescription(){
+		return "Description: ";
+	}
+	public String administratorModifyRoomTypeErrorRoomTypeNameMissing(){
+		return "Room Type is missing. ";
+	}
+	public String administratorModifyRoomTypeErrorStandardPriceMissing(){
+		return "Standard Price is missing. ";
+	}
+	public String administratorModifyRoomTypeErrorStandardPriceNotInRightFormat(){
+		return "Standard Price not in right Format. It must be from Type Double. ";
+	}
+	public String administratorModifyRoomTypeSuccessful(){
+		return "Successfully modified Room Type. ";
+	}
+	public String administratorModifyRoomTypeWeekdayPrices(){
+		return "Weekday Prices: ";
+	}
+	public String administratorDeleteWeekdayPriceSuccessful(){
+		return "Successfully deleted weekday price. ";
+	}
+	public String administratorAddWeekdayPriceErrorWeekdayAllreadyExist(){
+		return "Weekday Price Allready exist. ";
+	}
+	public String administratorAddWeekdayPriceSuccessful(){
+		return "Successfully add new weekday price. ";
 	}
 	
 	

@@ -53,6 +53,12 @@ public class German extends Language {
 	public String checkin(){
 		return "einchecken";
 	}
+	public String weekDay(){
+		return "Wochentag: ";
+	}
+	public String price(){
+		return "Preis: ";
+	}
 	
 	//Navigation Slide
 	public String navigationSlideGuest(){
@@ -448,6 +454,12 @@ public class German extends Language {
 	public String administratorModifyRoomSelectAddRoom(){
 		return "Zimmer hinzufügen";
 	}
+	public String administratorModifyRoomSelectModifyRoomType(){
+		return "Zimmertyp modifizieren";
+	}
+	public String administratorModifyRoomSelectAddRoomType(){
+		return "Zimmertyp hinzufügen";
+	}
 	public String administratorModifyRoomSearchRoomErrorRoomNumberNotInRightFormat(){
 		return "Zimmernummer muss vom Typ Integer sein. ";
 	}
@@ -538,6 +550,48 @@ public class German extends Language {
 	}
 	public String administratorAddProductSuccessful(ConsumerProduct product){
 		return "Erfolgreich neues Produkt hinzugefügt. (Produkt ID: " + product.getProductID() + ", Produkt Name: " + product.getName() + ", Preis: " + product.getPrice() + ") "; 
+	}
+	public String administratorModifyRoomTypeSelectRoomType(){
+		return "Zimmertyp Auswahl: ";
+	}
+	public String administratorModifyRoomTypeDetails(){
+		return "Zimmertyp Details: ";
+	}
+	public String roomTypeName(){
+		return "Zimmertyp Name: ";
+	}
+	public String roomTypePictureResource(){
+		return "Bild Resource: ";
+	}
+	public String roomTypeStandardPrice(){
+		return "Standard Preis: ";
+	}
+	public String roomTypeDescription(){
+		return "Beschreibung: ";
+	}
+	public String administratorModifyRoomTypeErrorRoomTypeNameMissing(){
+		return "Zimmertyp Name fehlt. ";
+	}
+	public String administratorModifyRoomTypeErrorStandardPriceMissing(){
+		return "Standard Preis fehlt. ";
+	}
+	public String administratorModifyRoomTypeErrorStandardPriceNotInRightFormat(){
+		return "Standard Preis ist nicht im richtigen Format. Es muss vom Typ Double sein. ";
+	}
+	public String administratorModifyRoomTypeSuccessful(){
+		return "Erfolgreich Zimmertyp modifiziert. ";
+	}
+	public String administratorModifyRoomTypeWeekdayPrices(){
+		return "Wochtentag Preise: ";
+	}
+	public String administratorDeleteWeekdayPriceSuccessful(){
+		return "Erfolgreich Wochentagpreis gelöscht. ";
+	}
+	public String administratorAddWeekdayPriceErrorWeekdayAllreadyExist(){
+		return "Wochentag Preis existiert bereits. ";
+	}
+	public String administratorAddWeekdayPriceSuccessful(){
+		return "Erfolgreich neuen Wochentag Preis hinzugefügt. ";
 	}
 	
 	public String administratorRegisterEmployeeHeading(){

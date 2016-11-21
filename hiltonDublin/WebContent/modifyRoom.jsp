@@ -1,12 +1,14 @@
 
 <%@page import="com.hiltondublin.classes.Room" %>
 <%@page import="com.hiltondublin.classes.RoomType" %>
+<%@page import="com.hiltondublin.classes.WeekdayPrice" %>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 
 <%@ include file="navigationSlideAdminHeader.jsp" %>
 
 <%
+String[] namesOfDays =  {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
 
 String showContent = (String) request.getAttribute("showContent");
 String lookedForRooms = (String) request.getAttribute("lookedForRooms");
@@ -28,11 +30,23 @@ String modifyRoomSuccessful = (String) request.getAttribute("modifyRoomSuccessfu
 String addRoomErrorRoomNumber = (String) request.getAttribute("addRoomErrorRoomNumber");
 String addRoomSuccessful = (String) request.getAttribute("addRoomSuccessful");
 
+String modifyRoomTypeErrorRoomTypeName = (String) request.getAttribute("modifyRoomTypeErrorRoomTypeName");
+String modifyRoomTypeErrorStandardPrice = (String) request.getAttribute("modifyRoomTypeErrorStandardPrice");
+String modifyRoomTypeSuccessul = (String) request.getAttribute("modifyRoomTypeSuccessul");
+
+String deleteWeekdayPriceSuccessful = (String) request.getAttribute("deleteWeekdayPriceSuccessful");
+
+String addWeekdayPriceErrorWeekday = (String) request.getAttribute("addWeekdayPriceErrorWeekday");
+String addWeekdayPriceSuccessful = (String) request.getAttribute("addWeekdayPriceSuccessful");
+
 List<Room> foundRooms = (List<Room>) request.getAttribute("foundRooms");
 Room selectedRoom = (Room) request.getAttribute("selectedRoom");
 Room addedRoom = (Room) request.getAttribute("addedRoom");
 
 List<RoomType> roomTypes = dbConnection.getRoomTypes(null, null, null, null, null, null);
+
+
+
 
 
 boolean searchRoomErrorRoomNumberNotInRightFormat = false;
@@ -52,6 +66,15 @@ boolean addRoomErrorRoomNumberNotInRightFormat = false;
 boolean addRoomErrorRoomAllreadyExist = false;
 boolean addRoomSuccessfulInsertRoom = false;
 
+boolean modifyRoomTypeErrorRoomTypeNameMissing = false;
+boolean modifyRoomTypeErrorStandardPriceMissing = false;
+boolean modifyRoomTypeErrorStandardPriceNotInRightFormat = false;
+boolean modifyRoomTypeSuccess = false;
+
+boolean deleteWeekdayPriceSuccess = false;
+
+boolean addWeekdayPriceErrorWeekdayAllreadyExist = false;
+boolean addWeekdayPriceSuccess = false;
 
 if(showContent==null){
 	showContent = "showOptions";
@@ -98,6 +121,24 @@ if(searchRoomSmoking == null){
 if(searchRoomOccupied == null){
 	searchRoomOccupied = "";
 }
+if(modifyRoomTypeErrorRoomTypeName == null){
+	modifyRoomTypeErrorRoomTypeName = "0";
+}
+if(modifyRoomTypeErrorStandardPrice == null){
+	modifyRoomTypeErrorStandardPrice = "0";
+}
+if(modifyRoomTypeSuccessul == null){
+	modifyRoomTypeSuccessul = "0";
+}
+if(deleteWeekdayPriceSuccessful == null){
+	deleteWeekdayPriceSuccessful = "0";
+}
+if(addWeekdayPriceErrorWeekday == null){
+	addWeekdayPriceErrorWeekday = "0";
+}
+if(addWeekdayPriceSuccessful == null){
+	addWeekdayPriceSuccessful = "0";
+}
 
 if(searchRoomErrorRoomNumber.equals("1")){
 	searchRoomErrorRoomNumberNotInRightFormat = true;
@@ -141,26 +182,103 @@ if(addRoomErrorRoomNumber.equals("3")){
 if(addRoomSuccessful.equals("1")){
 	addRoomSuccessfulInsertRoom = true;
 }
+
+if(modifyRoomTypeErrorRoomTypeName.equals("1")){
+	modifyRoomTypeErrorRoomTypeNameMissing = true;
+}
+if(modifyRoomTypeErrorStandardPrice.equals("1")){
+	modifyRoomTypeErrorStandardPriceMissing = true;
+}
+if(modifyRoomTypeErrorStandardPrice.equals("2")){
+	modifyRoomTypeErrorStandardPriceNotInRightFormat = true;
+}
+if(modifyRoomTypeSuccessul.equals("1")){
+	modifyRoomTypeSuccess = true;
+}
+
+if(deleteWeekdayPriceSuccessful.equals("1")){
+	deleteWeekdayPriceSuccess = true;
+}
+
+if(addWeekdayPriceErrorWeekday.equals("1")){
+	addWeekdayPriceErrorWeekdayAllreadyExist = true;
+}
+if(addWeekdayPriceSuccessful.equals("1")){
+	addWeekdayPriceSuccess = true;
+}
+
+
+boolean ableToModifyRoomType = true;
+RoomType selectedRoomType = null;
+String selectedRoomTypeID = request.getParameter("selectedRoomTypeID");
+
+if(selectedRoomTypeID == null){
+	if(roomTypes != null){
+		if(!roomTypes.isEmpty()){
+			selectedRoomTypeID = Integer.toString(roomTypes.get(0).getRoomTypeID());
+		} else {
+			ableToModifyRoomType = false;
+		}
+	} else {
+		ableToModifyRoomType = false;
+	}
+} 
+
+List<RoomType> selectedRoomTypes = dbConnection.getRoomTypes(selectedRoomTypeID, null, null, null, null, null);
+if(selectedRoomTypes != null){
+	if(!selectedRoomTypes.isEmpty()){
+		selectedRoomType = selectedRoomTypes.get(0);
+	} else {
+		ableToModifyRoomType = false;
+	}
+} else {
+	ableToModifyRoomType = false;
+}
+
+
+if(request.getParameter("showContent") != null){
+	if(!request.getParameter("showContent").isEmpty()){
+		showContent = request.getParameter("showContent");
+	}
+}
+
+
 %>
 
 <h1><%=language.administratorModifyRoomHeading() %></h1>
 <%if(showContent.equals("showOptions")){ %>
 
 <h4><%=language.whatWouldYouLikeToDo() %></h4>
-<table>
+<table class="showValues">
   <tr>
     <td>
     	<form action="<%=request.getContextPath() %>/Admin/Modify-Room-select-option" method="get">
     		<input type="hidden" name="optionSelection" value="modifyRoom"/>
     		<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
-    		<input type="submit" value="<%=language.administratorModifyRoomSelectModifyRoom() %>"/>
+    		<input style="width:100%;" type="submit" value="<%=language.administratorModifyRoomSelectModifyRoom() %>"/>
     	</form>
     </td>
     <td>
     	<form action="<%=request.getContextPath() %>/Admin/Modify-Room-select-option" method="get">
     		<input type="hidden" name="optionSelection" value="addRoom"/>
     		<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
-    		<input type="submit" value="<%=language.administratorModifyRoomSelectAddRoom() %>"/>
+    		<input style="width:100%;" type="submit" value="<%=language.administratorModifyRoomSelectAddRoom() %>"/>
+    	</form>
+    </td>
+  </tr>
+  <tr>
+    <td>
+    	<form action="<%=request.getContextPath() %>/Admin/Modify-Room-select-option" method="get">
+    		<input type="hidden" name="optionSelection" value="modifyRoomType"/>
+    		<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+    		<input style="width:100%;" type="submit" value="<%=language.administratorModifyRoomSelectModifyRoomType() %>"/>
+    	</form>
+    </td>
+    <td>
+    	<form action="<%=request.getContextPath() %>/Admin/Modify-Room-select-option" method="get">
+    		<input type="hidden" name="optionSelection" value="addRoomType"/>
+    		<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+    		<input style="width:100%;" type="submit" value="<%=language.administratorModifyRoomSelectAddRoomType() %>"/>
     	</form>
     </td>
   </tr>
@@ -361,6 +479,139 @@ if(addRoomSuccessful.equals("1")){
 <%if(addRoomErrorRoomNumberNotInRightFormat){ %><p class="error"><%=language.administratorAddRoomErrorRoomNumberNotInRightFormat() %></p><%} %>
 <%if(addRoomErrorRoomAllreadyExist){ %><p class="error"><%=language.administratorAddRoomErrorRoomAllreadyExist() %></p><%} %>
 <%if(addRoomSuccessfulInsertRoom){ %><p class="informational"><%=language.administratorAddRoomSuccessful(addedRoom) %></p><%} %>
+
+
+<%} else if(showContent.equals("modifyRoomType")){ %>
+	
+	<%if(!ableToModifyRoomType){ %>
+		<jsp:forward page="/" />
+	<%} %>
+	
+	<h3><%=language.administratorModifyRoomTypeSelectRoomType() %></h3>
+	
+	<table class="showValues">
+		<tr>
+			<td>
+				<form action="<%=request.getRequestURI()%>" method="get">
+					<select name="selectedRoomTypeID" size="1" onchange="this.form.submit()">
+						<%for(RoomType roomType : roomTypes){ %>
+						<option <%if(selectedRoomTypeID.equals(Integer.toString(roomType.getRoomTypeID()))){ %>selected<%} %> value="<%=roomType.getRoomTypeID() %>"><%=roomType.getName() %></option>
+						<%} %>
+					</select>
+					<input type="hidden" name="showContent" value="modifyRoomType"/>
+				</form>
+			</td>
+			
+			<td>
+				<form action="" method="post">
+					<input type="submit" value="<%=language.delete() %>"/>
+					<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+					<input type="hidden" name="showContent" value="modifyRoomType"/>
+					<input type="hidden" name="selectedRoomTypeID" value="<%=selectedRoomTypeID %>"/>
+				</form>
+			</td>
+		</tr>
+	</table>
+
+	<h3><%=language.administratorModifyRoomTypeDetails() %></h3>
+	
+	<form action="<%=request.getContextPath() %>/Admin/Modify-Room-Type-details" method="post">
+	
+		<table class="showValues">
+			<tr>
+				<td><%=language.roomTypeName() %></td>
+				<td><input type="text" size="30%" name="roomTypeName" value="<%=selectedRoomType.getName() %>"/></td>
+			</tr>
+			<tr>
+				<td><%=language.roomTypePictureResource() %></td>
+				<td><input type="text" size="30%" name="picture" value="<%=selectedRoomType.getPictureRessource() %>"/></td>
+			</tr>
+			<tr>
+				<td><%=language.roomTypeStandardPrice() %></td>
+				<td><input type="text" size="30%" name="standardPrice" value="<%=selectedRoomType.getStandardPrice() %>"/></td>
+			</tr>
+			<tr>
+				<td><%=language.roomTypeDescription() %></td>
+				<td><textarea rows="7" cols="60%" name="description"><%=selectedRoomType.getDescription() %></textarea></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="submit" value="<%=language.modify() %>"/></td>
+			</tr>
+		</table>
+		
+		
+		
+	<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+	<input type="hidden" name="showContent" value="modifyRoomType"/>
+	<input type="hidden" name="selectedRoomTypeID" value="<%=selectedRoomTypeID %>"/>
+	</form>
+	
+	
+	<h3><%=language.administratorModifyRoomTypeWeekdayPrices() %></h3>
+	
+	<table class="showValues">
+	
+		<tr>
+			<th><%=language.weekDay() %></th>
+			<th><%=language.price() %></th>
+			<th></th>
+		</tr>
+		<%
+		List<WeekdayPrice> weekdayPrices = selectedRoomType.getWeekdayPrices();
+		if(weekdayPrices != null){
+			for(WeekdayPrice weekdayPrice : weekdayPrices){
+		%>
+				<tr>
+					<td><%=namesOfDays[weekdayPrice.getWeekday()-1] %></td>
+					<td><%=weekdayPrice.getPrice() %></td>
+					<td>
+						<form action="<%=request.getContextPath() %>/Admin/Modify-Room-Type-weekday-price-delete" method="post">
+							<input type="submit" value="<%=language.delete() %>"/>
+							<input type="hidden" name="weekDay" value="<%=weekdayPrice.getWeekday() %>"/>
+							<input type="hidden" name="selectedRoomTypeID" value="<%=selectedRoomTypeID %>"/>
+							<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+							<input type="hidden" name="showContent" value="modifyRoomType"/>
+						</form>
+					</td>
+				</tr>
+				
+			<%} %>
+		<%} %>
+		
+		<form action="<%=request.getContextPath() %>/Admin/Modify-Room-Type-weekday-price-add" method="post">
+			<tr>
+				<td>
+					<select name="weekDay">
+					<%for(int i = 0; i < namesOfDays.length; i++){ %>
+						<option value="<%=i+1 %>"><%=namesOfDays[i] %></option>
+					<%} %>
+					</select>
+				</td>
+				<td><input type="text" name="price"/></td>
+				<td><input type="submit" value="<%=language.add() %>"/></td>
+			</tr>
+		<input type="hidden" name="selectedRoomTypeID" value="<%=selectedRoomTypeID %>"/>
+		<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+		<input type="hidden" name="showContent" value="modifyRoomType"/>
+		</form>
+	
+	</table>
+	
+	
+	<%if(modifyRoomTypeErrorRoomTypeNameMissing){ %><p class="error"><%=language.administratorModifyRoomTypeErrorRoomTypeNameMissing() %></p><%} %>
+	<%if(modifyRoomTypeErrorStandardPriceMissing){ %><p class="error"><%=language.administratorModifyRoomTypeErrorStandardPriceMissing() %></p><%} %>
+	<%if(modifyRoomTypeErrorStandardPriceNotInRightFormat){ %><p class="error"><%=language.administratorModifyRoomTypeErrorStandardPriceNotInRightFormat() %></p><%} %>
+	<%if(modifyRoomTypeSuccess){ %><p class="informational"><%=language.administratorModifyRoomTypeSuccessful() %></p><%} %>
+	<%if(deleteWeekdayPriceSuccess){ %><p class="informational"><%=language.administratorDeleteWeekdayPriceSuccessful() %></p><%} %>
+	<%if(addWeekdayPriceErrorWeekdayAllreadyExist){ %><p class="error"><%=language.administratorAddWeekdayPriceErrorWeekdayAllreadyExist() %></p><%} %>
+	<%if(addWeekdayPriceSuccess){ %><p class="informational"><%=language.administratorAddWeekdayPriceSuccessful() %></p><%} %>
+	
+
+<%} else if(showContent.equals("addRoomType")){ %>
+
+
+
 <%} %>
 
 <%@ include file="navigationSlideAdminFooter.jsp" %>
