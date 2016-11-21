@@ -300,13 +300,37 @@
     <servlet-name>deleteWeekdayPrice</servlet-name>
     <url-pattern>/Admin/Modify-Room-Type-weekday-price-delete</url-pattern>
   </servlet-mapping>
-   <servlet>
+  <servlet>
     <servlet-name>addWeekdayPrice</servlet-name>
     <servlet-class>com.hiltondublin.servlets.AddWeekdayPriceServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>addWeekdayPrice</servlet-name>
     <url-pattern>/Admin/Modify-Room-Type-weekday-price-add</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>DeleteRoomType</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.DeleteRoomTypeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteRoomType</servlet-name>
+    <url-pattern>/Admin/Modify-Room-Type-delete</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>deleteSpecialPrice</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.DeleteSpecialPriceServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>deleteSpecialPrice</servlet-name>
+    <url-pattern>/Admin/Modify-Room-Type-special-price-delete</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>addSpecialPrice</servlet-name>
+    <servlet-class>com.hiltondublin.servlets.AddSpecialPriceServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>addSpecialPrice</servlet-name>
+    <url-pattern>/Admin/Modify-Room-Type-special-price-add</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>modifyProduct</servlet-name>

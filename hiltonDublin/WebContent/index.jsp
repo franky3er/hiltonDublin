@@ -23,7 +23,7 @@ if(rs != null){
 
 %>
 
-<img src="${pageContext.request.contextPath}/resources/Pictures/hilton.jpg" alt="Hilton" title="Hilton" width="450" height="294" />
+<img style="width: 100%; height: auto;" src="${pageContext.request.contextPath}/resources/Pictures/hilton.jpg" alt="Hilton" title="Hilton" width="450" height="294" />
 
 <p><%=language.homeWelcomeText() %></p>
 

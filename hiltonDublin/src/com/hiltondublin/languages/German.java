@@ -59,6 +59,12 @@ public class German extends Language {
 	public String price(){
 		return "Preis: ";
 	}
+	public String date(){
+		return "Datum: ";
+	}
+	public String comment(){
+		return "Kommentar: ";
+	}
 	
 	//Navigation Slide
 	public String navigationSlideGuest(){
@@ -573,16 +579,19 @@ public class German extends Language {
 		return "Zimmertyp Name fehlt. ";
 	}
 	public String administratorModifyRoomTypeErrorStandardPriceMissing(){
-		return "Standard Preis fehlt. ";
+		return "Preis fehlt. ";
 	}
 	public String administratorModifyRoomTypeErrorStandardPriceNotInRightFormat(){
-		return "Standard Preis ist nicht im richtigen Format. Es muss vom Typ Double sein. ";
+		return "Preis ist nicht im richtigen Format. Es muss vom Typ Double sein. ";
 	}
 	public String administratorModifyRoomTypeSuccessful(){
 		return "Erfolgreich Zimmertyp modifiziert. ";
 	}
 	public String administratorModifyRoomTypeWeekdayPrices(){
 		return "Wochtentag Preise: ";
+	}
+	public String administratorModifyRoomTypeSpecialPrices(){
+		return "Spezial Preise: ";
 	}
 	public String administratorDeleteWeekdayPriceSuccessful(){
 		return "Erfolgreich Wochentagpreis gelöscht. ";
@@ -592,6 +601,15 @@ public class German extends Language {
 	}
 	public String administratorAddWeekdayPriceSuccessful(){
 		return "Erfolgreich neuen Wochentag Preis hinzugefügt. ";
+	}
+	public String administratorDeleteSpecialPriceSuccessful(){
+		return "Erfolgreich Spezial Preis gelöscht. ";
+	}
+	public String administratorAddSpecialPriceSuccessful(){
+		return "Erfolgreich neuen Spezial Preis hinzugefügt. ";
+	}
+	public String administratorAddSpecialPriceErrorDateAllreadyExist(){
+		return "Spezial Preis existiert bereits. ";
 	}
 	
 	public String administratorRegisterEmployeeHeading(){

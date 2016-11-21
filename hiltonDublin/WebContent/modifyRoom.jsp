@@ -2,6 +2,7 @@
 <%@page import="com.hiltondublin.classes.Room" %>
 <%@page import="com.hiltondublin.classes.RoomType" %>
 <%@page import="com.hiltondublin.classes.WeekdayPrice" %>
+<%@page import="com.hiltondublin.classes.SpecialPrice" %>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 
@@ -39,6 +40,11 @@ String deleteWeekdayPriceSuccessful = (String) request.getAttribute("deleteWeekd
 String addWeekdayPriceErrorWeekday = (String) request.getAttribute("addWeekdayPriceErrorWeekday");
 String addWeekdayPriceSuccessful = (String) request.getAttribute("addWeekdayPriceSuccessful");
 
+String deleteSpecialPriceSuccessful = (String) request.getAttribute("deleteSpecialPriceSuccessful");
+
+String addSpecialPriceErrorDate = (String) request.getAttribute("addSpecialPriceErrorDate");
+String addSpecialPriceSuccessful = (String) request.getAttribute("addSpecialPriceSuccessful");
+
 List<Room> foundRooms = (List<Room>) request.getAttribute("foundRooms");
 Room selectedRoom = (Room) request.getAttribute("selectedRoom");
 Room addedRoom = (Room) request.getAttribute("addedRoom");
@@ -75,6 +81,11 @@ boolean deleteWeekdayPriceSuccess = false;
 
 boolean addWeekdayPriceErrorWeekdayAllreadyExist = false;
 boolean addWeekdayPriceSuccess = false;
+
+boolean deleteSpecialPriceSuccess = false;
+
+boolean addSpecialPriceErrorDateAllreadyExist = false;
+boolean addSpecialPriceSuccess = false;
 
 if(showContent==null){
 	showContent = "showOptions";
@@ -138,6 +149,15 @@ if(addWeekdayPriceErrorWeekday == null){
 }
 if(addWeekdayPriceSuccessful == null){
 	addWeekdayPriceSuccessful = "0";
+}
+if(deleteSpecialPriceSuccessful == null){
+	deleteSpecialPriceSuccessful = "0";
+}
+if(addSpecialPriceErrorDate == null){
+	addSpecialPriceErrorDate = "0";
+}
+if(addSpecialPriceSuccessful == null){
+	addSpecialPriceSuccessful = "0";
 }
 
 if(searchRoomErrorRoomNumber.equals("1")){
@@ -205,6 +225,17 @@ if(addWeekdayPriceErrorWeekday.equals("1")){
 }
 if(addWeekdayPriceSuccessful.equals("1")){
 	addWeekdayPriceSuccess = true;
+}
+
+if(deleteSpecialPriceSuccessful.equals("1")){
+	deleteSpecialPriceSuccess = true;
+}
+
+if(addSpecialPriceErrorDate.equals("1")){
+	addSpecialPriceErrorDateAllreadyExist = true;
+}
+if(addSpecialPriceSuccessful.equals("1")){
+	addSpecialPriceSuccess = true;
 }
 
 
@@ -503,7 +534,7 @@ if(request.getParameter("showContent") != null){
 			</td>
 			
 			<td>
-				<form action="" method="post">
+				<form action="<%=request.getContextPath() %>/Admin/Modify-Room-Type-delete" method="post">
 					<input type="submit" value="<%=language.delete() %>"/>
 					<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
 					<input type="hidden" name="showContent" value="modifyRoomType"/>
@@ -547,15 +578,15 @@ if(request.getParameter("showContent") != null){
 	<input type="hidden" name="selectedRoomTypeID" value="<%=selectedRoomTypeID %>"/>
 	</form>
 	
-	
+	<br/>
 	<h3><%=language.administratorModifyRoomTypeWeekdayPrices() %></h3>
 	
 	<table class="showValues">
 	
 		<tr>
-			<th><%=language.weekDay() %></th>
-			<th><%=language.price() %></th>
-			<th></th>
+			<td><b><%=language.weekDay() %></b></th>
+			<td><b><%=language.price() %></b></th>
+			<td><b></b></th>
 		</tr>
 		<%
 		List<WeekdayPrice> weekdayPrices = selectedRoomType.getWeekdayPrices();
@@ -598,6 +629,56 @@ if(request.getParameter("showContent") != null){
 	
 	</table>
 	
+	<br/>
+	<h3><%=language.administratorModifyRoomTypeSpecialPrices() %></h3>
+	
+	<table class="showValues">
+	
+		<tr>
+			<td><b><%=language.date() %></b></td>
+			<td><b><%=language.price() %></b></td>
+			<td><b><%=language.comment() %></b></td>
+			<td><b></b></td>
+		</tr>
+		
+		<%
+		List<SpecialPrice> specialPrices = selectedRoomType.getSpecialPrices();
+		
+		if(specialPrices != null){
+			for(SpecialPrice specialPrice : specialPrices){
+		%>
+		
+				<tr>
+					<td><%=dbConnection.onlyDayDateFormat.format(specialPrice.getDate()) %></td>
+					<td><%=specialPrice.getPrice() %></td>
+					<td><%=specialPrice.getComment() %></td>
+					<td>
+						<form action="<%=request.getContextPath() %>/Admin/Modify-Room-Type-special-price-delete" method="post">
+							<input type="submit" value="<%=language.delete() %>"/>
+							<input type="hidden" name="date" value="<%=dbConnection.onlyDayDateFormat.format(specialPrice.getDate()) %>"/>
+							<input type="hidden" name="selectedRoomTypeID" value="<%=selectedRoomTypeID %>"/>
+							<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+							<input type="hidden" name="showContent" value="modifyRoomType"/>
+						</form>
+					</td>
+				</tr>
+		
+			<%} %>
+		<%} %>
+		
+		<form action="<%=request.getContextPath() %>/Admin/Modify-Room-Type-special-price-add" method="post">
+			<tr>
+				<td><input type="date" name="date" required/></td>
+				<td><input type="text" name="price" /></td>
+				<td><input type="text" name="comment"/></td>
+				<td><input type="submit" value="<%=language.add() %>"/></td>
+			</tr>
+		<input type="hidden" name="selectedRoomTypeID" value="<%=selectedRoomTypeID %>"/>
+		<input type="hidden" name="url" value="<%=request.getRequestURI().substring(request.getContextPath().length()) %>"/>
+		<input type="hidden" name="showContent" value="modifyRoomType"/>
+		</form>
+	
+	</table>
 	
 	<%if(modifyRoomTypeErrorRoomTypeNameMissing){ %><p class="error"><%=language.administratorModifyRoomTypeErrorRoomTypeNameMissing() %></p><%} %>
 	<%if(modifyRoomTypeErrorStandardPriceMissing){ %><p class="error"><%=language.administratorModifyRoomTypeErrorStandardPriceMissing() %></p><%} %>
@@ -606,6 +687,9 @@ if(request.getParameter("showContent") != null){
 	<%if(deleteWeekdayPriceSuccess){ %><p class="informational"><%=language.administratorDeleteWeekdayPriceSuccessful() %></p><%} %>
 	<%if(addWeekdayPriceErrorWeekdayAllreadyExist){ %><p class="error"><%=language.administratorAddWeekdayPriceErrorWeekdayAllreadyExist() %></p><%} %>
 	<%if(addWeekdayPriceSuccess){ %><p class="informational"><%=language.administratorAddWeekdayPriceSuccessful() %></p><%} %>
+	<%if(deleteSpecialPriceSuccess){ %><p class="informational"><%=language.administratorDeleteSpecialPriceSuccessful() %></p><%} %>
+	<%if(addSpecialPriceErrorDateAllreadyExist){ %><p class="error"><%=language.administratorAddSpecialPriceErrorDateAllreadyExist() %></p><%} %>
+	<%if(addSpecialPriceSuccess){ %><p class="informational"><%=language.administratorAddSpecialPriceSuccessful() %></p><%} %>
 	
 
 <%} else if(showContent.equals("addRoomType")){ %>

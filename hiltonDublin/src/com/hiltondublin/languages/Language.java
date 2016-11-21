@@ -67,6 +67,12 @@ public abstract class Language {
 	public String price(){
 		return "Price: ";
 	}
+	public String date(){
+		return "Date: ";
+	}
+	public String comment(){
+		return "Comment: ";
+	}
 	
 	
 
@@ -652,10 +658,10 @@ public abstract class Language {
 		return "Room Type is missing. ";
 	}
 	public String administratorModifyRoomTypeErrorStandardPriceMissing(){
-		return "Standard Price is missing. ";
+		return "Price is missing. ";
 	}
 	public String administratorModifyRoomTypeErrorStandardPriceNotInRightFormat(){
-		return "Standard Price not in right Format. It must be from Type Double. ";
+		return "Price not in right Format. It must be from Type Double. ";
 	}
 	public String administratorModifyRoomTypeSuccessful(){
 		return "Successfully modified Room Type. ";
@@ -663,14 +669,26 @@ public abstract class Language {
 	public String administratorModifyRoomTypeWeekdayPrices(){
 		return "Weekday Prices: ";
 	}
+	public String administratorModifyRoomTypeSpecialPrices(){
+		return "Special Prices: ";
+	}
 	public String administratorDeleteWeekdayPriceSuccessful(){
-		return "Successfully deleted weekday price. ";
+		return "Successfully delete weekday price. ";
 	}
 	public String administratorAddWeekdayPriceErrorWeekdayAllreadyExist(){
 		return "Weekday Price Allready exist. ";
 	}
 	public String administratorAddWeekdayPriceSuccessful(){
 		return "Successfully add new weekday price. ";
+	}
+	public String administratorDeleteSpecialPriceSuccessful(){
+		return "Successfully delete special price. ";
+	}
+	public String administratorAddSpecialPriceSuccessful(){
+		return "Successfully add new special price. ";
+	}
+	public String administratorAddSpecialPriceErrorDateAllreadyExist(){
+		return "Special Price allready exist. ";
 	}
 	
 	
