@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.catalina.filters.AddDefaultCharsetFilter;
+
 import com.hiltondublin.classes.ConsumerProduct;
 import com.hiltondublin.classes.Rating;
 import com.hiltondublin.classes.Reservation;
@@ -2884,12 +2886,13 @@ public class HiltonDublinDBConnection extends Helper {
 		String depDate = mySQLDateFormat.format(departureDate);
 		String isSmoking = Boolean.toString(smoking);
 		isSmoking = convertBooleanToTinyInt(isSmoking);
-		String additionalSQLCondition = "( " + ROOM_NUMBER + " IN ( SELECT " + RESERVED_ROOM_ROOMNUMBER + " FROM " + RESERVED_ROOM;
-		additionalSQLCondition += " WHERE " + RESERVED_ROOM_RESERVATIONID + " NOT IN ("; 
+		String additionalSQLCondition = ROOM_NUMBER + " NOT IN ( SELECT " + RESERVED_ROOM_ROOMNUMBER + " FROM " + RESERVED_ROOM;
+		additionalSQLCondition += " WHERE " + RESERVED_ROOM_RESERVATIONID + " IN ("; 
 		additionalSQLCondition += " SELECT " + RESERVATION_RESERVATIONID + " FROM " + RESERVATION;
 		additionalSQLCondition += " WHERE " + RESERVATION_ARRIVALDATE + " BETWEEN '" + arrDate + "' AND '" + depDate + "' ";
-		additionalSQLCondition += " OR " + RESERVATION_DEPARTUREDATE + " BETWEEN '" + arrDate + "' AND '" + depDate + "' )) ";
-		additionalSQLCondition += " OR " + ROOM_NUMBER + " NOT IN ( SELECT " + RESERVED_ROOM_ROOMNUMBER + " FROM " + RESERVED_ROOM + ")) LIMIT " + ammountOfRooms;
+		additionalSQLCondition += " OR " + RESERVATION_DEPARTUREDATE + " BETWEEN '" + arrDate + "' AND '" + depDate + "' ";
+		additionalSQLCondition += " OR (" + RESERVATION_ARRIVALDATE + " <= '" + arrDate + "' " + " AND " + RESERVATION_DEPARTUREDATE + " >= '" + depDate + "' )))";
+		additionalSQLCondition += " LIMIT " + ammountOfRooms;
 		
 		List<Room> rooms = getRooms(null, Integer.toString(roomTypeID), isSmoking, null, additionalSQLCondition);
 		
