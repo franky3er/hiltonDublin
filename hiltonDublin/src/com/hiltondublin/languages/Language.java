@@ -73,6 +73,9 @@ public abstract class Language {
 	public String comment(){
 		return "Comment: ";
 	}
+	public String rooms(){
+		return "Room(s): ";
+	}
 	
 	
 

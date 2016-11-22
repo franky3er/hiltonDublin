@@ -99,6 +99,10 @@ List<Reservation> reservations = dbConnection.getUnCheckedInReservationsFromGues
 									<td><b><%=dbConnection.onlyDayDateFormat.format(reservation.getDepartureDate()) %></b></td>
 								</tr>
 								<tr>
+									<td><%=language.rooms() %></td>
+									<td><b><%=selectedReservation.getRoomNumbersAsString() %></b></td>
+								</tr>
+								<tr>
 									<td></td>
 									<td><input type="submit" value="<%=language.checkin() %>"/></td>
 								</tr>
@@ -162,6 +166,10 @@ List<Reservation> reservations = dbConnection.getUnCheckedInReservationsFromGues
 				<tr>
 					<td><%=language.administratorModifyReservationDepartureDate() %></td>
 					<td><b><%=dbConnection.onlyDayDateFormat.format(selectedReservation.getDepartureDate()) %></b></td>
+				</tr>
+				<tr>
+					<td><%=language.rooms() %></td>
+					<td><b><%=selectedReservation.getRoomNumbersAsString() %></b></td>
 				</tr>
 			</table>
 		</fieldset>

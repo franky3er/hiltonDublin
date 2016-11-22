@@ -131,6 +131,10 @@ if(cancelReservationSuccessful.equals("1")){
 						<td><b><%=dbConnection.onlyDayDateFormat.format(reservation.getDepartureDate()) %></b></td>
 					</tr>
 					<tr>
+						<td><%=language.rooms() %></td>
+						<td><b><%=reservation.getRoomNumbersAsString() %></b></td>
+					</tr>
+					<tr>
 						<td></td>
 						<td><input type="submit" value="<%=language.employeeCancelReservationCancelButton() %>"/></td>
 					</tr>
@@ -188,6 +192,10 @@ if(cancelReservationSuccessful.equals("1")){
 			<tr>
 				<td><%=language.administratorModifyReservationDepartureDate() %></td>
 				<td><b><%=dbConnection.onlyDayDateFormat.format(selectedReservation.getDepartureDate()) %></b></td>
+			</tr>
+			<tr>
+				<td><%=language.rooms() %></td>
+				<td><b><%=selectedReservation.getRoomNumbersAsString() %></b></td>
 			</tr>
 		</table>
 	</fieldset>

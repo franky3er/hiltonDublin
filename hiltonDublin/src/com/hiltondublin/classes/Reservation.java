@@ -185,4 +185,15 @@ public class Reservation {
 		return roomTypeAmmounts;
 	}
 	
+	public String getRoomNumbersAsString(){
+		String roomNumbers = null;
+		if(rooms != null){
+			roomNumbers = "";
+			for(Room room : rooms){
+				roomNumbers += room.getRoomNumber() + "  ";
+			}
+		} 
+		return roomNumbers;
+	}
+	
 }

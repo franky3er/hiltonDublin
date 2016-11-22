@@ -65,6 +65,9 @@ public class German extends Language {
 	public String comment(){
 		return "Kommentar: ";
 	}
+	public String rooms(){
+		return "Zimmer: ";
+	}
 	
 	//Navigation Slide
 	public String navigationSlideGuest(){
