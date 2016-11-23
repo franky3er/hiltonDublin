@@ -190,7 +190,7 @@ public class Reservation {
 		if(rooms != null){
 			roomNumbers = "";
 			for(Room room : rooms){
-				roomNumbers += room.getRoomNumber() + "  ";
+				roomNumbers += room.getRoomNumber() + "<br/>";
 			}
 		} 
 		return roomNumbers;

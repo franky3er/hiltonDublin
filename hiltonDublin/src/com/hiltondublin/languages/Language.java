@@ -742,6 +742,9 @@ public abstract class Language {
 	public String reserveAndPay(){
 		return "Reserve and Pay";
 	}
+	public String reserve(){
+		return "Reserve";
+	}
 	public String reservationArrivalDate(){
 		return "Arrival Date";
 	}

@@ -218,7 +218,7 @@
 	<table>
 		<tr>
 			<td colspan="2" align="center">
-			<input type="submit" value="<%=language.reserveAndPay() %>">
+			<input type="submit" value="<%=language.reserve() %>">
 			<input type="reset" value="Reset">
 			</td>
 		</tr>

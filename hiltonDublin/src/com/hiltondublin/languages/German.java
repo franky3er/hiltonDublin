@@ -718,6 +718,9 @@ public class German extends Language {
 	public String reserveAndPay(){
 		return "Reservieren und Bezahlen";
 	}
+	public String reserve(){
+		return "Reservieren";
+	}
 	public String reservationArrivalDate(){
 		return "Anreisedatum";
 	}

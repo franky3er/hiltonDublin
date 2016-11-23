@@ -83,7 +83,7 @@ if(pageName == null || pageName.trim() == "" || pageName.isEmpty()){
 			<input class="navigationDetail" type="submit" value="Cancellation" />
 		</form>
 		<form action="<%=getURLWithContextPath(request) %>/Guest/Rating" method="get">
-			<input class="navigationDetail" type="submit" value="<%=language.guestRatingRating() %>" />
+			<input class="navigationDetail" type="submit" value="<%=language.guestRatingReview() %>" />
 		</form>
 		<form action="<%=getURLWithContextPath(request) %>/Employee" method="get">
 			<input class="navigationPage" type="submit" value="<%=language.navigationSlideEmployee() %>" />

@@ -100,7 +100,7 @@ List<Reservation> reservations = dbConnection.getUnCheckedInReservationsFromGues
 								</tr>
 								<tr>
 									<td><%=language.rooms() %></td>
-									<td><b><%=selectedReservation.getRoomNumbersAsString() %></b></td>
+									<td><b><%=reservation.getRoomNumbersAsString() %></b></td>
 								</tr>
 								<tr>
 									<td></td>

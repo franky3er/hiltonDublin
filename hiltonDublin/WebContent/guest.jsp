@@ -12,7 +12,7 @@
 			<input class="plaintextNavigationAreaDetail" type="submit" value="Cancellation" />
 		</form>
 		<form action="<%=getURLWithContextPath(request) %>/Guest/Rating" method="get">
-			<input class="plaintextNavigationAreaDetail" type="submit" value="<%=language.guestRatingRating() %>" />
+			<input class="plaintextNavigationAreaDetail" type="submit" value="<%=language.guestRatingReview() %>" />
 		</form>
 	</div>
 </body>
