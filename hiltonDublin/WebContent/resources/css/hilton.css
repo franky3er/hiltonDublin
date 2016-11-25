@@ -5,7 +5,9 @@ body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
-	background-image: url(../Pictures/background.jpg)
+	background-image: url(../Pictures/background.jpg);
+	background-repeat: no-repeat;
+	background-attachment: fixed;
 }
 
 .loginError {
